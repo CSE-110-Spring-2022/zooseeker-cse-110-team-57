@@ -23,8 +23,8 @@ public class animal_item {
     public int order; // used for displaying on the screen
 
     //not sure if i will change this constructor
-    public animal_item(String name, int order, ZooData.VertexInfo exhibit){
-        this.name = name;
+    public animal_item(int order, ZooData.VertexInfo exhibit){
+        this.name = exhibit.name;
         this.order = order;
         this.exhibit = exhibit;
     }
@@ -36,7 +36,7 @@ public class animal_item {
         int i =0;
         for (Map.Entry<String, ZooData.VertexInfo> set : vInfo.entrySet()) {
 
-            retVal.add(new animal_item(set.getValue().name,i,set.getValue()));
+            retVal.add(new animal_item(i,set.getValue()));
             i++;
         }
         return  retVal;
