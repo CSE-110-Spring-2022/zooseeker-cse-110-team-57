@@ -74,7 +74,7 @@ public class ZooData {
         return indexedZooData;
     }
 
-    public static Graph<String, IdentifiedWeightedEdge> loadZooGraphJSON(String path) {
+    public static Graph<String, IdentifiedWeightedEdge> loadZooGraphJSON(String s) {
         // Create an empty graph to populate.
         Graph<String, IdentifiedWeightedEdge> g = new DefaultUndirectedWeightedGraph<>(IdentifiedWeightedEdge.class);
 
