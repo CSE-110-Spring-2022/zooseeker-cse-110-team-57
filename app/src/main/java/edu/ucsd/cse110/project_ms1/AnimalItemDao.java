@@ -16,7 +16,7 @@ public interface AnimalItemDao {
     long insert(AnimalItem animalItem);
 
     @Insert
-    List<Long> insertAll(List<AnimalItem> todoListItem);
+    List<Long> insertAll(List<AnimalItem> animalItems);
 
     @Query("SELECT * FROM `animal_items` WHERE `id`=:id")
     AnimalItem get(long id);
