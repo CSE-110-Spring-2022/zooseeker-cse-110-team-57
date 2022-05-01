@@ -78,9 +78,9 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
     }
 
     @Override
-    public  long getItemId(int position) {
-
-        return searched_animal_items.get(position).id;
+    public long getItemId(int position) {
+        return 0;
+       // return searched_animal_items.get(position).id;
     }
 
 

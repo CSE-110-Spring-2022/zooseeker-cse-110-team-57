@@ -2,7 +2,9 @@ package edu.ucsd.cse110.project_ms1;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,7 +18,9 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 @Entity(tableName = "animal_items")
 public class AnimalItem {
-    public long id  = 0;
+    @PrimaryKey
+    public String id;
+    @NonNull
     public String name; //essentially, the name is the tag in json file
     public ZooData.VertexInfo exhibit;
     public boolean selected;
@@ -28,6 +32,7 @@ public class AnimalItem {
 
     //not sure if i will change this constructor
     public AnimalItem(int order, ZooData.VertexInfo exhibit){
+        this.id = exhibit.id;
         this.name = exhibit.name;
         this.order = order;
         this.exhibit = exhibit;
