@@ -36,4 +36,5 @@ public interface AnimalItemDao {
     @Query("SELECT `order` + 1 FROM `animal_items` ORDER BY `order` DESC LIMIT 1")
     int getOrderForAppend();
 
+    //@Query()
 }
