@@ -45,9 +45,10 @@ public class SearchAnimalActivity extends AppCompatActivity{
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(search_adapter);
 
+        List<AnimalItem> toBeShown= null;
         try {
             AnimalItem.loadInfo(this, "sample_node_info.json");
-            List<AnimalItem> toBeShown= AnimalItem.search_by_tag("mammal");
+            toBeShown= AnimalItem.search_by_tag(null);
 
             Log.d("TodoListActivity", toBeShown.toString());
             search_adapter.setSearched_animal_items(toBeShown);
@@ -58,9 +59,9 @@ public class SearchAnimalActivity extends AppCompatActivity{
         //List<AnimalItem> mylist = new ArrayList<>();
 
         ListView listView = findViewById(R.id.my_list);
-        List<AnimalItem> mylist = new ArrayList<>();
-        mylist.add(new AnimalItem(1,
-                new ZooData.VertexInfo("1", ZooData.VertexInfo.Kind.EXHIBIT, "Gorillas", Collections.singletonList("new tag"))));
+//        List<AnimalItem> mylist = new ArrayList<>();
+//        mylist.add(new AnimalItem(1,
+//                new ZooData.VertexInfo("1", ZooData.VertexInfo.Kind.EXHIBIT, "Gorillas", Collections.singletonList("new tag"))));
 
        /*
         mylist.add("Gorillas");
@@ -70,11 +71,9 @@ public class SearchAnimalActivity extends AppCompatActivity{
         mylist.add("Arctic Foxes");
          */
 
-
-        arrayAdapter = new ArrayAdapter<AnimalItem>(this, android.R.layout.simple_list_item_multiple_choice, mylist);
+        arrayAdapter = new ArrayAdapter<AnimalItem>(this, android.R.layout.simple_list_item_multiple_choice, toBeShown);
         listView.setAdapter(arrayAdapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-
     }
 
     public void onAddToListClicked(View view) {
@@ -102,7 +101,6 @@ public class SearchAnimalActivity extends AppCompatActivity{
             }
         });
         return super.onCreateOptionsMenu(menu);
-
     }
 
 

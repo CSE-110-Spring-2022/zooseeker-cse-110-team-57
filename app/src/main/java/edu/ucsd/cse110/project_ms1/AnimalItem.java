@@ -34,13 +34,7 @@ public class AnimalItem {
 
     @Override
     public String toString() {
-        return "animal_item{" +
-                "name='" + name + '\'' +
-                ", exhibit=" + exhibit +
-                ", selected=" + selected +
-                ", searched=" + searched +
-                ", order=" + order +
-                '}';
+        return name;
     }
 
     public static List<AnimalItem> search_by_tag(String tag){

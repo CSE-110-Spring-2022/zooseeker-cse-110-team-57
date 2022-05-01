@@ -10,8 +10,8 @@
         android:id="@+id/all_searched_animals"
         android:layout_width="409dp"
         android:layout_height="729dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="360dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="348dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,10 +28,10 @@
         android:text="ADD TO LIST"
         app:layout_constraintBottom_toBottomOf="@+id/all_searched_animals"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.943"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.299" />
+        app:layout_constraintVertical_bias="0.291" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
