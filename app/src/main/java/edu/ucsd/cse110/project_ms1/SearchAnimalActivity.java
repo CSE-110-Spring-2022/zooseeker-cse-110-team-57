@@ -71,9 +71,9 @@ public class SearchAnimalActivity extends AppCompatActivity{
         mylist.add("Arctic Foxes");
          */
 
-        arrayAdapter = new ArrayAdapter<AnimalItem>(this, android.R.layout.simple_list_item_multiple_choice, toBeShown);
+        arrayAdapter = new ArrayAdapter<AnimalItem>(this, android.R.layout.simple_list_item_1, toBeShown);
         listView.setAdapter(arrayAdapter);
-        listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        //listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
     }
 
     public void onAddToListClicked(View view) {
