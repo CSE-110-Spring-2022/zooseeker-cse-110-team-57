@@ -10,7 +10,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project_MS1">
         <activity
+<<<<<<< HEAD
             android:name=".LoadActivity"
+=======
+            android:name=".ListOfSelectedAnimalsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SearchAnimalActivity"
+>>>>>>> US1_search_for_animal-2
             android:exported="false" />
         <activity
             android:name=".MainActivity"
