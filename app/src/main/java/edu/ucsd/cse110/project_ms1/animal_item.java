@@ -5,6 +5,10 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -16,30 +20,48 @@ import java.util.List;
 import java.util.Map;
 
 public class animal_item {
-    public String name; //essentially, the name is the tag in json file
-    public ZooData.VertexInfo exhibit;
+    //
+    public ZooData.VertexInfo vertex;
+    //For List
     public boolean selected;
     public boolean searched;
-    public int order; // used for displaying on the screen
+    public int order;
 
     //not sure if i will change this constructor
-    public animal_item(int order, ZooData.VertexInfo exhibit){
-        this.name = exhibit.name;
+    public animal_item(int order, ZooData.VertexInfo vertex) {
+        this.vertex = vertex;
+        // temp
         this.order = order;
-        this.exhibit = exhibit;
+        this.selected = false;
+        this.searched = false;
     }
 
-    public static List<animal_item> loadJSON(Context context, String path){
-        Map<String, ZooData.VertexInfo> vInfo = ZooData.loadVertexInfoJSON("sample_node_info.json");
-
-        List<animal_item> retVal =  new ArrayList<animal_item>();
-        int i =0;
+    public static List<animal_item> loadJSON(Context context, String path) {
+//
+        //Load the information about our nodes
+        Map<String, ZooData.VertexInfo> vInfo = ZooData.loadVertexInfoJSON(context,"sample_node_info.json");
+//
+        //retVal -return value
+        List<animal_item> retVal = new ArrayList<animal_item>();
+        int i = 0;
         for (Map.Entry<String, ZooData.VertexInfo> set : vInfo.entrySet()) {
-
-            retVal.add(new animal_item(i,set.getValue()));
+            retVal.add(new animal_item(i, set.getValue()));
             i++;
         }
-        return  retVal;
+
+        return retVal;
     }
 
+    @Override
+    public String toString() {
+        return "animal_item{" +
+                "vertex=" + vertex +
+                ", vertex.id=" + vertex.id +
+                ", vertex.name=" + vertex.name +
+                ", vertex.tags=" + vertex.tags +
+                ", selected=" + selected +
+                ", searched=" + searched +
+                ", order=" + order +
+                '}';
+    }
 }

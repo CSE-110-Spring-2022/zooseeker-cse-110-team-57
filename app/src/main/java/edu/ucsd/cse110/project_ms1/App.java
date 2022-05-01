@@ -11,6 +11,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 public class App {
     public static void main(String[] args) {
+        /*
         // "source" and "sink" are graph terms for the start and end
         String start = "entrance_exit_gate";
         String goal = "elephant_odyssey";
@@ -19,7 +20,7 @@ public class App {
         Graph<String, IdentifiedWeightedEdge> g = ZooData.loadZooGraphJSON("sample_zoo_graph.json");
         GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(g, start, goal);
 
-        // 2. Load the information about our nodes and edges...         
+        // 2. Load the information about our nodes and edges...
         Map<String, ZooData.VertexInfo> vInfo = ZooData.loadVertexInfoJSON("sample_node_info.json");
         Map<String, ZooData.EdgeInfo> eInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json");
 
@@ -35,5 +36,8 @@ public class App {
                     vInfo.get(g.getEdgeTarget(e).toString()).name);
             i++;
         }
+    }
+
+    */
     }
 }
