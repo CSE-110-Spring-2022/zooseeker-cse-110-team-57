@@ -2,12 +2,15 @@ package edu.ucsd.cse110.project_ms1;
 
 import android.content.Context;
 
+import androidx.room.Entity;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Entity(tableName = "animal_items")
 public class AnimalItem {
     public long id  = 0;
     public String name; //essentially, the name is the tag in json file

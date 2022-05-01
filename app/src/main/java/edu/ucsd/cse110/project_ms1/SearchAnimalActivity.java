@@ -17,6 +17,7 @@ import androidx.appcompat.widget.SearchView;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SearchAnimalActivity extends AppCompatActivity{
@@ -53,16 +54,21 @@ public class SearchAnimalActivity extends AppCompatActivity{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //ListView listView = findViewById(R.id.my_list);
+        ////ListView listView = findViewById(R.id.my_list);
         //List<AnimalItem> mylist = new ArrayList<>();
 
         ListView listView = findViewById(R.id.my_list);
-        List<String> mylist = new ArrayList<>();
+        List<AnimalItem> mylist = new ArrayList<>();
+        mylist.add(new AnimalItem(1,
+                new ZooData.VertexInfo("1", ZooData.VertexInfo.Kind.EXHIBIT, "Gorillas", Collections.singletonList("new tag"))));
+
+,        /*
         mylist.add("Gorillas");
         mylist.add("Alligators");
         mylist.add("Lions");
         mylist.add("Elephant Odyssey");
         mylist.add("Arctic Foxes");
+         */
 
 
         arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, mylist);

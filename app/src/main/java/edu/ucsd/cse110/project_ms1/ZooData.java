@@ -26,6 +26,13 @@ public class ZooData {
             @SerializedName("intersection") INTERSECTION
         }
 
+        VertexInfo(String id, Kind kind, String name, List<String> tags) {
+            this.id = id;
+            this.kind = kind;
+            this.name = name;
+            this.tags = tags;
+        }
+
         public String id;
         public Kind kind;
         public String name;
