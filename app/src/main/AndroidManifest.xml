@@ -11,6 +11,10 @@
         android:theme="@style/Theme.Project_MS1">
         <activity
             android:name=".LoadActivity"
+            android:name=".ListOfSelectedAnimalsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SearchAnimalActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
