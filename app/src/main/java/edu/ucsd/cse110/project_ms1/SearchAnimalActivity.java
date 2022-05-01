@@ -23,7 +23,7 @@ import java.util.List;
 public class SearchAnimalActivity extends AppCompatActivity{
 
     public RecyclerView recyclerView;
-    public ArrayAdapter<String> arrayAdapter;
+    public ArrayAdapter<AnimalItem> arrayAdapter;
     //public ArrayAdapter<AnimalItem> arrayAdapter;
 
     @Override
@@ -71,7 +71,7 @@ public class SearchAnimalActivity extends AppCompatActivity{
          */
 
 
-        arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_multiple_choice, mylist);
+        arrayAdapter = new ArrayAdapter<AnimalItem>(this, android.R.layout.simple_list_item_multiple_choice, mylist);
         listView.setAdapter(arrayAdapter);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
