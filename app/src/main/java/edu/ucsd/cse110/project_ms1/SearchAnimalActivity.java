@@ -62,7 +62,7 @@ public class SearchAnimalActivity extends AppCompatActivity{
         mylist.add(new AnimalItem(1,
                 new ZooData.VertexInfo("1", ZooData.VertexInfo.Kind.EXHIBIT, "Gorillas", Collections.singletonList("new tag"))));
 
-,        /*
+       /*
         mylist.add("Gorillas");
         mylist.add("Alligators");
         mylist.add("Lions");
