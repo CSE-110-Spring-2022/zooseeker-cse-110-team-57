@@ -53,7 +53,7 @@ public class SearchAnimalActivity extends AppCompatActivity{
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        //ListView listView = findViewById(R.id.my_list);
         //List<AnimalItem> mylist = new ArrayList<>();
 
         ListView listView = findViewById(R.id.my_list);
