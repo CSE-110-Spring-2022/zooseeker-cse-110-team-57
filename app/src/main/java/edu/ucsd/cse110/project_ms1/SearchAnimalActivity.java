@@ -47,7 +47,7 @@ public class SearchAnimalActivity extends AppCompatActivity{
 
         List<AnimalItem> toBeShown= null;
         try {
-            AnimalItem.loadInfo(this, "sample_node_info.json");
+            AnimalItem.loadInfo(this, "sample_node_info.json","sample_edge_info.json","sample_zoo_graph.json");
             toBeShown= AnimalItem.search_by_tag(null);
 
             Log.d("TodoListActivity", toBeShown.toString());

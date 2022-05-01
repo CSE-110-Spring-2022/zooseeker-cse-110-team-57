@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+
 @Entity(tableName = "animal_items")
 public class AnimalItem {
     public long id  = 0;
@@ -19,6 +23,8 @@ public class AnimalItem {
     public boolean searched;
     public int order; // used for displaying on the screen
     public static Map<String, ZooData.VertexInfo> vInfo;
+    public  static  Map<String, ZooData.EdgeInfo> eInfo;
+    public static Graph<String, IdentifiedWeightedEdge> gInfo;
 
     //not sure if i will change this constructor
     public AnimalItem(int order, ZooData.VertexInfo exhibit){
@@ -27,9 +33,18 @@ public class AnimalItem {
         this.exhibit = exhibit;
     }
 
-    public static void loadInfo(Context context,String path) throws IOException {
-        InputStream input = context.getAssets().open(path);
+    // parsing json files to static fields
+    public static void loadInfo(Context context,String v_path,String e_path,String g_path)
+            throws IOException {
+
+        InputStream input = context.getAssets().open(v_path);
         vInfo = ZooData.loadVertexInfoJSON(input);
+
+        input = context.getAssets().open(e_path);
+        eInfo = ZooData.loadEdgeInfoJSON(input);
+
+        input = context.getAssets().open(g_path);
+        gInfo = ZooData.loadZooGraphJSON(input);
     }
 
     @Override
@@ -37,6 +52,8 @@ public class AnimalItem {
         return name;
     }
 
+    //return a list of animals whose tag is contained but the user input tag
+    // If animal names match the tag, that also counts
     public static List<AnimalItem> search_by_tag(String tag){
         List<AnimalItem> retVal =  new ArrayList<AnimalItem>();
         int i =0;
@@ -53,4 +70,46 @@ public class AnimalItem {
         }
         return  retVal;
     }
+
+    //return a route that has a different order of input route, so it can be a good choice for the user
+    public static List<AnimalItem> plan_route(List<AnimalItem> animal_items){
+        //begin and end positions
+        String start = "entrance_exit_gate";
+        String goal;
+        ArrayList<AnimalItem> planned_route = null;
+
+        for (int i=0; i<animal_items.size()+1; i++){
+            //plus 1 because we need the begin and end of the route
+            int min_distance=999999999;
+            AnimalItem closest_animal=null;
+
+            //use for loop to find next closet exhibit
+            for (AnimalItem item : animal_items){
+                goal=item.exhibit.id;
+                GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(gInfo, start, goal);
+                int curr_dis = route_length(path);
+                if (curr_dis<min_distance){
+                    min_distance = curr_dis;
+                    closest_animal = item;
+                }
+            }
+
+            start=closest_animal.exhibit.id;
+            animal_items.remove(closest_animal);
+            planned_route.add(closest_animal);
+        }
+        return  planned_route;
+    }
+
+    // return a path's length
+    public static int route_length(GraphPath<String, IdentifiedWeightedEdge> path){
+        int retVal=0;
+        for (IdentifiedWeightedEdge e : path.getEdgeList()){
+            retVal+= gInfo.getEdgeWeight(e);
+        }
+        return retVal;
+    }
+
+
+
 }
