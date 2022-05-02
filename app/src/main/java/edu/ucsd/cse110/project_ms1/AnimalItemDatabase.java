@@ -16,7 +16,14 @@ import java.util.concurrent.Executors;
 
 public abstract class AnimalItemDatabase extends RoomDatabase {
     public abstract AnimalItemDao AnimalItemDao();
+    private static AnimalItemDatabase singleton = null;
 
+    public synchronized  static AnimalItemDatabase getSingleton(Context context){
+        if (singleton == null){
+            singleton = AnimalItemDatabase.makeDatabase(context);
+        }
+        return  singleton;
+    }
 
 
     static  AnimalItemDatabase makeDatabase(Context context){

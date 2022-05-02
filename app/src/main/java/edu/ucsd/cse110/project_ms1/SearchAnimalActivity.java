@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.project_ms1;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,6 +26,7 @@ public class SearchAnimalActivity extends AppCompatActivity implements SearchVie
     public RecyclerView recyclerView;
     SearchedAnimalsAdapter search_adapter;
     AddToListAdapter addToList_adapter;
+    private AnimalViewModel viewModel;
     String selected_animal;
     String animalId;
 
@@ -33,27 +35,24 @@ public class SearchAnimalActivity extends AppCompatActivity implements SearchVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_animal);
 
-        AnimalItemDao animalItemDao = AnimalItemDatabase.makeDatabase(this).AnimalItemDao();
+        viewModel = new ViewModelProvider(this)
+                .get(AnimalViewModel.class);
+
+        AnimalItemDao animalItemDao = AnimalItemDatabase.getSingleton(this).AnimalItemDao();
         List<AnimalItem> animalItemDaos = animalItemDao.getAll();
 
         search_adapter = new SearchedAnimalsAdapter();
         search_adapter.setHasStableIds(true);
         search_adapter.setSearched_animal_items(animalItemDaos);
+        search_adapter.setOnAnimalButtonClickedHandler(viewModel::select_animal);
+        //viewModel.get
+
         //dropdown bar
         recyclerView = findViewById(R.id.all_searched_animals);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(search_adapter);
-        selected_animal = search_adapter.getSelectedAnimal();
+        selected_animal = search_adapter.onButtonClickListner();
 
-        List<AnimalItem> toBeShown= null;
-        try {
-            AnimalItem.loadInfo(this, "sample_node_info.json","sample_edge_info.json","sample_zoo_graph.json");
-            toBeShown= AnimalItem.search_by_tag(null);
-            Log.d("TodoListActivity", toBeShown.toString());
-            search_adapter.setSearched_animal_items(toBeShown);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         //display list
         addToList_adapter = new AddToListAdapter();
         addToList_adapter.setHasStableIds(true);

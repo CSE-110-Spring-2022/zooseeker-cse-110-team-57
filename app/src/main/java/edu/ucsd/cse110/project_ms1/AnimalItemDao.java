@@ -24,14 +24,14 @@ public interface AnimalItemDao {
     @Query("SELECT * FROM `animal_items` ORDER BY `id`")
     List<AnimalItem> getAll();
 
+    @Query("SELECT * FROM `animal_items` ORDER BY `id`")
+    LiveData<List<AnimalItem>> getAllLive();
+
     @Update
     int update(AnimalItem animalItem);
 
     @Delete
     int delete(AnimalItem animalItem);
-
-    @Query("SELECT * FROM `animal_items` ORDER BY `id`")
-    LiveData<List<AnimalItem>> getAllLive();
 
     @Query("SELECT `id` + 1 FROM `animal_items` ORDER BY `id` DESC LIMIT 1")
     int getOrderForAppend();
