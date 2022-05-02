@@ -28,8 +28,8 @@ public class AddToListActivity extends AppCompatActivity implements SearchView.O
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        List<AnimalItem> selectedAnimalsList = ???????;
-        addToList_adapter.setSelectedAnimalItems();
+        //List<AnimalItem> selectedAnimalsList = ?????;
+        //addToList_adapter.setSelectedAnimalItems();
         return false;
     }
 

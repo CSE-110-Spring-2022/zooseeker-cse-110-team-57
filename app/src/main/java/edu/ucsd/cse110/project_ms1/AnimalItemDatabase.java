@@ -15,8 +15,9 @@ import java.util.concurrent.Executors;
 @Database(entities = {AnimalItem.class}, version = 1)
 
 public abstract class AnimalItemDatabase extends RoomDatabase {
-    public abstract AnimalItemDao AnimalItemDao();
+    //private static TagConverter tagConverter;
 
+    public abstract AnimalItemDao AnimalItemDao();
 
 
     static  AnimalItemDatabase makeDatabase(Context context){
@@ -32,6 +33,7 @@ public abstract class AnimalItemDatabase extends RoomDatabase {
                         });
                     }
                 }).build();
+        //.addTypeConverter(tagConverter)
     }
 }
 

@@ -43,10 +43,10 @@ public class SearchAnimalActivity extends AppCompatActivity implements SearchVie
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(search_adapter);
 
-        List<AnimalItem> toBeShown= null;
+        List<AnimalItem> toBeShown = null;
         try {
-            AnimalItem.loadInfo(this, "sample_node_info.json","sample_edge_info.json","sample_zoo_graph.json");
-            toBeShown= AnimalItem.search_by_tag(null);
+            AnimalItem.loadInfo(this, "sample_node_info.json", "sample_edge_info.json", "sample_zoo_graph.json");
+            toBeShown = AnimalItem.search_by_tag(null);
             Log.d("TodoListActivity", toBeShown.toString());
             search_adapter.setSearched_animal_items(toBeShown);
         } catch (IOException e) {
@@ -63,6 +63,7 @@ public class SearchAnimalActivity extends AppCompatActivity implements SearchVie
 
         SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+       /*
         for (int i = 0; i < selected_animals.size(); i++) {
             String name = selected_animals.get(i);
             AnimalItem currentAnimal = AnimalItem.search_by_tag(name).get(0);
@@ -71,8 +72,10 @@ public class SearchAnimalActivity extends AppCompatActivity implements SearchVie
             editor.putString(currentAnimal.name, animalName.getText().toString());
             editor.commit();
             editor.apply();
-    }
+        }
+       */
 
+    }
 
     @Override
     public boolean onQueryTextSubmit(String query) {
