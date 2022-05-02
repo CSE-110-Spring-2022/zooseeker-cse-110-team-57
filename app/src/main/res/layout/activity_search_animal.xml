@@ -10,8 +10,8 @@
         android:id="@+id/all_searched_animals"
         android:layout_width="400dp"
         android:layout_height="300dp"
-        android:layout_marginStart="4dp"
         android:layout_marginTop="48dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,6 +38,16 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
+    <TextView
+        android:id="@+id/no_such_animal"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:text="There is no such animal"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/all_searched_animals"
+        app:layout_constraintEnd_toEndOf="@+id/all_searched_animals"
+        app:layout_constraintStart_toStartOf="@+id/all_searched_animals"
+        app:layout_constraintTop_toTopOf="@+id/all_searched_animals" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -70,6 +70,12 @@ public class AddToListAdapter extends RecyclerView.Adapter<AddToListAdapter.View
             this.animalItem = animalItem;
             this.animalName.setText(animalItem.name);
         }
+/*
+        public void OnButtonClickListener(View view){
+
+        }
+
+ */
     }
 
 }
