@@ -18,10 +18,10 @@ public interface AnimalItemDao {
     @Insert
     List<Long> insertAll(List<AnimalItem> animalItems);
 
-    @Query("SELECT * FROM `animal_items` WHERE `id`=:id")
+    @Query("SELECT * FROM `animal_items` WHERE `unique_id`=:id")
     AnimalItem get(long id);
 
-    @Query("SELECT * FROM `animal_items` ORDER BY `id`")
+    @Query("SELECT * FROM `animal_items` ORDER BY `unique_id`")
     List<AnimalItem> getAll();
 
     @Update
