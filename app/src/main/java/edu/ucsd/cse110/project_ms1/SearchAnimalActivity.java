@@ -31,49 +31,35 @@ public class SearchAnimalActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_animal);
 
-//        List<animal_item> animal_items = null;
-//        try {
-//            animal_items = animal_item.loadInfo(this,"sample_node_info.json");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        AnimalItemDao animalItemDao = AnimalItemDatabase.makeDatabase(this).AnimalItemDao();
+        List<AnimalItem> animalItemDaos = animalItemDao.getAll();
+
 
         SearchedAnimalsAdapter search_adapter = new SearchedAnimalsAdapter();
         search_adapter.setHasStableIds(true);
+        search_adapter.setSearched_animal_items(animalItemDaos);
 
         recyclerView = findViewById(R.id.all_searched_animals);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(search_adapter);
 
-        List<AnimalItem> toBeShown= null;
-        try {
-            AnimalItem.loadInfo(this, "sample_node_info.json","sample_edge_info.json","sample_zoo_graph.json");
-            toBeShown= AnimalItem.search_by_tag(null);
-
-            Log.d("TodoListActivity", toBeShown.toString());
-            search_adapter.setSearched_animal_items(toBeShown);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        ////ListView listView = findViewById(R.id.my_list);
-        //List<AnimalItem> mylist = new ArrayList<>();
-
-        ListView listView = findViewById(R.id.my_list);
-//        List<AnimalItem> mylist = new ArrayList<>();
-//        mylist.add(new AnimalItem(1,
-//                new ZooData.VertexInfo("1", ZooData.VertexInfo.Kind.EXHIBIT, "Gorillas", Collections.singletonList("new tag"))));
-
-       /*
-        mylist.add("Gorillas");
-        mylist.add("Alligators");
-        mylist.add("Lions");
-        mylist.add("Elephant Odyssey");
-        mylist.add("Arctic Foxes");
-         */
-
-        arrayAdapter = new ArrayAdapter<AnimalItem>(this, android.R.layout.simple_list_item_1, toBeShown);
-        listView.setAdapter(arrayAdapter);
-        //listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+//        List<AnimalItem> toBeShown= null;
+//        try {
+//            AnimalItem.loadInfo(this, "sample_node_info.json","sample_edge_info.json","sample_zoo_graph.json");
+//            toBeShown= AnimalItem.search_by_tag(null);
+//
+//            Log.d("TodoListActivity", toBeShown.toString());
+//            search_adapter.setSearched_animal_items(toBeShown);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        ListView listView = findViewById(R.id.my_list);
+//
+//
+//        arrayAdapter = new ArrayAdapter<AnimalItem>(this, android.R.layout.simple_list_item_1, toBeShown);
+//        listView.setAdapter(arrayAdapter);
+//        //listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
     }
 
     public void onAddToListClicked(View view) {

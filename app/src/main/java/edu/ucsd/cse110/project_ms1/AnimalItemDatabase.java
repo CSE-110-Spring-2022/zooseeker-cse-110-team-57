@@ -6,16 +6,20 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.List;
 import java.util.concurrent.Executors;
 
-@Database(entities = {AnimalItem.class}, version = 1)
-public abstract  class AnimalItemDatabase extends RoomDatabase {
+@Database(entities = {AnimalItem.class}, version = 1, exportSchema = false)
+@TypeConverters(TagConverter.class)
+public abstract class AnimalItemDatabase extends RoomDatabase {
     public abstract AnimalItemDao AnimalItemDao();
 
-    private  static  AnimalItemDatabase makeDatabase(Context context){
+
+
+    static  AnimalItemDatabase makeDatabase(Context context){
         return Room.databaseBuilder(context, AnimalItemDatabase.class, "zoo.db").allowMainThreadQueries()
                 .addCallback(new Callback() {
                     @Override
