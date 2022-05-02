@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/an_animal_from_search"
-        android:layout_width="350dp"
+        android:layout_width="250dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
@@ -15,21 +15,20 @@
         android:maxLines="1"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/an_animal_checkBox"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
-    <CheckBox
-        android:id="@+id/an_animal_checkBox"
-        android:layout_width="41dp"
-        android:layout_height="58dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+    <Button
+        android:id="@+id/add_to_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/an_animal_from_search"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
