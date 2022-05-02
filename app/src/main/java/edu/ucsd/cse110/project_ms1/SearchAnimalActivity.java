@@ -29,7 +29,7 @@ public class SearchAnimalActivity extends AppCompatActivity implements SearchVie
     String animalId;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) { 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_animal);
 
