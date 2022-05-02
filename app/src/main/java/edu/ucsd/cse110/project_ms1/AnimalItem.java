@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,26 +18,32 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 @Entity(tableName = "animal_items")
+@TypeConverters({TagConverter.class})
 public class AnimalItem {
-    @PrimaryKey
-    public String id;
+    @PrimaryKey(autoGenerate = true)
+    public long unique_id;
     @NonNull
+    public String id;
+
+
+
+    public  ArrayList<String> tags;
+
+
     public String name; //essentially, the name is the tag in json file
-    public ZooData.VertexInfo exhibit;
-    public boolean selected;
-    public boolean searched;
-    public int order; // used for displaying on the screen
     public static Map<String, ZooData.VertexInfo> vInfo;
-    public  static  Map<String, ZooData.EdgeInfo> eInfo;
+    public static  Map<String, ZooData.EdgeInfo> eInfo;
     public static Graph<String, IdentifiedWeightedEdge> gInfo;
 
     //not sure if i will change this constructor
-    public AnimalItem(int order, ZooData.VertexInfo exhibit){
-        this.id = exhibit.id;
-        this.name = exhibit.name;
-        this.order = order;
-        this.exhibit = exhibit;
+    public AnimalItem(@NonNull String id, ArrayList<String> tags, String name){
+        this.id = id;
+        this.name = name;
+        this.tags = tags;
+        //this.exhibit = exhibit;
     }
+
+
 
     // parsing json files to static fields
     public static void loadInfo(Context context,String v_path,String e_path,String g_path)
@@ -67,7 +74,7 @@ public class AnimalItem {
             if(currentVertex.kind.name().equals("EXHIBIT")){
                 if (tag==null || currentVertex.tags.contains(tag.toLowerCase()) ||
                         currentVertex.name.toLowerCase().equals(tag.toLowerCase())){
-                    retVal.add(new AnimalItem(i,set.getValue()));
+                    retVal.add(new AnimalItem(set.getValue().id, (ArrayList<String>) set.getValue().tags,set.getValue().name));
                 }
             }
 
@@ -90,7 +97,7 @@ public class AnimalItem {
 
             //use for loop to find next closet exhibit
             for (AnimalItem item : animal_items){
-                goal=item.exhibit.id;
+                goal=item.id;
                 GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(gInfo, start, goal);
                 int curr_dis = route_length(path);
                 if (curr_dis<min_distance){
@@ -99,7 +106,7 @@ public class AnimalItem {
                 }
             }
 
-            start=closest_animal.exhibit.id;
+            start=closest_animal.id;
             animal_items.remove(closest_animal);
             planned_route.add(closest_animal);
         }
@@ -114,7 +121,6 @@ public class AnimalItem {
         }
         return retVal;
     }
-
 
 
 }

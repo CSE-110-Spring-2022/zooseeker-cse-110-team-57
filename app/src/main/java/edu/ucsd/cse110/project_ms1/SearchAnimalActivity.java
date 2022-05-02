@@ -31,8 +31,13 @@ public class SearchAnimalActivity extends AppCompatActivity implements SearchVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_animal);
 
+        AnimalItemDao animalItemDao = AnimalItemDatabase.makeDatabase(this).AnimalItemDao();
+        List<AnimalItem> animalItemDaos = animalItemDao.getAll();
+
+
         search_adapter = new SearchedAnimalsAdapter();
         search_adapter.setHasStableIds(true);
+        search_adapter.setSearched_animal_items(animalItemDaos);
 
         recyclerView = findViewById(R.id.all_searched_animals);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

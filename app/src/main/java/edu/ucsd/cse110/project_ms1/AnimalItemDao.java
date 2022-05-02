@@ -21,7 +21,7 @@ public interface AnimalItemDao {
     @Query("SELECT * FROM `animal_items` WHERE `id`=:id")
     AnimalItem get(long id);
 
-    @Query("SELECT * FROM `animal_items` ORDER BY `order`")
+    @Query("SELECT * FROM `animal_items` ORDER BY `id`")
     List<AnimalItem> getAll();
 
     @Update
@@ -30,10 +30,10 @@ public interface AnimalItemDao {
     @Delete
     int delete(AnimalItem animalItem);
 
-    @Query("SELECT * FROM `animal_items` ORDER BY `order`")
+    @Query("SELECT * FROM `animal_items` ORDER BY `id`")
     LiveData<List<AnimalItem>> getAllLive();
 
-    @Query("SELECT `order` + 1 FROM `animal_items` ORDER BY `order` DESC LIMIT 1")
+    @Query("SELECT `id` + 1 FROM `animal_items` ORDER BY `id` DESC LIMIT 1")
     int getOrderForAppend();
 
     //@Query()
