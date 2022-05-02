@@ -78,7 +78,7 @@ public class SearchAnimalActivity extends AppCompatActivity implements SearchVie
     public boolean onQueryTextSubmit(String query) {
         List<AnimalItem> searchedAnimalsList = AnimalItem.search_by_tag(query);
         search_adapter.setSearched_animal_items(searchedAnimalsList);
-        return false; 
+        return false;
     }
     @Override
     public boolean onQueryTextChange(String newText) {
