@@ -1,0 +1,23 @@
+[
+  {
+    "id": "gorillas",
+    "kind": "exhibit",
+    "name": "Gorillas",
+    "tags": [
+      "gorilla",
+      "monkey",
+      "ape",
+      "mammal"
+    ]
+  },
+  {
+    "id": "gators",
+    "kind": "exhibit",
+    "name": "Alligators",
+    "tags": [
+      "alligator",
+      "reptile",
+      "gator"
+    ]
+  }
+]
