@@ -28,11 +28,11 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
         searched_animal_items = new_searched_animal_items;
         notifyDataSetChanged();
     }
-    /*
+
     public void setOnAnimalButtonClickedHandler(Consumer<AnimalItem> onAnimalButtonClicked){
         this.onAnimalButtonClicked = onAnimalButtonClicked;
     }
-    */
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
