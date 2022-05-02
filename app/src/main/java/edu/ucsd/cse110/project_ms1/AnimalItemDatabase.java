@@ -12,8 +12,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.List;
 import java.util.concurrent.Executors;
 
-@Database(entities = {AnimalItem.class}, version = 1, exportSchema = false)
-@TypeConverters(TagConverter.class)
+@Database(entities = {AnimalItem.class}, version = 1)
+
 public abstract class AnimalItemDatabase extends RoomDatabase {
     public abstract AnimalItemDao AnimalItemDao();
 

@@ -14,9 +14,9 @@ public class TagConverter {
     }
 
     @TypeConverter
-    public static String listToStoredString(AnimalItem item) {
+    public static String listToStoredString(ArrayList<String> tags) {
         String value = "";
-        for (String tag : item.tags)
+        for (String tag : tags)
             value += tag + ",";
 
         return value;

@@ -18,6 +18,7 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 @Entity(tableName = "animal_items")
+@TypeConverters({TagConverter.class})
 public class AnimalItem {
     @PrimaryKey(autoGenerate = true)
     public long unique_id;
@@ -25,8 +26,8 @@ public class AnimalItem {
     public String id;
 
 
-    @TypeConverters({TagConverter.class})
-    public final ArrayList<String> tags;
+
+    public  ArrayList<String> tags;
 
 
     public String name; //essentially, the name is the tag in json file
