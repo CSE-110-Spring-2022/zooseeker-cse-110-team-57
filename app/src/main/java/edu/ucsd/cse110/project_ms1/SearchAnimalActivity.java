@@ -25,6 +25,8 @@ public class SearchAnimalActivity extends AppCompatActivity implements SearchVie
     public RecyclerView recyclerView;
     SearchedAnimalsAdapter search_adapter;
     AddToListAdapter addToList_adapter;
+    String selected_animal;
+    String animalId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) { 
@@ -34,14 +36,14 @@ public class SearchAnimalActivity extends AppCompatActivity implements SearchVie
         AnimalItemDao animalItemDao = AnimalItemDatabase.makeDatabase(this).AnimalItemDao();
         List<AnimalItem> animalItemDaos = animalItemDao.getAll();
 
-
         search_adapter = new SearchedAnimalsAdapter();
         search_adapter.setHasStableIds(true);
         search_adapter.setSearched_animal_items(animalItemDaos);
-
+        //dropdown bar
         recyclerView = findViewById(R.id.all_searched_animals);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(search_adapter);
+        selected_animal = search_adapter.getSelectedAnimal();
 
         List<AnimalItem> toBeShown= null;
         try {
@@ -52,7 +54,7 @@ public class SearchAnimalActivity extends AppCompatActivity implements SearchVie
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        //display list
         addToList_adapter = new AddToListAdapter();
         addToList_adapter.setHasStableIds(true);
 
@@ -60,17 +62,17 @@ public class SearchAnimalActivity extends AppCompatActivity implements SearchVie
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(addToList_adapter);
 
-
+        //link the name with the combo string
         SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        for (int i = 0; i < selected_animals.size(); i++) {
-            String name = selected_animals.get(i);
-            AnimalItem currentAnimal = AnimalItem.search_by_tag(name).get(0);
-            currentAnimal.selected = true;
-            TextView animalName = findViewById(R.id.an_animal_selected);
-            editor.putString(currentAnimal.name, animalName.getText().toString());
-            editor.commit();
-            editor.apply();
+        AnimalItem currentAnimal = AnimalItem.search_by_tag(selected_animal).get(0);
+        animalId = currentAnimal.id;
+        editor.putString(selected_animal, animalId);
+
+        editor.commit();
+        editor.apply();
+
+
     }
 
 
@@ -78,17 +80,24 @@ public class SearchAnimalActivity extends AppCompatActivity implements SearchVie
     public boolean onQueryTextSubmit(String query) {
         List<AnimalItem> searchedAnimalsList = AnimalItem.search_by_tag(query);
         search_adapter.setSearched_animal_items(searchedAnimalsList);
+        //List<AnimalItem> selectedAnimalsList = ???;
+        //addToList_adapter.setSelectedAnimalItems();
         return false;
     }
     @Override
     public boolean onQueryTextChange(String newText) {
         return false;
     }
+
     public void onAddToListClicked(View view) {
         Intent intent = new Intent(this, AddToListActivity.class);
         startActivity(intent);
     }
-
+/*
+    public AnimalItem getAnimalItemFromId(String Id){
+        String
+    }
+*/
 /*
     @Override
     public boolean onCreateOptionsMenu (Menu menu){

@@ -63,7 +63,7 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
         private final TextView animalView;
         private Button animalButton;
         private AnimalItem animal_item;
-        private List<String> selected_animals;
+        private String selected_animal;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -74,12 +74,13 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
                 if (onAnimalButtonClicked == null) return;
                 onAnimalButtonClicked.accept(animal_item);
 
-                selected_animals.add(animal_item.name);
+                selected_animal = animal_item.name;
             });
         }
 
-        public List<String> getSelectedAnimals(){
-            return selected_animals;
+        //public View getView(final int position, View concertView, ViewGroup parent){
+        public String getSelected_animal(){
+            return selected_animal;
         }
         public AnimalItem getAnimalItem(){
             return animal_item;
