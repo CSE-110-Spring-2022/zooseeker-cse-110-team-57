@@ -46,6 +46,7 @@ public class SearchAnimalActivity extends AppCompatActivity{
         recyclerView.setAdapter(search_adapter);
 
         List<AnimalItem> toBeShown= null;
+        
         try {
             AnimalItem.loadInfo(this, "sample_node_info.json","sample_edge_info.json","sample_zoo_graph.json");
             toBeShown= AnimalItem.search_by_tag(null);
