@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project_MS1">
         <activity
-            android:name=".AddToListActivity"
+            android:name=".PlanActivity"
             android:exported="false" />
         <activity
             android:name=".SearchAnimalActivity"

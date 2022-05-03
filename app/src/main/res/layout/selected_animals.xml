@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/an_animal_selected"
+        android:id="@+id/an_selected_animal"
         android:layout_width="fill_parent"
         android:layout_height="40dp"
         android:text="animal's name"

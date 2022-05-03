@@ -25,12 +25,12 @@ public class AnimalItem {
     @NonNull
     public String id;
 
-    public  ArrayList<String> tags;
+    public ArrayList<String> tags;
 
     public String name; //essentially, the name is the tag in json file
 
     public static Map<String, ZooData.VertexInfo> vInfo;
-    public static  Map<String, ZooData.EdgeInfo> eInfo;
+    public static Map<String, ZooData.EdgeInfo> eInfo;
     public static Graph<String, IdentifiedWeightedEdge> gInfo;
 
     //not sure if i will change this constructor
