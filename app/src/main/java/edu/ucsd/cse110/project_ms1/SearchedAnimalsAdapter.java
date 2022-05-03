@@ -8,27 +8,34 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimalsAdapter.ViewHolder> {
-    private List<AnimalItem> searched_animal_items = Collections.emptyList();
+public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimalsAdapter.ViewHolder>
+                                    implements Filterable {
+    private List<AnimalItem> all_animal_items;
+    private List<AnimalItem> searched_animal_items ;
     private Consumer<AnimalItem> onAnimalButtonClicked;
     private OnAddListener myOnAddListener;
+
 
     public interface OnAddListener{
         void OnAddClick(int position);
     }
 
-    public SearchedAnimalsAdapter(List<AnimalItem> searched_animal_items, OnAddListener onAddListener){
-        this.searched_animal_items = searched_animal_items;
+    public SearchedAnimalsAdapter( OnAddListener onAddListener){
+        this.all_animal_items = AnimalItem.search_by_tag(null);
+        this.searched_animal_items = new ArrayList<>(all_animal_items);
         this.myOnAddListener = onAddListener;
     }
 
@@ -71,7 +78,7 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
 */
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-    //public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
         private final TextView animalName;
         private Button animalButton;
         private AnimalItem animal_item;
@@ -101,5 +108,23 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
         public void onClick(View view) {
             onAddListener.OnAddClick(getAdapterPosition());
         }
+
+        @Override
+        public Filter getFilter() {
+            return animal_filter;
+        }
+
+        private Filter animal_filter =new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                return null;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+
+            }
+        };
+
     }
 }

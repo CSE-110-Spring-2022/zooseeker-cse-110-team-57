@@ -39,6 +39,7 @@ public class SearchAnimalActivity extends AppCompatActivity
     List<AnimalItem> searchedAnimalItemList;
     List<AnimalItem> selectedAnimalItemList;
     List<String> selectedAnimalNameStringList;
+    android.widget.SearchView searchView;
 
     private AnimalViewModel viewModel;
 
@@ -47,7 +48,7 @@ public class SearchAnimalActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) { 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_animal);
-        //Retain the previous list of selected animals (List<AnimalItem>)
+        //Retain the previous list of selected animals (List<AnimalItem>) each time we start the app
         selectedAnimalItemList = loadAddToList();
         for (AnimalItem selectedAnimal : selectedAnimalItemList){
             selectedAnimalNameStringList.add(selectedAnimal.name);
@@ -65,8 +66,8 @@ public class SearchAnimalActivity extends AppCompatActivity
                 .get(AnimalViewModel.class);
 
         //SearchedAnimalsAdapter
-        search_adapter = new SearchedAnimalsAdapter(searchedAnimalItemList, this);
-        search_adapter.setOnAnimalButtonClickedHandler(viewModel::select);
+        search_adapter = new SearchedAnimalsAdapter(this);
+        //search_adapter.setOnAnimalButtonClickedHandler(viewModel::select);
         search_adapter.setHasStableIds(true);
 
         //dropdown bar
@@ -74,6 +75,8 @@ public class SearchAnimalActivity extends AppCompatActivity
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(search_adapter);
 
+
+        searchView = findViewById(R.id.search_bar);
 
         //--------------------------Below is the AddToList part-----------------------------------
 

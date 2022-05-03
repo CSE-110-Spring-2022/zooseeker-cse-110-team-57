@@ -34,7 +34,7 @@ public abstract class AnimalItemDatabase extends RoomDatabase {
                         super.onCreate(db);
                         Executors.newSingleThreadScheduledExecutor().execute(()->{
                             List<AnimalItem> todos = AnimalItem
-                                    .search_by_tag("empty");
+                                    .search_by_tag(null);
                             //getSingleton(context).todoListItemDao().insertAll(todos);
                         });
                     }
