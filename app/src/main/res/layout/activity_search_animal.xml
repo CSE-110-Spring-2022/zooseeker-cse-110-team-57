@@ -15,15 +15,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/all_selected_animals"
-        android:layout_width="400dp"
-        android:layout_height="300dp"
-        android:layout_marginTop="428dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/search_bar"
@@ -48,6 +39,43 @@
         app:layout_constraintEnd_toEndOf="@+id/all_searched_animals"
         app:layout_constraintStart_toStartOf="@+id/all_searched_animals"
         app:layout_constraintTop_toTopOf="@+id/all_searched_animals" />
+
+    <TextView
+        android:id="@+id/below_are_selected_animals"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Below are your selected animals"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/all_selected_animals"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/all_searched_animals"
+        app:layout_constraintVertical_bias="0.021" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/all_selected_animals"
+        android:layout_width="400dp"
+        android:layout_height="300dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.454"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.87" />
+
+    <Button
+        android:id="@+id/plan_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Plan"
+        android:onClick="onPlanClick"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/all_selected_animals"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

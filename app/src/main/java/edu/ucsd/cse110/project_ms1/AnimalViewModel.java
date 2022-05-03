@@ -37,4 +37,6 @@ public class AnimalViewModel extends AndroidViewModel {
     private  void loadUsers() {
         todoListItems = AnimalItemDao.getAllLive();
     }
+
+
 }

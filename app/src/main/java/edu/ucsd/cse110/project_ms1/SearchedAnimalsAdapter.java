@@ -21,31 +21,41 @@ import java.util.function.Consumer;
 public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimalsAdapter.ViewHolder> {
     private List<AnimalItem> searched_animal_items = Collections.emptyList();
     private Consumer<AnimalItem> onAnimalButtonClicked;
+    private OnAddListener myOnAddListener;
 
+    public interface OnAddListener{
+        void OnAddClick(int position);
+    }
+
+    public SearchedAnimalsAdapter(List<AnimalItem> searched_animal_items, OnAddListener onAddListener){
+        this.searched_animal_items = searched_animal_items;
+        this.myOnAddListener = onAddListener;
+    }
 
     public void setSearched_animal_items(List<AnimalItem> new_searched_animal_items){
         searched_animal_items.clear();
         searched_animal_items = new_searched_animal_items;
         notifyDataSetChanged();
     }
-    /*
+
     public void setOnAnimalButtonClickedHandler(Consumer<AnimalItem> onAnimalButtonClicked){
         this.onAnimalButtonClicked = onAnimalButtonClicked;
     }
-    */
+
+
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SearchedAnimalsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.searched_animals, parent, false);
 
-        return new ViewHolder(view);
+        return new ViewHolder(view, myOnAddListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setAnimal_item(searched_animal_items.get(position));
+        holder.setAnimalItem(searched_animal_items.get(position));
     }
 
     @Override
@@ -60,44 +70,36 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
     }
 */
 
-
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        private final TextView animalView;
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    //public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        private final TextView animalName;
         private Button animalButton;
         private AnimalItem animal_item;
-        private String selected_animal;
+        OnAddListener onAddListener;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, OnAddListener onAddListener) {
             super(itemView);
-            this.animalView = itemView.findViewById(R.id.an_animal_from_search);
+            this.animalName = itemView.findViewById(R.id.an_animal_from_search);
             this.animalButton = itemView.findViewById(R.id.add_to_button);
+            this.onAddListener = onAddListener;
 
-            this.animalButton.setOnClickListener(view -> {
-                if (onAnimalButtonClicked == null) return;
-                onAnimalButtonClicked.accept(animal_item);
+            //itemView.setOnClickListener(this);
+            this.animalButton.setOnClickListener(this);
 
-                selected_animal = animal_item.name;
-            });
         }
 
-        //public View getView(final int position, View concertView, ViewGroup parent){
-        public String getSelected_animal(){
-            return selected_animal;
-        }
         public AnimalItem getAnimalItem(){
             return animal_item;
         }
-        public void setAnimal_item(AnimalItem animal_item) {
+
+        public void setAnimalItem(AnimalItem animal_item) {
             this.animal_item = animal_item;
-            this.animalView.setText(animal_item.name);
-        }
-        public AnimalItem getAnimal_item() {
-            return animal_item;
+            this.animalName.setText(animal_item.name);
         }
 
+        @Override
+        public void onClick(View view) {
+            onAddListener.OnAddClick(getAdapterPosition());
+        }
     }
-
-
-
-
 }

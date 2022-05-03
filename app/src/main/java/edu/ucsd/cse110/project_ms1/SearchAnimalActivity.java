@@ -24,38 +24,50 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 
-public class SearchAnimalActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
+public class SearchAnimalActivity extends AppCompatActivity
+        implements SearchView.OnQueryTextListener, SearchedAnimalsAdapter.OnAddListener {
 
     public RecyclerView recyclerView;
     SearchedAnimalsAdapter search_adapter;
     AddToListAdapter addToList_adapter;
-    private AnimalViewModel viewModel;
-    List<String> selectedAnimalNameStringList;
-    List<String> selectedAnimalItemStringList;
+    List<AnimalItem> searchedAnimalItemList;
     List<AnimalItem> selectedAnimalItemList;
-    String selected_animal;
+    List<String> selectedAnimalNameStringList;
+
+    private AnimalViewModel viewModel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) { 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_animal);
+        //Retain the previous list of selected animals (List<AnimalItem>)
+        selectedAnimalItemList = loadAddToList();
+        for (AnimalItem selectedAnimal : selectedAnimalItemList){
+            selectedAnimalNameStringList.add(selectedAnimal.name);
+        }
+        //make "No such animal" invisible
+        TextView NoSuchAnimal = findViewById(R.id.no_such_animal);
+        NoSuchAnimal.setVisibility(View.INVISIBLE);
 
+        //AnimalItemDao
+        AnimalItemDao animalItemDao = AnimalItemDatabase.getSingleton(this).AnimalItemDao();
+        List<AnimalItem> allAnimalItem = animalItemDao.getAll();
+
+        //viewModel
         viewModel = new ViewModelProvider(this)
                 .get(AnimalViewModel.class);
 
-        AnimalItemDao animalItemDao = AnimalItemDatabase.getSingleton(this).AnimalItemDao();
-        List<AnimalItem> animalItemDaos = animalItemDao.getAll();
-        //list of searched animals
-        search_adapter = new SearchedAnimalsAdapter();
+        //SearchedAnimalsAdapter
+        search_adapter = new SearchedAnimalsAdapter(searchedAnimalItemList, this);
+        search_adapter.setOnAnimalButtonClickedHandler(viewModel::select);
         search_adapter.setHasStableIds(true);
-        search_adapter.setSearched_animal_items(animalItemDaos);
-        search_adapter.setOnAnimalButtonClickedHandler(viewModel::select_animal);
-        //viewModel.get
 
         //dropdown bar
         recyclerView = findViewById(R.id.all_searched_animals);
@@ -63,30 +75,35 @@ public class SearchAnimalActivity extends AppCompatActivity implements SearchVie
         recyclerView.setAdapter(search_adapter);
 
 
+        //--------------------------Below is the AddToList part-----------------------------------
 
         //get the list of name string of selected animals
-        selectedAnimalNameStringList = search_adapter.getSelectedAnimal();
-        SaveAnimalItemString(selectedAnimalNameStringList);
 
+
+
+        //AddToListAdapter
         addToList_adapter = new AddToListAdapter();
         addToList_adapter.setHasStableIds(true);
+
         //list bar
         recyclerView = findViewById(R.id.all_selected_animals);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(addToList_adapter);
 
-        //get the animalItem list of selected animals
-        selectedAnimalItemList = LoadAnimalItemString(selectedAnimalNameStringList);
-
+        //reset the addToList
+        selectedAnimalItemList = loadAddToList();
         addToList_adapter.setSelectedAnimalItems(selectedAnimalItemList);
+
     }
 
+    //----------------------Below are the functions of SearchView--------------------------------
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        //Get the searched animals
         List<AnimalItem> searchedAnimalsList = AnimalItem.search_by_tag(query);
+        //Check if there is no such animal
         TextView NoSuchAnimal = findViewById(R.id.no_such_animal);
-        //link searched animals
         if (searchedAnimalsList.size() == 0){
             NoSuchAnimal.setVisibility(View.VISIBLE);
             return false;
@@ -94,22 +111,62 @@ public class SearchAnimalActivity extends AppCompatActivity implements SearchVie
         else{
             NoSuchAnimal.setVisibility(View.INVISIBLE);
         }
+        //set the searched animals
         search_adapter.setSearched_animal_items(searchedAnimalsList);
-        return false;
+        return true;
     }
+
     @Override
     public boolean onQueryTextChange(String newText) {
         return false;
     }
 
-    public void onAddToListClicked(View view) {
-        Intent intent = new Intent(this, AddToListActivity.class);
-        startActivity(intent);
+    //--------------------------Below is the Add Button Click--------------------------------------
+    //When the user taps the "Add" button, add the selected animal to selectedAnimalItemList.
+    @Override
+    public void OnAddClick(int position) {
+        AnimalItem newSelectedAnimalItem = searchedAnimalItemList.get(position);
+        saveAddToList(newSelectedAnimalItem);
+        selectedAnimalItemList = loadAddToList();
     }
 
-    public AnimalItem getAnimalNameFromId(String Id){
-        AnimalItem animalItem = AnimalItem.search_by_tag(Id).get(0);
-        return animalItem;
+    //----------------------Below are functions in SharedPreferences-------------------------------
+
+    public void saveAddToList(AnimalItem newSelectedAnimalItem){
+        //link the animalItem name with the string form of animalItem
+        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        //convert AnimalItem into a string containing all related information of a selected animal
+        String animalItemInfoString = AnimalItemToString(newSelectedAnimalItem);
+        //Map(animal name, animal information)
+        editor.putString(newSelectedAnimalItem.name, animalItemInfoString);
+        editor.commit();
+        editor.apply();
+    }
+
+    public List<AnimalItem> loadAddToList(){
+        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        List<AnimalItem> selectedAnimalItemList = new ArrayList<AnimalItem>();
+        //get the list of selected animal names
+        Set<String> selectedAnimalNameStringSet = sharedPreferences.getAll().keySet();
+        selectedAnimalNameStringList = new ArrayList<String>(selectedAnimalNameStringSet);
+        //check if the user hasn't selected any animal
+        if (selectedAnimalNameStringList.size() == 0){
+            //return empty list of AnimalItem
+            return selectedAnimalItemList;
+        }
+        //set the recycler view
+        for (String animalName: selectedAnimalNameStringList){
+            //find the string containing all related information of a selected animal
+            String animalItemInfoString = sharedPreferences.getString(animalName,
+                    "No found such animal in sharedPreference");
+            //get the animalItem
+            AnimalItem animalItem = StringToAnimalItem(animalItemInfoString);
+            //add animalItem to the AnimalItem list
+            selectedAnimalItemList.add(animalItem);
+        }
+        addToList_adapter.setSelectedAnimalItems(selectedAnimalItemList);
+        return selectedAnimalItemList;
     }
 
     public String AnimalItemToString(AnimalItem animalItem){
@@ -121,29 +178,10 @@ public class SearchAnimalActivity extends AppCompatActivity implements SearchVie
         AnimalItem currentAnimalItem = g.fromJson(animalItem, AnimalItem.class);
         return currentAnimalItem;
     }
-    public void SaveAnimalItemString(List<String> selectedAnimalNameStringList){
-        //link the animalItem name with the string form of animalItem
-        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        for (int i = 0; i < selectedAnimalNameStringList.size(); i++){
-            AnimalItem animalItem = AnimalItem.search_by_tag(selectedAnimalNameStringList.get(i)).get(0);
-            String currentString = AnimalItemToString(animalItem);
-            editor.putString(currentString, selectedAnimalNameStringList.get(i));
-        }
-        editor.commit();
-        editor.apply();
-    }
-    public List<AnimalItem> LoadAnimalItemString(List<String> currentStringList){
-        List<AnimalItem> currentAnimalItemList = new ArrayList<AnimalItem>();
-        if (currentStringList.size() == 0){
-            return currentAnimalItemList;
-        }
-        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
-        for (int i = 0; i < currentStringList.size(); i++){
-            String currentAnimalString = sharedPreferences.getString(currentStringList.get(i), "default_if_not_found");
-            currentAnimalItemList.add(StringToAnimalItem(currentAnimalString));
-        }
-        return currentAnimalItemList;
+
+    public void onPlanClick(View view) {
+        Intent intent = new Intent(this, PlanActivity.class);
+        startActivity(intent);
     }
 
 
