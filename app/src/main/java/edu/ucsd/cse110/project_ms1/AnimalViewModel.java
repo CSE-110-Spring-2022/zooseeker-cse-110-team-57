@@ -11,13 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AnimalViewModel extends AndroidViewModel {
-    private LiveData<List<AnimalItem>> selected_animals;
+    private LiveData<List<AnimalItem>> searchedAnimals;
     private final AnimalItemDao animalItemDao;
 
 
     public AnimalViewModel(@NonNull Application application){
         super(application);
-        //selected_animals = new ArrayList<AnimalItem>();
         Context context = getApplication().getApplicationContext();
         AnimalItemDatabase db = AnimalItemDatabase.getSingleton(context);
         animalItemDao = db.AnimalItemDao();
