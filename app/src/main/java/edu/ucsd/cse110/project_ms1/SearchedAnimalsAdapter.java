@@ -8,19 +8,23 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Filter;
 import android.widget.TextView;
+import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimalsAdapter.ViewHolder> {
+public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimalsAdapter.ViewHolder> implements Filterable {
     private List<AnimalItem> searched_animal_items = Collections.emptyList();
-    private Consumer<AnimalItem> onAnimalButtonClicked;
+
     private OnAddListener myOnAddListener;
 
     public interface OnAddListener{
@@ -38,10 +42,31 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
         notifyDataSetChanged();
     }
 
-    public void setOnAnimalButtonClickedHandler(Consumer<AnimalItem> onAnimalButtonClicked){
-        this.onAnimalButtonClicked = onAnimalButtonClicked;
-    }
+    public Filter animalItemFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<AnimalItem> filteredList = new ArrayList<AnimalItem>();
+            if (charSequence == null || charSequence.length() == 0){
+                return ???;
+            }
+            else{
+                String searchText = charSequence.toString().trim();
+                for (AnimalItem animalItem : ){
 
+                }
+            }
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+
+        }
+    };
+
+    @Override
+    public Filter getFilter() {
+        return animalItemFilter;
+    }
 
     @NonNull
     @Override

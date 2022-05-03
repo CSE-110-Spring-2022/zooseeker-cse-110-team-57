@@ -25,6 +25,8 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -34,9 +36,11 @@ public class SearchAnimalActivity extends AppCompatActivity
         implements SearchView.OnQueryTextListener, SearchedAnimalsAdapter.OnAddListener {
 
     public RecyclerView recyclerView;
+    SearchView searchView;
     AnimalViewModel viewModel;
     SearchedAnimalsAdapter search_adapter;
     AddToListAdapter addToList_adapter;
+    List<AnimalItem> allAnimalItem;
     List<AnimalItem> searchedAnimalItemList;
     List<AnimalItem> selectedAnimalItemList;
     List<String> selectedAnimalNameStringList;
@@ -58,25 +62,30 @@ public class SearchAnimalActivity extends AppCompatActivity
 
         //AnimalItemDao
         AnimalItemDao animalItemDao = AnimalItemDatabase.getSingleton(this).AnimalItemDao();
-        List<AnimalItem> allAnimalItem = animalItemDao.getAll();
+        allAnimalItem= animalItemDao.getAll();
 
         //SearchedAnimalsAdapter
-        viewModel = new ViewModelProvider(this).get(AnimalViewModel.class);
         search_adapter = new SearchedAnimalsAdapter(searchedAnimalItemList, this);
-        viewModel.getSearchedAnimalItems().observe(this, search_adapter::setSearched_animal_items);
-        //search_adapter.setOnAnimalButtonClickedHandler(viewModel::select);
         search_adapter.setHasStableIds(true);
+
+        viewModel = new ViewModelProvider(this).get(AnimalViewModel.class);
+        //viewModel.getSearchedAnimalItems().observe(this, search_adapter::setSearched_animal_items);
 
         //dropdown bar
         recyclerView = findViewById(R.id.all_searched_animals);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(search_adapter);
 
+        searchView = findViewById(R.id.search_bar);
+        /*
+        searchView.setOnFocusChangeListener((view, hasFocus) -> {
+            if (!hasFocus){
+                onTextEditedHandler.accept(AnimalItem, );
+            }
+        });
+        */
 
         //--------------------------Below is the AddToList part-----------------------------------
-
-        //get the list of name string of selected animals
-
 
 
         //AddToListAdapter
@@ -181,6 +190,7 @@ public class SearchAnimalActivity extends AppCompatActivity
         Intent intent = new Intent(this, PlanActivity.class);
         startActivity(intent);
     }
+
 
 
 /*

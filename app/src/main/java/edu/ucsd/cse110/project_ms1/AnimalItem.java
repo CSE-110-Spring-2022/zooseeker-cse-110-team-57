@@ -24,10 +24,9 @@ public class AnimalItem {
     public long unique_id;
     @NonNull
     public String id;
-
     public ArrayList<String> tags;
-
     public String name; //essentially, the name is the tag in json file
+    public boolean searched;
 
     public static Map<String, ZooData.VertexInfo> vInfo;
     public static Map<String, ZooData.EdgeInfo> eInfo;
@@ -38,6 +37,7 @@ public class AnimalItem {
         this.id = id;
         this.name = name;
         this.tags = tags;
+        this.searched = false;
 
         //this.exhibit = exhibit;
     }
