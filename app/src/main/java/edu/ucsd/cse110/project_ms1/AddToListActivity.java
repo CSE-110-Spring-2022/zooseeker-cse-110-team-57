@@ -21,9 +21,6 @@ public class AddToListActivity extends AppCompatActivity implements SearchView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_to_list);
 
-
-
-
     }
 
     @Override
