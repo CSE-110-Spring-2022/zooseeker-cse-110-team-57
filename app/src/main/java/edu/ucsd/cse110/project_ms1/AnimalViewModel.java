@@ -22,15 +22,20 @@ public class AnimalViewModel extends AndroidViewModel {
         animalItemDao = db.AnimalItemDao();
     }
 
-    public LiveData<List<AnimalItem>> getSearchedAnimalItems(){
-        if (searchedAnimals == null){
-            loadUsers();
-        }
-        return searchedAnimals;
+    public void select_animal(AnimalItem selected_animal){
+
+        //selected_animals.add(selected_animal);
     }
 
-    private void loadUsers() {
-        searchedAnimals = animalItemDao.getAllLive();
+    public LiveData<List<AnimalItem>> getTodoListItems(){
+        if (selected_animals == null){
+            loadUsers();
+        }
+        return null;//todoListItems;
+    }
+
+    private  void loadUsers() {
+        //todoListItems = AnimalItemDao.getAllLive();
     }
 
 
