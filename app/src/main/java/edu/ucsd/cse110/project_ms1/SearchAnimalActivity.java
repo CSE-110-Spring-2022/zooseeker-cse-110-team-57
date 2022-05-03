@@ -34,13 +34,13 @@ public class SearchAnimalActivity extends AppCompatActivity
         implements SearchView.OnQueryTextListener, SearchedAnimalsAdapter.OnAddListener {
 
     public RecyclerView recyclerView;
+    AnimalViewModel viewModel;
     SearchedAnimalsAdapter search_adapter;
     AddToListAdapter addToList_adapter;
     List<AnimalItem> searchedAnimalItemList;
     List<AnimalItem> selectedAnimalItemList;
     List<String> selectedAnimalNameStringList;
 
-    private AnimalViewModel viewModel;
 
 
     @Override
@@ -60,13 +60,11 @@ public class SearchAnimalActivity extends AppCompatActivity
         AnimalItemDao animalItemDao = AnimalItemDatabase.getSingleton(this).AnimalItemDao();
         List<AnimalItem> allAnimalItem = animalItemDao.getAll();
 
-        //viewModel
-        viewModel = new ViewModelProvider(this)
-                .get(AnimalViewModel.class);
-
         //SearchedAnimalsAdapter
+        viewModel = new ViewModelProvider(this).get(AnimalViewModel.class);
         search_adapter = new SearchedAnimalsAdapter(searchedAnimalItemList, this);
-        search_adapter.setOnAnimalButtonClickedHandler(viewModel::select);
+        viewModel.getSearchedAnimalItems().observe(this, search_adapter::setSearched_animal_items);
+        //search_adapter.setOnAnimalButtonClickedHandler(viewModel::select);
         search_adapter.setHasStableIds(true);
 
         //dropdown bar
