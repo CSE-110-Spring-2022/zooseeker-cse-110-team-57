@@ -30,7 +30,6 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
     private Consumer<AnimalItem> onAnimalButtonClicked;
     private OnAddListener myOnAddListener;
 
-
     public interface OnAddListener{
         void OnAddClick(int position);
     }
@@ -72,6 +71,8 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
             notifyDataSetChanged();
         }
     };
+
+
 
     @Override
     public Filter getFilter() {

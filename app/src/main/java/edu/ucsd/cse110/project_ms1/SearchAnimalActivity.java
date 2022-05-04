@@ -53,6 +53,7 @@ public class SearchAnimalActivity extends AppCompatActivity
     List<AnimalItem> selectedAnimalItemList;
     List<AnimalItem> preSelectedAnimalItemList;
     List<String> selectedAnimalNameStringList;
+    TextView NoSuchAnimal;
 
 
     @Override
@@ -73,7 +74,7 @@ public class SearchAnimalActivity extends AppCompatActivity
  */
 
         //make "No such animal" invisible
-        TextView NoSuchAnimal = findViewById(R.id.no_such_animal);
+        NoSuchAnimal = findViewById(R.id.no_such_animal);
         NoSuchAnimal.setVisibility(View.INVISIBLE);
         TextView BelowAreSelectedAnimals = findViewById(R.id.below_are_selected_animals);
         BelowAreSelectedAnimals.setVisibility(View.VISIBLE);
