@@ -194,7 +194,6 @@ public class SearchAnimalActivity extends AppCompatActivity
             //add animalItem to the AnimalItem list
             selectedAnimalItemList.add(animalItem);
         }
-        Log.d("animal666666", selectedAnimalItemList.toString());
         addToList_adapter.setSelectedAnimalItems(selectedAnimalItemList);
 
         return selectedAnimalItemList;
