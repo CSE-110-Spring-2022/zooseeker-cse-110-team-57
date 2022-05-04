@@ -18,7 +18,6 @@ public class PlanActivity extends AppCompatActivity implements SearchView.OnQuer
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-
         return false;
     }
 
