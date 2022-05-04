@@ -120,29 +120,29 @@ public class USTest {
     @Test
     public void AddListTest() {
         //User Story 4
-        ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
-        scenario.moveToState(Lifecycle.State.CREATED);
-        scenario.onActivity(activity -> {
-
+//        ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
+//        scenario.moveToState(Lifecycle.State.CREATED);
+//        scenario.onActivity(activity -> {
+//
 //            SharedPreferences preferences = activity.getPreferences(Context.MODE_PRIVATE);
 //            SharedPreferences.Editor editor = preferences.edit();
 //
 //            TextView animal = activity.findViewById(R.id."");
 //            editor.putString("",animal.getText().toString());
 //
-
-        });
+//
+//        });
     }
 
 //========================================================== US 5 ======================================================================================================
     @Test
     public void displayNumbOfExhibit() {
-        ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
-        scenario.moveToState(Lifecycle.State.CREATED);
-        scenario.onActivity(activity -> {
-
-
-
-        });
+//        ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
+//        scenario.moveToState(Lifecycle.State.CREATED);
+//        scenario.onActivity(activity -> {
+//
+//
+//
+//        });
     }
 }
