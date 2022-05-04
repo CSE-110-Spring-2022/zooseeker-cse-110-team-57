@@ -44,8 +44,6 @@ public class SearchAnimalActivity extends AppCompatActivity
     List<AnimalItem> searchedAnimalItemList;
     List<AnimalItem> selectedAnimalItemList;
     List<String> selectedAnimalNameStringList;
-    android.widget.SearchView searchView;
-
 
 
     @Override
@@ -66,7 +64,7 @@ public class SearchAnimalActivity extends AppCompatActivity
         allAnimalItem= animalItemDao.getAll();
 
         //SearchedAnimalsAdapter
-        search_adapter = new SearchedAnimalsAdapter(searchedAnimalItemList, this);
+        search_adapter = new SearchedAnimalsAdapter(this);
         search_adapter.setHasStableIds(true);
 
         viewModel = new ViewModelProvider(this).get(AnimalViewModel.class);
