@@ -79,6 +79,7 @@ public class SearchAnimalActivity extends AppCompatActivity
         BelowAreSelectedAnimals.setVisibility(View.VISIBLE);
 
 
+
         //AnimalItemDao
         ///AnimalItemDao animalItemDao = AnimalItemDatabase.getSingleton(this).AnimalItemDao();
         allAnimalItem = AnimalItem.search_by_tag(null);
@@ -112,6 +113,8 @@ public class SearchAnimalActivity extends AppCompatActivity
         //Retain the previous list of selected animals (List<AnimalItem>) each time we start the app
         selectedAnimalNameStringList = new ArrayList<String>();
         preSelectedAnimalItemList = loadAddToList();
+        TextView animalNumbers = findViewById(R.id.selected_animals_number);
+        animalNumbers.setText(Integer.toString(preSelectedAnimalItemList.size()));
         for (AnimalItem selectedAnimal : preSelectedAnimalItemList){
             selectedAnimalNameStringList.add(selectedAnimal.name);
         }
@@ -151,11 +154,12 @@ public class SearchAnimalActivity extends AppCompatActivity
     //When the user taps the "Add" button, add the selected animal to selectedAnimalItemList.
     @Override
     public void OnAddClick(int position) {
-        Log.d("position",Integer.toString(position));
         AnimalItem newSelectedAnimalItem = allAnimalItem.get(position);
         saveAddToList(newSelectedAnimalItem);
         selectedAnimalItemList = loadAddToList();
         //addToList_adapter.setSelectedAnimalItems(selectedAnimalItemList);
+        TextView animalNumbers = findViewById(R.id.selected_animals_number);
+        animalNumbers.setText(selectedAnimalItemList.size());
     }
 
     //----------------------Below are functions in SharedPreferences-------------------------------
@@ -214,7 +218,6 @@ public class SearchAnimalActivity extends AppCompatActivity
         Intent intent = new Intent(this, PlanActivity.class);
         startActivity(intent);
     }
-
 
 
     @Override
