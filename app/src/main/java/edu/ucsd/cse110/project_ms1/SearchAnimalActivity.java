@@ -53,6 +53,7 @@ public class SearchAnimalActivity extends AppCompatActivity
     List<AnimalItem> selectedAnimalItemList;
     List<AnimalItem> preSelectedAnimalItemList;
     List<String> selectedAnimalNameStringList;
+    TextView NoSuchAnimal;
 
 
     @Override
@@ -73,7 +74,7 @@ public class SearchAnimalActivity extends AppCompatActivity
  */
 
         //make "No such animal" invisible
-        TextView NoSuchAnimal = findViewById(R.id.no_such_animal);
+        NoSuchAnimal = findViewById(R.id.no_such_animal);
         NoSuchAnimal.setVisibility(View.INVISIBLE);
         TextView BelowAreSelectedAnimals = findViewById(R.id.below_are_selected_animals);
         BelowAreSelectedAnimals.setVisibility(View.VISIBLE);
@@ -103,6 +104,9 @@ public class SearchAnimalActivity extends AppCompatActivity
         //AddToListAdapter
         addToList_adapter = new AddToListAdapter();
         addToList_adapter.setHasStableIds(true);
+        selectedAnimalItemList = loadAddToList();
+        addToList_adapter.setSelectedAnimalItems(selectedAnimalItemList);
+
 
         //Retain the previous list of selected animals (List<AnimalItem>) each time we start the app
         selectedAnimalNameStringList = new ArrayList<String>();
@@ -114,9 +118,10 @@ public class SearchAnimalActivity extends AppCompatActivity
         }
 
         //reset the addToList
-        selectedAnimalItemList = loadAddToList();
-        addToList_adapter.notifyDataSetChanged();
-        addToList_adapter.setSelectedAnimalItems(selectedAnimalItemList);
+
+
+//        addToList_adapter.setSelectedAnimalItems(selectedAnimalItemList);
+//        addToList_adapter.notifyDataSetChanged();
 
         //list bar
         selected_recyclerView = findViewById(R.id.all_selected_animals);
@@ -155,7 +160,8 @@ public class SearchAnimalActivity extends AppCompatActivity
     public void OnAddClick(int position) {
         AnimalItem newSelectedAnimalItem = allAnimalItem.get(position);
         saveAddToList(newSelectedAnimalItem);
-        selectedAnimalItemList = loadAddToList();
+        loadAddToList();
+
         //addToList_adapter.setSelectedAnimalItems(selectedAnimalItemList);
     }
 

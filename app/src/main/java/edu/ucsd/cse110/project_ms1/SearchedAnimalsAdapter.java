@@ -37,7 +37,7 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
 
     public SearchedAnimalsAdapter(OnAddListener onAddListener){
         this.all_animal_items = AnimalItem.search_by_tag(null);
-        this.searched_animal_items = new ArrayList<>(all_animal_items);
+        this.searched_animal_items = new ArrayList<>();
         this.myOnAddListener = onAddListener;
     }
 

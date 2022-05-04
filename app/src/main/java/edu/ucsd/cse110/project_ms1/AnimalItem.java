@@ -67,7 +67,9 @@ public class AnimalItem {
     // If animal names match the tag, that also counts
     //List<AnimalItem> -return all animal under the tag
     public static List<AnimalItem> search_by_tag(String tag){
+
         List<AnimalItem> retVal =  new ArrayList<AnimalItem>();
+
         int i =0;
         for (Map.Entry<String, ZooData.VertexInfo> set : vInfo.entrySet()) {
             ZooData.VertexInfo currentVertex = set.getValue();

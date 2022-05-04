@@ -21,7 +21,7 @@ public class AddToListAdapter extends RecyclerView.Adapter<AddToListAdapter.View
     private List<AnimalItem> animalItems;
 
     public AddToListAdapter(){
-        animalItems = new ArrayList<>();
+        this.animalItems = new ArrayList<>();
     }
     public void setSelectedAnimalItems(List<AnimalItem> newAnimalItems) {
         this.animalItems.clear();
