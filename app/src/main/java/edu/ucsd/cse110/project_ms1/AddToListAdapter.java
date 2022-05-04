@@ -56,8 +56,6 @@ public class AddToListAdapter extends RecyclerView.Adapter<AddToListAdapter.View
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView animalName;
         private AnimalItem animalItem;
-        private SharedPreferences sharedPreferences;
-        private List<String> selected_animals;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
