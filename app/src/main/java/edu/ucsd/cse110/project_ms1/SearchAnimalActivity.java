@@ -40,7 +40,7 @@ public class SearchAnimalActivity extends AppCompatActivity
 
  */
     public class SearchAnimalActivity extends AppCompatActivity
-            implements SearchedAnimalsAdapter.OnAddListener {
+            implements SearchedAnimalsAdapter.OnAddListener, SearchedAnimalsAdapter.IsAnimalFoundPass {
 
     public RecyclerView searched_recyclerView;
     public RecyclerView selected_recyclerView;
@@ -85,8 +85,20 @@ public class SearchAnimalActivity extends AppCompatActivity
         allAnimalItem = AnimalItem.search_by_tag(null);
 
 
+
         //SearchedAnimalsAdapter
-        search_adapter = new SearchedAnimalsAdapter(this);
+        SearchedAnimalsAdapter.IsAnimalFoundPass isAnimalFoundPass = new SearchedAnimalsAdapter.IsAnimalFoundPass() {
+            @Override
+            public void pass(List<AnimalItem> isAnimalFound) {
+                if (isAnimalFound.isEmpty()){
+                    NoSuchAnimal.setVisibility(View.VISIBLE);
+                }
+                else{
+                    NoSuchAnimal.setVisibility(View.INVISIBLE);
+                }
+            }
+        };
+        search_adapter = new SearchedAnimalsAdapter(this, isAnimalFoundPass);
         search_adapter.setHasStableIds(true);
 
         //viewModel = new ViewModelProvider(this).get(AnimalViewModel.class);
@@ -243,5 +255,14 @@ public class SearchAnimalActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public void pass(List<AnimalItem> isAnimalFound) {
+        if (isAnimalFound.isEmpty()){
+            NoSuchAnimal.setVisibility(View.VISIBLE);
+        }
+        else{
+            NoSuchAnimal.setVisibility(View.INVISIBLE);
+        }
+    }
 
 }
