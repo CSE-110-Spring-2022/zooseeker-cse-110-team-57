@@ -7,14 +7,18 @@
     tools:context=".PlanActivity">
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:id="@+id/this_is_a_route_plan"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="This is the page of route plan, please delete this textview"
-        android:textSize="50dp"
+        android:text="Route Plan"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:background="#DB7093"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.001" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

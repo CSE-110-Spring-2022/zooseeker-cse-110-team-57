@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
-public class PlanActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
+public class PlanActivity extends AppCompatActivity{
     public RecyclerView recyclerView;
 
     @Override
@@ -16,13 +16,4 @@ public class PlanActivity extends AppCompatActivity implements SearchView.OnQuer
 
     }
 
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        return false;
-    }
 }
