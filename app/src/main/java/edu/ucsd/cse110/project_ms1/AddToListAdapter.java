@@ -42,6 +42,7 @@ public class AddToListAdapter extends RecyclerView.Adapter<AddToListAdapter.View
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.setAnimalItem(animalItems.get(position));
+
     }
 
     @Override

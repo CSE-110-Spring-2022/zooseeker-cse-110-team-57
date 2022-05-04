@@ -79,7 +79,6 @@ public class SearchAnimalActivity extends AppCompatActivity
         BelowAreSelectedAnimals.setVisibility(View.VISIBLE);
 
 
-
         //AnimalItemDao
         ///AnimalItemDao animalItemDao = AnimalItemDatabase.getSingleton(this).AnimalItemDao();
         allAnimalItem = AnimalItem.search_by_tag(null);
@@ -116,6 +115,7 @@ public class SearchAnimalActivity extends AppCompatActivity
 
         //reset the addToList
         selectedAnimalItemList = loadAddToList();
+        addToList_adapter.notifyDataSetChanged();
         addToList_adapter.setSelectedAnimalItems(selectedAnimalItemList);
 
         //list bar
@@ -157,8 +157,6 @@ public class SearchAnimalActivity extends AppCompatActivity
         saveAddToList(newSelectedAnimalItem);
         selectedAnimalItemList = loadAddToList();
         //addToList_adapter.setSelectedAnimalItems(selectedAnimalItemList);
-        TextView animalNumbers = findViewById(R.id.selected_animals_number);
-        animalNumbers.setText(selectedAnimalItemList.size());
     }
 
     //----------------------Below are functions in SharedPreferences-------------------------------
