@@ -57,6 +57,7 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
             else{
                 String searchText = charSequence.toString().toLowerCase().trim();
                 filteredList = AnimalItem.search_by_tag(searchText);
+
             }
 
             FilterResults filtered = new FilterResults();

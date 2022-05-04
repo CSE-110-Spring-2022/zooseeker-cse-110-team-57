@@ -66,36 +66,29 @@ public class SearchAnimalActivity extends AppCompatActivity
         TextView NoSuchAnimal = findViewById(R.id.no_such_animal);
         NoSuchAnimal.setVisibility(View.INVISIBLE);
 
+        /*
         //AnimalItemDao
         AnimalItemDao animalItemDao = AnimalItemDatabase.getSingleton(this).AnimalItemDao();
         allAnimalItem= animalItemDao.getAll();
+         */
+
 
         //SearchedAnimalsAdapter
         search_adapter = new SearchedAnimalsAdapter(this);
         search_adapter.setHasStableIds(true);
 
-        viewModel = new ViewModelProvider(this).get(AnimalViewModel.class);
+        //viewModel = new ViewModelProvider(this).get(AnimalViewModel.class);
         //viewModel.getSearchedAnimalItems().observe(this, search_adapter::setSearched_animal_items);
-
+/*
         //dropdown bar
         recyclerView = findViewById(R.id.all_searched_animals);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(search_adapter);
-
-        searchView = findViewById(R.id.search_bar);
-        /*
-        searchView.setOnFocusChangeListener((view, hasFocus) -> {
-            if (!hasFocus){
-                onTextEditedHandler.accept(AnimalItem, );
-            }
-        });
-        */
-
-        searchView = findViewById(R.id.search_bar);
+*/
 
         //--------------------------Below is the AddToList part-----------------------------------
 
-
+/*
         //AddToListAdapter
         addToList_adapter = new AddToListAdapter();
         addToList_adapter.setHasStableIds(true);
@@ -108,7 +101,7 @@ public class SearchAnimalActivity extends AppCompatActivity
         //reset the addToList
         selectedAnimalItemList = loadAddToList();
         addToList_adapter.setSelectedAnimalItems(selectedAnimalItemList);
-
+*/
     }
 
     //----------------------Below are the functions of SearchView--------------------------------
@@ -201,7 +194,6 @@ public class SearchAnimalActivity extends AppCompatActivity
 
 
 
-
     @Override
     public boolean onCreateOptionsMenu (Menu menu){
         MenuInflater inflater = getMenuInflater();
@@ -214,7 +206,6 @@ public class SearchAnimalActivity extends AppCompatActivity
             public boolean onQueryTextSubmit(String s) {
                 return false;
             }
-
             @Override
             public boolean onQueryTextChange(String s) {
                 search_adapter.getFilter().filter(s);
