@@ -9,7 +9,7 @@ import java.util.List;
 public class TagConverter {
     @TypeConverter
     public static ArrayList<String> storedStringToList(String value) {
-        ArrayList<String> tags = (ArrayList<String>) Arrays.asList(value.split("\\s*,\\s*"));
+        ArrayList<String> tags = new ArrayList<>(Arrays.asList(value.split("\\s*,\\s*")));
         return tags;
     }
 

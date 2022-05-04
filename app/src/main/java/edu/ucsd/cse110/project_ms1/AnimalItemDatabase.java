@@ -39,6 +39,7 @@ public abstract class AnimalItemDatabase extends RoomDatabase {
                         });
                     }
                 }).build();
+        //.addTypeConverter(tagConverter)
     }
 }
 
