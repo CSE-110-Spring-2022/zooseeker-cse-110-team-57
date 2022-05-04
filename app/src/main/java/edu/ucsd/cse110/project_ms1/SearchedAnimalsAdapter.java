@@ -97,13 +97,6 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
     public int getItemCount() {
         return searched_animal_items.size();
     }
-/*
-    @Override
-    public long getItemId(int position) {
-        return 0;
-        // return searched_animal_items.get(position).id;
-    }
-*/
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
