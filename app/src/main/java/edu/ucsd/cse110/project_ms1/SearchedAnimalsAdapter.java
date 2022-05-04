@@ -52,19 +52,23 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
         protected FilterResults performFiltering(CharSequence charSequence) {
             List<AnimalItem> filteredList = new ArrayList<AnimalItem>();
             if (charSequence == null || charSequence.length() == 0){
-                return ???;
+                filteredList.addAll(all_animal_items);
             }
             else{
-                String searchText = charSequence.toString().trim();
-                for (AnimalItem animalItem : ){
-
-                }
+                String searchText = charSequence.toString().toLowerCase().trim();
+                filteredList = AnimalItem.search_by_tag(searchText);
             }
+
+            FilterResults filtered = new FilterResults();
+            filtered.values = filteredList;
+            return filtered;
         }
 
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-
+            searched_animal_items.clear();
+            searched_animal_items.addAll((List) filterResults.values);
+            notifyDataSetChanged();
         }
     };
 
@@ -132,7 +136,7 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
             onAddListener.OnAddClick(getAdapterPosition());
         }
 
-        @Override
+        //@Override
         public Filter getFilter() {
             return animal_filter;
         }

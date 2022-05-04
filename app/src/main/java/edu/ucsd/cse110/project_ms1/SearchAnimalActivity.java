@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -32,8 +33,14 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 
+
+/*
 public class SearchAnimalActivity extends AppCompatActivity
         implements SearchView.OnQueryTextListener, SearchedAnimalsAdapter.OnAddListener {
+
+ */
+    public class SearchAnimalActivity extends AppCompatActivity
+            implements SearchedAnimalsAdapter.OnAddListener {
 
     public RecyclerView recyclerView;
     SearchView searchView;
@@ -44,7 +51,7 @@ public class SearchAnimalActivity extends AppCompatActivity
     List<AnimalItem> searchedAnimalItemList;
     List<AnimalItem> selectedAnimalItemList;
     List<String> selectedAnimalNameStringList;
-    android.widget.SearchView searchView;
+
 
 
 
@@ -66,7 +73,7 @@ public class SearchAnimalActivity extends AppCompatActivity
         allAnimalItem= animalItemDao.getAll();
 
         //SearchedAnimalsAdapter
-        search_adapter = new SearchedAnimalsAdapter(searchedAnimalItemList, this);
+        search_adapter = new SearchedAnimalsAdapter(this);
         search_adapter.setHasStableIds(true);
 
         viewModel = new ViewModelProvider(this).get(AnimalViewModel.class);
@@ -107,7 +114,7 @@ public class SearchAnimalActivity extends AppCompatActivity
     }
 
     //----------------------Below are the functions of SearchView--------------------------------
-
+/*
     @Override
     public boolean onQueryTextSubmit(String query) {
         //Get the searched animals
@@ -130,7 +137,7 @@ public class SearchAnimalActivity extends AppCompatActivity
     public boolean onQueryTextChange(String newText) {
         return false;
     }
-
+*/
     //--------------------------Below is the Add Button Click--------------------------------------
     //When the user taps the "Add" button, add the selected animal to selectedAnimalItemList.
     @Override
@@ -196,10 +203,11 @@ public class SearchAnimalActivity extends AppCompatActivity
 
 
 
-/*
+
     @Override
     public boolean onCreateOptionsMenu (Menu menu){
-        getMenuInflater().inflate(R.menu.animal_menu, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.animal_menu, menu);
         MenuItem menuItem = menu.findItem(R.id.search_bar_2);
         SearchView searchView = (SearchView) menuItem.getActionView();
         searchView.setQueryHint("Please enter an animal's name");
@@ -211,12 +219,12 @@ public class SearchAnimalActivity extends AppCompatActivity
 
             @Override
             public boolean onQueryTextChange(String s) {
-                arrayAdapter.getFilter().filter(s);
-                return true;
+                search_adapter.getFilter().filter(s);
+                return false;
             }
         });
-        return super.onCreateOptionsMenu(menu);
+        return true;
     }
-*/
+
 
 }

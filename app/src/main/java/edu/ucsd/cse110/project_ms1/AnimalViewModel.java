@@ -28,7 +28,7 @@ public class AnimalViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<AnimalItem>> getTodoListItems(){
-        if (selected_animals == null){
+        if (searchedAnimals == null){
             loadUsers();
         }
         return null;//todoListItems;
