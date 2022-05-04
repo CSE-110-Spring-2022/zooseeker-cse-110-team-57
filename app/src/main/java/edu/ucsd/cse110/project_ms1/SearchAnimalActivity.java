@@ -76,6 +76,7 @@ public class SearchAnimalActivity extends AppCompatActivity
         //AnimalItemDao animalItemDao = AnimalItemDatabase.getSingleton(this).AnimalItemDao();
         //allAnimalItem= animalItemDao.getAll();
 
+
         //SearchedAnimalsAdapter
         search_adapter = new SearchedAnimalsAdapter(this);
         search_adapter.setHasStableIds(true);
