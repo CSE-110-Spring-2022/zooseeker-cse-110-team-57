@@ -51,6 +51,7 @@ public class SearchAnimalActivity extends AppCompatActivity
     List<AnimalItem> allAnimalItem;
     List<AnimalItem> searchedAnimalItemList;
     List<AnimalItem> selectedAnimalItemList;
+    List<AnimalItem> preSelectedAnimalItemList;
     List<String> selectedAnimalNameStringList;
 
 
@@ -63,11 +64,14 @@ public class SearchAnimalActivity extends AppCompatActivity
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //Retain the previous list of selected animals (List<AnimalItem>) each time we start the app
-        selectedAnimalItemList = loadAddToList();
-        for (AnimalItem selectedAnimal : selectedAnimalItemList){
-            selectedAnimalNameStringList.add(selectedAnimal.name);
-        }
+
+/*
+        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+
+ */
+
         //make "No such animal" invisible
         TextView NoSuchAnimal = findViewById(R.id.no_such_animal);
         NoSuchAnimal.setVisibility(View.INVISIBLE);
@@ -76,8 +80,8 @@ public class SearchAnimalActivity extends AppCompatActivity
 
 
         //AnimalItemDao
-        //AnimalItemDao animalItemDao = AnimalItemDatabase.getSingleton(this).AnimalItemDao();
-        //allAnimalItem= animalItemDao.getAll();
+        ///AnimalItemDao animalItemDao = AnimalItemDatabase.getSingleton(this).AnimalItemDao();
+        allAnimalItem = AnimalItem.search_by_tag(null);
 
 
         //SearchedAnimalsAdapter
@@ -104,6 +108,13 @@ public class SearchAnimalActivity extends AppCompatActivity
         selected_recyclerView = findViewById(R.id.all_selected_animals);
         selected_recyclerView.setLayoutManager(new LinearLayoutManager(this));
         selected_recyclerView.setAdapter(addToList_adapter);
+
+        //Retain the previous list of selected animals (List<AnimalItem>) each time we start the app
+        selectedAnimalNameStringList = new ArrayList<String>();
+        preSelectedAnimalItemList = loadAddToList();
+        for (AnimalItem selectedAnimal : preSelectedAnimalItemList){
+            selectedAnimalNameStringList.add(selectedAnimal.name);
+        }
 
         //reset the addToList
         selectedAnimalItemList = loadAddToList();
@@ -140,9 +151,11 @@ public class SearchAnimalActivity extends AppCompatActivity
     //When the user taps the "Add" button, add the selected animal to selectedAnimalItemList.
     @Override
     public void OnAddClick(int position) {
-        AnimalItem newSelectedAnimalItem = searchedAnimalItemList.get(position);
+        Log.d("position",Integer.toString(position));
+        AnimalItem newSelectedAnimalItem = allAnimalItem.get(position);
         saveAddToList(newSelectedAnimalItem);
         selectedAnimalItemList = loadAddToList();
+        //addToList_adapter.setSelectedAnimalItems(selectedAnimalItemList);
     }
 
     //----------------------Below are functions in SharedPreferences-------------------------------
@@ -164,9 +177,10 @@ public class SearchAnimalActivity extends AppCompatActivity
         List<AnimalItem> selectedAnimalItemList = new ArrayList<AnimalItem>();
         //get the list of selected animal names
         Set<String> selectedAnimalNameStringSet = sharedPreferences.getAll().keySet();
-        selectedAnimalNameStringList = new ArrayList<String>(selectedAnimalNameStringSet);
+        List<String> selectedAnimalNameStringList = new ArrayList<String>(selectedAnimalNameStringSet);
+
         //check if the user hasn't selected any animal
-        if (selectedAnimalNameStringList.size() == 0){
+        if (selectedAnimalNameStringList.isEmpty()) {
             //return empty list of AnimalItem
             return selectedAnimalItemList;
         }
@@ -180,7 +194,9 @@ public class SearchAnimalActivity extends AppCompatActivity
             //add animalItem to the AnimalItem list
             selectedAnimalItemList.add(animalItem);
         }
+        Log.d("animal666666", selectedAnimalItemList.toString());
         addToList_adapter.setSelectedAnimalItems(selectedAnimalItemList);
+
         return selectedAnimalItemList;
     }
 
