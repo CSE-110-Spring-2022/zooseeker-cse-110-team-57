@@ -53,8 +53,6 @@ public class SearchAnimalActivity extends AppCompatActivity
     List<String> selectedAnimalNameStringList;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) { 
         super.onCreate(savedInstanceState);
