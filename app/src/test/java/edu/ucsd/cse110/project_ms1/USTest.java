@@ -11,6 +11,7 @@ import org.robolectric.Robolectric;
 import static org.junit.Assert.*;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,6 +34,7 @@ public class USTest {
     @Rule
     public ActivityScenarioRule<SearchAnimalActivity> scenarioRule = new ActivityScenarioRule<>(SearchAnimalActivity.class);
 
+    //US 0
     @Test
     public void LoadTest() {
         //User Story 0
@@ -62,7 +64,7 @@ public class USTest {
 
     }
 
-
+    ////================================================================================= US 1 ===============================================================================
     @Test
     public void SearchByTagTest() {
         //User Story 1
@@ -76,6 +78,24 @@ public class USTest {
             for(AnimalItem item : animalItem){
                 assertTrue(item.tags.contains("lions"));
             }
+        });
+    }
+
+    //US 1
+    @Test
+    public void SearchByTagTest_none() {
+        //User Story 1
+        ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
+
+        scenario.moveToState(Lifecycle.State.CREATED);
+
+        scenario.onActivity(activity -> {
+            List<AnimalItem> animalItem = AnimalItem.search_by_tag("Unicorn");
+
+            for(AnimalItem item : animalItem){
+                assertEquals(false,item.tags.contains("Unicorn"));
+            }
+            assertEquals(true, animalItem.isEmpty());
         });
     }
 
@@ -94,20 +114,33 @@ public class USTest {
             }
         });
     }
+//================================================================================================================================================================
 
-
-
-
+//========================================================== US 4 ======================================================================================================
     @Test
-
     public void AddListTest() {
         //User Story 4
         ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
-
         scenario.moveToState(Lifecycle.State.CREATED);
-
         scenario.onActivity(activity -> {
-            //ListView listView = activity.findViewById(R.id.);
+
+//            SharedPreferences preferences = activity.getPreferences(Context.MODE_PRIVATE);
+//            SharedPreferences.Editor editor = preferences.edit();
+//
+//            TextView animal = activity.findViewById(R.id."");
+//            editor.putString("",animal.getText().toString());
+//
+
+        });
+    }
+
+//========================================================== US 5 ======================================================================================================
+    @Test
+    public void displayNumbOfExhibit() {
+        ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
+        scenario.moveToState(Lifecycle.State.CREATED);
+        scenario.onActivity(activity -> {
+
 
 
         });
