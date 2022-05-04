@@ -71,6 +71,8 @@ public class SearchAnimalActivity extends AppCompatActivity
         //make "No such animal" invisible
         TextView NoSuchAnimal = findViewById(R.id.no_such_animal);
         NoSuchAnimal.setVisibility(View.INVISIBLE);
+        TextView BelowAreSelectedAnimals = findViewById(R.id.below_are_selected_animals);
+        BelowAreSelectedAnimals.setVisibility(View.VISIBLE);
 
 
         //AnimalItemDao
@@ -93,7 +95,7 @@ public class SearchAnimalActivity extends AppCompatActivity
 
         //--------------------------Below is the AddToList part-----------------------------------
 
-/*
+
         //AddToListAdapter
         addToList_adapter = new AddToListAdapter();
         addToList_adapter.setHasStableIds(true);
@@ -106,7 +108,7 @@ public class SearchAnimalActivity extends AppCompatActivity
         //reset the addToList
         selectedAnimalItemList = loadAddToList();
         addToList_adapter.setSelectedAnimalItems(selectedAnimalItemList);
-*/
+
     }
 
     //----------------------Below are the functions of SearchView--------------------------------
