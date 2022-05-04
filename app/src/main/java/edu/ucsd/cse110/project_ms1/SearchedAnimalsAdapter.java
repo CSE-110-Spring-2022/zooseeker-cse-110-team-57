@@ -29,15 +29,21 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
     private List<AnimalItem> searched_animal_items ;
     private Consumer<AnimalItem> onAnimalButtonClicked;
     private OnAddListener myOnAddListener;
+    private IsAnimalFoundPass myIsAnimalFoundPass;
 
     public interface OnAddListener{
         void OnAddClick(int position);
     }
 
-    public SearchedAnimalsAdapter(OnAddListener onAddListener){
+    public interface IsAnimalFoundPass{
+        public void pass(List<AnimalItem> isAnimalFound);
+    }
+
+    public SearchedAnimalsAdapter(OnAddListener onAddListener, IsAnimalFoundPass isAnimalFoundPass){
         this.all_animal_items = AnimalItem.search_by_tag(null);
         this.searched_animal_items = new ArrayList<>(all_animal_items);
         this.myOnAddListener = onAddListener;
+        this.myIsAnimalFoundPass = isAnimalFoundPass;
     }
 
     public void setSearched_animal_items(List<AnimalItem> new_searched_animal_items){
@@ -68,6 +74,7 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
             searched_animal_items.clear();
             searched_animal_items.addAll((List) filterResults.values);
+            myIsAnimalFoundPass.pass(searched_animal_items);
             notifyDataSetChanged();
         }
     };
