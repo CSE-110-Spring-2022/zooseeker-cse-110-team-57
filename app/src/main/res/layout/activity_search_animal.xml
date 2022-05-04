@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:onClick="onPlanClick"
         android:text="Plan"
-        android:backgroundTint="#CD5C5C"
+        android:backgroundTint="@color/main_theme_pink"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
