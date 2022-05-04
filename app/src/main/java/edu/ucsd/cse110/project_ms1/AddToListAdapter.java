@@ -13,12 +13,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 public class AddToListAdapter extends RecyclerView.Adapter<AddToListAdapter.ViewHolder> {
-    private List<AnimalItem> animalItems = Collections.emptyList();
+    private List<AnimalItem> animalItems;
 
+    public AddToListAdapter(){
+        animalItems = new ArrayList<>();
+    }
     public void setSelectedAnimalItems(List<AnimalItem> newAnimalItems) {
         this.animalItems.clear();
         this.animalItems = newAnimalItems;

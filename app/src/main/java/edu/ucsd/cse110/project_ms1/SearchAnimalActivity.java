@@ -104,11 +104,6 @@ public class SearchAnimalActivity extends AppCompatActivity
         addToList_adapter = new AddToListAdapter();
         addToList_adapter.setHasStableIds(true);
 
-        //list bar
-        selected_recyclerView = findViewById(R.id.all_selected_animals);
-        selected_recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        selected_recyclerView.setAdapter(addToList_adapter);
-
         //Retain the previous list of selected animals (List<AnimalItem>) each time we start the app
         selectedAnimalNameStringList = new ArrayList<String>();
         preSelectedAnimalItemList = loadAddToList();
@@ -120,6 +115,10 @@ public class SearchAnimalActivity extends AppCompatActivity
         selectedAnimalItemList = loadAddToList();
         addToList_adapter.setSelectedAnimalItems(selectedAnimalItemList);
 
+        //list bar
+        selected_recyclerView = findViewById(R.id.all_selected_animals);
+        selected_recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        selected_recyclerView.setAdapter(addToList_adapter);
     }
 
     //----------------------Below are the functions of SearchView--------------------------------
@@ -194,7 +193,7 @@ public class SearchAnimalActivity extends AppCompatActivity
             //add animalItem to the AnimalItem list
             selectedAnimalItemList.add(animalItem);
         }
-        Log.d("animal666666", selectedAnimalItemList.toString());
+        //Log.d("animal666666", selectedAnimalItemList.toString());
         addToList_adapter.setSelectedAnimalItems(selectedAnimalItemList);
 
         return selectedAnimalItemList;
