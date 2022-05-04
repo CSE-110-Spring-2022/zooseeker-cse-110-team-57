@@ -35,7 +35,7 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
         void OnAddClick(int position);
     }
 
-    public SearchedAnimalsAdapter( OnAddListener onAddListener){
+    public SearchedAnimalsAdapter(OnAddListener onAddListener){
         this.all_animal_items = AnimalItem.search_by_tag(null);
         this.searched_animal_items = new ArrayList<>(all_animal_items);
         this.myOnAddListener = onAddListener;
@@ -51,6 +51,7 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
             List<AnimalItem> filteredList = new ArrayList<AnimalItem>();
+            //if the user hasn't entered anything.
             if (charSequence == null || charSequence.length() == 0){
                 filteredList.addAll(all_animal_items);
             }
@@ -59,7 +60,6 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
                 filteredList = AnimalItem.search_by_tag(searchText);
 
             }
-
             FilterResults filtered = new FilterResults();
             filtered.values = filteredList;
             return filtered;
@@ -137,22 +137,6 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
             onAddListener.OnAddClick(getAdapterPosition());
         }
 
-        //@Override
-        public Filter getFilter() {
-            return animal_filter;
-        }
-
-        private Filter animal_filter =new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence charSequence) {
-                return null;
-            }
-
-            @Override
-            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
-
-            }
-        };
 
     }
 }

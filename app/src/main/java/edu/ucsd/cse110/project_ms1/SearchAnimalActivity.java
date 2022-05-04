@@ -42,7 +42,8 @@ public class SearchAnimalActivity extends AppCompatActivity
     public class SearchAnimalActivity extends AppCompatActivity
             implements SearchedAnimalsAdapter.OnAddListener {
 
-    public RecyclerView recyclerView;
+    public RecyclerView searched_recyclerView;
+    public RecyclerView selected_recyclerView;
     SearchView searchView;
     AnimalViewModel viewModel;
     SearchedAnimalsAdapter search_adapter;
@@ -85,9 +86,9 @@ public class SearchAnimalActivity extends AppCompatActivity
         //viewModel.getSearchedAnimalItems().observe(this, search_adapter::setSearched_animal_items);
 
         //dropdown bar
-        recyclerView = findViewById(R.id.all_searched_animals);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(search_adapter);
+        searched_recyclerView = findViewById(R.id.all_searched_animals);
+        searched_recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        searched_recyclerView.setAdapter(search_adapter);
 
 
         //--------------------------Below is the AddToList part-----------------------------------
@@ -98,9 +99,9 @@ public class SearchAnimalActivity extends AppCompatActivity
         addToList_adapter.setHasStableIds(true);
 
         //list bar
-        recyclerView = findViewById(R.id.all_selected_animals);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(addToList_adapter);
+        selected_recyclerView = findViewById(R.id.all_selected_animals);
+        selected_recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        selected_recyclerView.setAdapter(addToList_adapter);
 
         //reset the addToList
         selectedAnimalItemList = loadAddToList();
