@@ -71,9 +71,9 @@ public class SearchAnimalActivity extends AppCompatActivity
         TextView NoSuchAnimal = findViewById(R.id.no_such_animal);
         NoSuchAnimal.setVisibility(View.INVISIBLE);
 
-        /*
+
         //AnimalItemDao
-        AnimalItemDao animalItemDao = AnimalItemDatabase.getSingleton(this).AnimalItemDao();
+        //AnimalItemDao animalItemDao = AnimalItemDatabase.getSingleton(this).AnimalItemDao();
         //allAnimalItem= animalItemDao.getAll();
 
         //SearchedAnimalsAdapter
@@ -82,12 +82,12 @@ public class SearchAnimalActivity extends AppCompatActivity
 
         //viewModel = new ViewModelProvider(this).get(AnimalViewModel.class);
         //viewModel.getSearchedAnimalItems().observe(this, search_adapter::setSearched_animal_items);
-/*
+
         //dropdown bar
         recyclerView = findViewById(R.id.all_searched_animals);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(search_adapter);
-*/
+
 
         //--------------------------Below is the AddToList part-----------------------------------
 
