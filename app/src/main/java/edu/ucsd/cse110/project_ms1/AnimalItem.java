@@ -72,7 +72,7 @@ public class AnimalItem {
             ZooData.VertexInfo currentVertex = set.getValue();
             if(currentVertex.kind.name().equals("EXHIBIT")){
                 if (tag==null || currentVertex.tags.contains(tag.toLowerCase()) ||
-                        currentVertex.name.toLowerCase().equals(tag.toLowerCase())){
+                        currentVertex.name.toLowerCase().contains(tag.toLowerCase())){
                     retVal.add(new AnimalItem(set.getValue().id, (ArrayList<String>) set.getValue().tags,set.getValue().name));
                 }
             }
