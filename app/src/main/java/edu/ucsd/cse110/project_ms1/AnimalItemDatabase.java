@@ -15,12 +15,18 @@ import java.util.concurrent.Executors;
 @Database(entities = {AnimalItem.class}, version = 1)
 
 public abstract class AnimalItemDatabase extends RoomDatabase {
-    //private static TagConverter tagConverter;
-
     public abstract AnimalItemDao AnimalItemDao();
+    private static AnimalItemDatabase singleton = null;
+
+    public synchronized static AnimalItemDatabase getSingleton(Context context){
+        if (singleton == null){
+            singleton = AnimalItemDatabase.makeDatabase(context);
+        }
+        return  singleton;
+    }
 
 
-    static  AnimalItemDatabase makeDatabase(Context context){
+    static AnimalItemDatabase makeDatabase(Context context){
         return Room.databaseBuilder(context, AnimalItemDatabase.class, "zoo.db").allowMainThreadQueries()
                 .addCallback(new Callback() {
                     @Override

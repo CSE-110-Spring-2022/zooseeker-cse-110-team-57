@@ -16,18 +16,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
-public class AddToListAdapter extends RecyclerView.Adapter<AddToListAdapter.ViewHolder>{
+public class AddToListAdapter extends RecyclerView.Adapter<AddToListAdapter.ViewHolder> {
     private List<AnimalItem> animalItems = Collections.emptyList();
 
-    public void setSelectedAnimalItems(List<AnimalItem> newAnimalItem){
+    public void setSelectedAnimalItems(List<AnimalItem> newAnimalItems) {
         this.animalItems.clear();
-        this.animalItems = newAnimalItem;
+        this.animalItems = newAnimalItems;
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AddToListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.selected_animals, parent, false);
@@ -44,15 +44,16 @@ public class AddToListAdapter extends RecyclerView.Adapter<AddToListAdapter.View
     public int getItemCount() {
         return animalItems.size();
     }
-/*
-    @Override
-    public int getItemId(int position){
 
-        return Integer.valueOf(animalItems.get(position).id);
-        //return 0;
-    }
-*/
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    /*
+        @Override
+        public int getItemId(int position){
+
+            return Integer.valueOf(animalItems.get(position).id);
+            //return 0;
+        }
+    */
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView animalName;
         private AnimalItem animalItem;
         private SharedPreferences sharedPreferences;
@@ -60,8 +61,9 @@ public class AddToListAdapter extends RecyclerView.Adapter<AddToListAdapter.View
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.animalName = itemView.findViewById(R.id.an_animal_selected);
+            this.animalName = itemView.findViewById(R.id.an_selected_animal);
         }
+
         public AnimalItem getAnimalItem() {
             return animalItem;
         }
@@ -70,6 +72,6 @@ public class AddToListAdapter extends RecyclerView.Adapter<AddToListAdapter.View
             this.animalItem = animalItem;
             this.animalName.setText(animalItem.name);
         }
-    }
 
+    }
 }

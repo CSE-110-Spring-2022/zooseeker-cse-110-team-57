@@ -24,15 +24,12 @@ public class AnimalItem {
     public long unique_id;
     @NonNull
     public String id;
-
-
-
-    public  ArrayList<String> tags;
-
-
+    public ArrayList<String> tags;
     public String name; //essentially, the name is the tag in json file
+    public boolean searched;
+
     public static Map<String, ZooData.VertexInfo> vInfo;
-    public static  Map<String, ZooData.EdgeInfo> eInfo;
+    public static Map<String, ZooData.EdgeInfo> eInfo;
     public static Graph<String, IdentifiedWeightedEdge> gInfo;
 
     //not sure if i will change this constructor
@@ -40,6 +37,8 @@ public class AnimalItem {
         this.id = id;
         this.name = name;
         this.tags = tags;
+        this.searched = false;
+
         //this.exhibit = exhibit;
     }
 
@@ -74,7 +73,7 @@ public class AnimalItem {
             ZooData.VertexInfo currentVertex = set.getValue();
             if(currentVertex.kind.name().equals("EXHIBIT")){
                 if (tag==null || currentVertex.tags.contains(tag.toLowerCase()) ||
-                        currentVertex.name.toLowerCase().equals(tag.toLowerCase())){
+                        currentVertex.name.toLowerCase().contains(tag.toLowerCase())){
                     retVal.add(new AnimalItem(set.getValue().id, (ArrayList<String>) set.getValue().tags,set.getValue().name));
                 }
             }
