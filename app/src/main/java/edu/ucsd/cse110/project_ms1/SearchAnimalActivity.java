@@ -57,6 +57,11 @@ public class SearchAnimalActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) { 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_animal);
+        try {
+            AnimalItem.loadInfo(this,"sample_node_info.json", "sample_edge_info.json","sample_zoo_graph.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         //Retain the previous list of selected animals (List<AnimalItem>) each time we start the app
         selectedAnimalItemList = loadAddToList();
         for (AnimalItem selectedAnimal : selectedAnimalItemList){
@@ -69,9 +74,7 @@ public class SearchAnimalActivity extends AppCompatActivity
         /*
         //AnimalItemDao
         AnimalItemDao animalItemDao = AnimalItemDatabase.getSingleton(this).AnimalItemDao();
-        allAnimalItem= animalItemDao.getAll();
-         */
-
+        //allAnimalItem= animalItemDao.getAll();
 
         //SearchedAnimalsAdapter
         search_adapter = new SearchedAnimalsAdapter(this);
