@@ -14,8 +14,9 @@ import java.util.List;
 import java.util.Set;
 
 public class PlanActivity extends AppCompatActivity{
-    /*
+/*
     public RecyclerView plan_recyclerView;
+    StringAndAnimalItem stringAndAnimalItem;
     PlanAdapter plan_adapter;
     List<AnimalItem> selectedAnimalItemList;
     List<String> selectedAnimalNameStringList;
@@ -26,6 +27,8 @@ public class PlanActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan);
 
+        stringAndAnimalItem = new StringAndAnimalItem();
+
         plan_adapter = new PlanAdapter();
         plan_adapter.setHasStableIds(true);
 
@@ -34,17 +37,16 @@ public class PlanActivity extends AppCompatActivity{
         plan_recyclerView.setAdapter(plan_adapter);
 
         Intent intent = getIntent();
-        selectedAnimalNameStringList = intent.getStringArrayListExtra("selectedAnimalNameStringList");
-    }
+        selectedAnimalNameStringList =
+                intent.getStringArrayListExtra("selectedAnimalNameStringList");
 
-    public List<AnimalItem> loadAddToList(){
+        //-----------------------------load selected animalitem----------------------------------
         SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
         List<AnimalItem> selectedAnimalItemList = new ArrayList<AnimalItem>();
-
         //check if the user hasn't selected any animal
         if (selectedAnimalNameStringList.isEmpty()) {
             //return empty list of AnimalItem
-            return selectedAnimalItemList;
+            ???
         }
         //set the recycler view
         for (String animalName: selectedAnimalNameStringList){
@@ -52,13 +54,13 @@ public class PlanActivity extends AppCompatActivity{
             String animalItemInfoString = sharedPreferences.getString(animalName,
                     "No found such animal in sharedPreference");
             //get the animalItem
-            AnimalItem animalItem = StringToAnimalItem(animalItemInfoString);
+            AnimalItem animalItem = stringAndAnimalItem.StringToAnimalItem(animalItemInfoString);
             //add animalItem to the AnimalItem list
             selectedAnimalItemList.add(animalItem);
         }
-        addToList_adapter.setSelectedAnimalItems(selectedAnimalItemList);
+        plan_adapter.setSelectedAnimalItems(ro);
 
-        return selectedAnimalItemList;
+
     }
 */
 
