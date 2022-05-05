@@ -55,14 +55,16 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
 
     public class ViewHolder extends RecyclerView.ViewHolder {
          private TextView routedExhibitName;
-         private TextView routedDirections;
+         private TextView routedExhibitDirections;
+         private TextView routedExhibitDistance;
          private AnimalItem routedAnimalItem;
 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.routedExhibitName = itemView.findViewById(R.id.exhibit_name);
-            this.routedDirections = itemView.findViewById(R.id.exhibit_address);
+            this.routedExhibitDirections = itemView.findViewById(R.id.exhibit_address);
+            this.routedExhibitDistance = itemView.findViewById(R.id.exhibit_distance);
 
         }
 
@@ -73,7 +75,8 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
         public void setAnimalItem(AnimalItem animal_item) {
             this.routedAnimalItem = animal_item;
             this.routedExhibitName.setText(animal_item.name);
-            this.routedDirections.setText(animal_item.address);
+            this.routedExhibitDirections.setText(animal_item.address);
+            this.routedExhibitDistance.setText(animal_item.distance);
         }
     }
 }
