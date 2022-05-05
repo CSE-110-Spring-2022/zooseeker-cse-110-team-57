@@ -23,14 +23,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
-
+/*
 public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
     List<AnimalItem> routedAnimalItem;
-    /*
-    public PlanAdapter(){
 
-    }
-    */
 
     public void setRouted_animal_items(List<AnimalItem> new_routed_animal_items){
         routedAnimalItem.clear();
@@ -81,10 +77,15 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
         public void setAnimalItem(AnimalItem animal_item) {
             this.routedAnimalItem = animal_item;
             this.routedExhibitName.setText(animal_item.name);
-//            this.routedExhibitDirections.setText(animal_item.address);
-//            this.routedExhibitDistance.setText(animal_item.distance);
+            //this.routedExhibitDirections.setText(animal_item.address);
+            //this.routedExhibitDistance.setText(animal_item.distance);
         }
     }
+
+
+
 }
+*/
+
 
 
