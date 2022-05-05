@@ -54,6 +54,7 @@ public class SearchAnimalActivity extends AppCompatActivity
     List<AnimalItem> preSelectedAnimalItemList;
     List<String> selectedAnimalNameStringList;
     TextView NoSuchAnimal;
+    TextView animalNumbers;
 
 
     @Override
@@ -123,7 +124,7 @@ public class SearchAnimalActivity extends AppCompatActivity
         //Retain the previous list of selected animals (List<AnimalItem>) each time we start the app
         selectedAnimalNameStringList = new ArrayList<String>();
         preSelectedAnimalItemList = loadAddToList();
-        TextView animalNumbers = findViewById(R.id.selected_animals_number);
+        animalNumbers = findViewById(R.id.selected_animals_number);
         animalNumbers.setText(Integer.toString(preSelectedAnimalItemList.size()));
         for (AnimalItem selectedAnimal : preSelectedAnimalItemList){
             selectedAnimalNameStringList.add(selectedAnimal.name);
@@ -170,9 +171,10 @@ public class SearchAnimalActivity extends AppCompatActivity
     //When the user taps the "Add" button, add the selected animal to selectedAnimalItemList.
     @Override
     public void OnAddClick(int position) {
-        AnimalItem newSelectedAnimalItem = allAnimalItem.get(position);
+        AnimalItem newSelectedAnimalItem = search_adapter.searched_animal_items.get(position);
         saveAddToList(newSelectedAnimalItem);
-        loadAddToList();
+
+        animalNumbers.setText(Integer.toString(loadAddToList().size()));
 
         //addToList_adapter.setSelectedAnimalItems(selectedAnimalItemList);
     }

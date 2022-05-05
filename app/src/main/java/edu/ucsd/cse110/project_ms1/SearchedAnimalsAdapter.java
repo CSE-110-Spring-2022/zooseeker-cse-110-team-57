@@ -26,7 +26,7 @@ import java.util.function.Consumer;
 public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimalsAdapter.ViewHolder>
                                     implements Filterable {
     private List<AnimalItem> all_animal_items;
-    private List<AnimalItem> searched_animal_items ;
+    public  List<AnimalItem> searched_animal_items ;
     private Consumer<AnimalItem> onAnimalButtonClicked;
     private OnAddListener myOnAddListener;
     private IsAnimalFoundPass myIsAnimalFoundPass;

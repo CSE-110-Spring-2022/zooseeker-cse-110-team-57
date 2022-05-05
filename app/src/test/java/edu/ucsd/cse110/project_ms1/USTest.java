@@ -11,7 +11,9 @@ import org.robolectric.Robolectric;
 import static org.junit.Assert.*;
 
 import android.content.Context;
+
 import android.content.SharedPreferences;
+
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,7 +36,6 @@ public class USTest {
     @Rule
     public ActivityScenarioRule<SearchAnimalActivity> scenarioRule = new ActivityScenarioRule<>(SearchAnimalActivity.class);
 
-    //US 0
     @Test
     public void LoadTest() {
         //User Story 0
@@ -64,7 +65,6 @@ public class USTest {
 
     }
 
-    ////================================================================================= US 1 ===============================================================================
     @Test
     public void SearchByTagTest() {
         //User Story 1
@@ -81,15 +81,16 @@ public class USTest {
         });
     }
 
-    //US 1
+
     @Test
-    public void SearchByTagTest_none() {
+    public void SearchByNameTest() {
         //User Story 1
         ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
 
         scenario.moveToState(Lifecycle.State.CREATED);
 
         scenario.onActivity(activity -> {
+
             List<AnimalItem> animalItem = AnimalItem.search_by_tag("Unicorn");
 
             for(AnimalItem item : animalItem){
@@ -102,11 +103,13 @@ public class USTest {
     @Test
     public void SearchByNameTest() {
         //User Story 1
+
         ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
 
         scenario.moveToState(Lifecycle.State.CREATED);
 
         scenario.onActivity(activity -> {
+
             List<AnimalItem> animalItem = AnimalItem.search_by_tag("Elephant Odyssey");
 
             for(AnimalItem item : animalItem){
