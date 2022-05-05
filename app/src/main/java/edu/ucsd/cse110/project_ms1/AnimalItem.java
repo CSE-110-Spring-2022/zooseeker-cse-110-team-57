@@ -87,7 +87,7 @@ public class AnimalItem {
     }
 
     //return a route that has a different order of input route, so it can be a good choice for the user
-    public static   List<route_node> plan_route(List<AnimalItem> animal_items){
+    public static List<route_node> plan_route(List<AnimalItem> animal_items){
         //begin and end positions
         String start = "entrance_exit_gate";
         String goal;

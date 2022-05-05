@@ -8,18 +8,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 public class PlanActivity extends AppCompatActivity{
-/*
+
     public RecyclerView plan_recyclerView;
     StringAndAnimalItem stringAndAnimalItem;
     PlanAdapter plan_adapter;
     List<AnimalItem> selectedAnimalItemList;
     List<String> selectedAnimalNameStringList;
+    List<route_node> routeNodeList;
 
 
     @Override
@@ -36,19 +38,15 @@ public class PlanActivity extends AppCompatActivity{
         plan_recyclerView.setLayoutManager(new LinearLayoutManager(this));
         plan_recyclerView.setAdapter(plan_adapter);
 
+/*
+        //-----------------------------load selected animalitem----------------------------------
         Intent intent = getIntent();
         selectedAnimalNameStringList =
-                intent.getStringArrayListExtra("selectedAnimalNameStringList");
+                intent.getStringArrayListExtra("nameStringList");
 
-        //-----------------------------load selected animalitem----------------------------------
         SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
-        List<AnimalItem> selectedAnimalItemList = new ArrayList<AnimalItem>();
-        //check if the user hasn't selected any animal
-        if (selectedAnimalNameStringList.isEmpty()) {
-            //return empty list of AnimalItem
-            ???
-        }
-        //set the recycler view
+        selectedAnimalItemList = new ArrayList<AnimalItem>();
+
         for (String animalName: selectedAnimalNameStringList){
             //find the string containing all related information of a selected animal
             String animalItemInfoString = sharedPreferences.getString(animalName,
@@ -58,11 +56,25 @@ public class PlanActivity extends AppCompatActivity{
             //add animalItem to the AnimalItem list
             selectedAnimalItemList.add(animalItem);
         }
-        plan_adapter.setSelectedAnimalItems(ro);
+        routeNodeList = AnimalItem.plan_route(selectedAnimalItemList);
 
+        plan_adapter.setRouted_animal_items(routeNodeList);
+*/
 
     }
-*/
+    /*
+    public void onDirectionsClick(View view) {
+        Intent intent = new Intent(this, DirectionsActivity.class);
+
+        if (selectedAnimalNameStringList.isEmpty()){
+            showAlert;
+        }
+
+        //ArrayList<String> currentNameStringList = new ArrayList<String>(selectedAnimalNameStringList);
+        //intent.putStringArrayListExtra("nameStringList", currentNameStringList);
+        startActivity(intent);
+    }
+    */
 
 
 }

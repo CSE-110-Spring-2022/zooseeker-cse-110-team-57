@@ -23,14 +23,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
-/*
+
 public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
-    List<AnimalItem> routedAnimalItem;
+    List<route_node> routedNode;
 
 
-    public void setRouted_animal_items(List<AnimalItem> new_routed_animal_items){
-        routedAnimalItem.clear();
-        routedAnimalItem = new_routed_animal_items;
+    public void setRouted_animal_items(List<route_node> new_routed_animal_node){
+        routedNode.clear();
+        routedNode = new_routed_animal_node;
         notifyDataSetChanged();
     }
 
@@ -47,12 +47,12 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setAnimalItem(routedAnimalItem.get(position));
+        holder.setAnimalItem(routedNode.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return routedAnimalItem.size();
+        return routedNode.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -74,18 +74,18 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
             return routedAnimalItem;
         }
 
-        public void setAnimalItem(AnimalItem animal_item) {
-            this.routedAnimalItem = animal_item;
-            this.routedExhibitName.setText(animal_item.name);
-            //this.routedExhibitDirections.setText(animal_item.address);
-            //this.routedExhibitDistance.setText(animal_item.distance);
+        public void setAnimalItem(route_node animal_node) {
+            this.routedAnimalItem = animal_node.animal;
+            this.routedExhibitName.setText(animal_node.animal.name);
+            this.routedExhibitDirections.setText(animal_node.address);
+            this.routedExhibitDistance.setText(Double.toString(animal_node.distance));
         }
     }
 
 
 
 }
-*/
+
 
 
 
