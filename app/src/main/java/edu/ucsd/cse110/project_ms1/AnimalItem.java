@@ -17,6 +17,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
+
 @Entity(tableName = "animal_items")
 @TypeConverters({TagConverter.class})
 public class AnimalItem {
@@ -86,16 +87,19 @@ public class AnimalItem {
     }
 
     //return a route that has a different order of input route, so it can be a good choice for the user
-    public static List<AnimalItem> plan_route(List<AnimalItem> animal_items){
+    public static   List<route_node> plan_route(List<AnimalItem> animal_items){
         //begin and end positions
         String start = "entrance_exit_gate";
         String goal;
-        ArrayList<AnimalItem> planned_route = null;
+        ArrayList<route_node> planned_route = null;
 
         for (int i=0; i<animal_items.size()+1; i++){
             //plus 1 because we need the begin and end of the route
             int min_distance=999999999;
             AnimalItem closest_animal=null;
+            String address = null;
+            double distance = 0;
+
 
             //use for loop to find next closet exhibit
             for (AnimalItem item : animal_items){
@@ -105,12 +109,14 @@ public class AnimalItem {
                 if (curr_dis<min_distance){
                     min_distance = curr_dis;
                     closest_animal = item;
+                    address = path.getEdgeList().get(path.getEdgeList().size()).getId();
                 }
             }
 
+            distance = route_length(DijkstraShortestPath.findPathBetween(gInfo, "entrance_exit_gate",closest_animal.id ));
             start=closest_animal.id;
             animal_items.remove(closest_animal);
-            planned_route.add(closest_animal);
+            planned_route.add(new route_node(closest_animal,address,distance));
         }
         return  planned_route;
     }
@@ -126,3 +132,17 @@ public class AnimalItem {
 
 
 }
+
+
+class route_node
+{
+    public route_node(AnimalItem animal, String address, double distance) {
+        this.animal = animal;
+        this.address = address;
+        this.distance = distance;
+    }
+
+    public AnimalItem animal;
+    public String address;
+    public double  distance;
+};

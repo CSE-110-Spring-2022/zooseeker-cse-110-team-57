@@ -81,8 +81,8 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
         public void setAnimalItem(AnimalItem animal_item) {
             this.routedAnimalItem = animal_item;
             this.routedExhibitName.setText(animal_item.name);
-            this.routedExhibitDirections.setText(animal_item.address);
-            this.routedExhibitDistance.setText(animal_item.distance);
+//            this.routedExhibitDirections.setText(animal_item.address);
+//            this.routedExhibitDistance.setText(animal_item.distance);
         }
     }
 }
