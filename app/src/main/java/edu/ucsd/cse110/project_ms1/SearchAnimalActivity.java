@@ -71,13 +71,16 @@ public class SearchAnimalActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        stringAndAnimalItem = new StringAndAnimalItem();
+        //---------------------------------Remember to comment this line----------------------
+        clearSavedAnimalItem();
+        //----------------------------------------------------------------------------------
 
         //make "No such animal" invisible
         NoSuchAnimal = findViewById(R.id.no_such_animal);
         NoSuchAnimal.setVisibility(View.INVISIBLE);
         TextView BelowAreSelectedAnimals = findViewById(R.id.below_are_selected_animals);
         BelowAreSelectedAnimals.setVisibility(View.VISIBLE);
+        stringAndAnimalItem = new StringAndAnimalItem();
 
 
         //AnimalItemDao
@@ -219,14 +222,22 @@ public class SearchAnimalActivity extends AppCompatActivity
         return selectedAnimalItemList;
     }
 
+    public void clearSavedAnimalItem(){
+        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.commit();
+        editor.apply();
+
+    }
+
     public void onPlanClick(View view) {
         Intent intent = new Intent(this, PlanActivity.class);
-        /*
+
         if (selectedAnimalNameStringList.isEmpty()){
-            Utilities.showAlert(this, "Please select some animals first");
+            Utilities.showAlert(this, "Please select at least one animals");
             return;
         }
-        */
 
         ArrayList<String> currentNameStringList = new ArrayList<String>(selectedAnimalNameStringList);
         intent.putStringArrayListExtra("nameStringList", currentNameStringList);
