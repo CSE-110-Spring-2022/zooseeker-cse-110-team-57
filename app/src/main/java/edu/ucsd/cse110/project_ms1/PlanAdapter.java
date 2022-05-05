@@ -16,6 +16,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.w3c.dom.Text;
+
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,25 +25,55 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
+    List<AnimalItem> selectedAnimalItem;
+    /*
+    public PlanAdapter(){
+
+    }
+    */
+
+
     @NonNull
     @Override
     public PlanAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        View view = LayoutInflater
+                .from(parent.getContext())
+                .inflate(R.layout.route_plan_items, parent, false);
+
+        return new PlanAdapter.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
+        holder.setAnimalItem(selectedAnimalItem.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return selectedAnimalItem.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+         private TextView routedExhibitName;
+         private TextView routedDirections;
+         private AnimalItem routedAnimalItem;
+
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
+            this.routedExhibitName = itemView.findViewById(R.id.exhibit_name);
+            this.routedDirections = itemView.findViewById(R.id.exhibit_address);
+
+        }
+
+        public AnimalItem getAnimalItem(){
+            return routedAnimalItem;
+        }
+
+        public void setAnimalItem(AnimalItem animal_item) {
+            this.routedAnimalItem = animal_item;
+            this.routedExhibitName.setText(animal_item.name);
+            this.routedDirections.setText(animal_item.address);
         }
     }
 }
