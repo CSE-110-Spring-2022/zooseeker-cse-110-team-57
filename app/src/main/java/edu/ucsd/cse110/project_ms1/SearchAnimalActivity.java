@@ -53,9 +53,10 @@ public class SearchAnimalActivity extends AppCompatActivity
     List<AnimalItem> selectedAnimalItemList;
     List<AnimalItem> preSelectedAnimalItemList;
     List<String> selectedAnimalNameStringList;
-    StringAndAnimalItem stringAndAnimalItem;
     TextView NoSuchAnimal;
     TextView animalNumbers;
+
+    StringAndAnimalItem stringAndAnimalItem;
 
 
     @Override
@@ -68,12 +69,7 @@ public class SearchAnimalActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-/*
-        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-
- */
+        stringAndAnimalItem = new StringAndAnimalItem();
 
         //make "No such animal" invisible
         NoSuchAnimal = findViewById(R.id.no_such_animal);
@@ -199,7 +195,7 @@ public class SearchAnimalActivity extends AppCompatActivity
         List<AnimalItem> selectedAnimalItemList = new ArrayList<AnimalItem>();
         //get the list of selected animal names
         Set<String> selectedAnimalNameStringSet = sharedPreferences.getAll().keySet();
-        selectedAnimalNameStringList = new ArrayList<String>(selectedAnimalNameStringSet);
+        List<String> selectedAnimalNameStringList = new ArrayList<String>(selectedAnimalNameStringSet);
 
         //check if the user hasn't selected any animal
         if (selectedAnimalNameStringList.isEmpty()) {
@@ -221,14 +217,11 @@ public class SearchAnimalActivity extends AppCompatActivity
         return selectedAnimalItemList;
     }
 
-
-
     public void onPlanClick(View view) {
         Intent intent = new Intent(this, PlanActivity.class);
-        ArrayList<String> currentNameStringList = new ArrayList<String>(selectedAnimalNameStringList);
-        intent.putStringArrayListExtra("selectedAnimalNameStringList", currentNameStringList);
         startActivity(intent);
     }
+
 
 
     @Override
