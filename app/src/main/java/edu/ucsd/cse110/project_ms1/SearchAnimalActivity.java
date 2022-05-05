@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -220,7 +222,8 @@ public class SearchAnimalActivity extends AppCompatActivity
     public void onPlanClick(View view) {
         Intent intent = new Intent(this, PlanActivity.class);
         if (selectedAnimalNameStringList.isEmpty()){
-            showAlert;
+            Utilities.showAlert(this, "Please select some animals first");
+            return;
         }
         ArrayList<String> currentNameStringList = new ArrayList<String>(selectedAnimalNameStringList);
         intent.putStringArrayListExtra("nameStringList", currentNameStringList);
@@ -261,3 +264,4 @@ public class SearchAnimalActivity extends AppCompatActivity
     }
 
 }
+
