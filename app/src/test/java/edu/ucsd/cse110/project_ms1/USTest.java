@@ -1,7 +1,7 @@
 package edu.ucsd.cse110.project_ms1;
 
 
-
+/*
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -33,6 +33,7 @@ import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class USTest {
+
     @Rule
     public ActivityScenarioRule<SearchAnimalActivity> scenarioRule = new ActivityScenarioRule<>(SearchAnimalActivity.class);
 
@@ -149,3 +150,4 @@ public class USTest {
 //        });
     }
 }
+*/
