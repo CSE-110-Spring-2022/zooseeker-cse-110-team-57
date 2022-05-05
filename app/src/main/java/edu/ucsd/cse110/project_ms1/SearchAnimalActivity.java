@@ -195,7 +195,7 @@ public class SearchAnimalActivity extends AppCompatActivity
         List<AnimalItem> selectedAnimalItemList = new ArrayList<AnimalItem>();
         //get the list of selected animal names
         Set<String> selectedAnimalNameStringSet = sharedPreferences.getAll().keySet();
-        List<String> selectedAnimalNameStringList = new ArrayList<String>(selectedAnimalNameStringSet);
+        selectedAnimalNameStringList = new ArrayList<String>(selectedAnimalNameStringSet);
 
         //check if the user hasn't selected any animal
         if (selectedAnimalNameStringList.isEmpty()) {
@@ -219,6 +219,8 @@ public class SearchAnimalActivity extends AppCompatActivity
 
     public void onPlanClick(View view) {
         Intent intent = new Intent(this, PlanActivity.class);
+        ArrayList<String> currentNameStringList = new ArrayList<String>(selectedAnimalNameStringList);
+        intent.putStringArrayListExtra("nameStringList", currentNameStringList);
         startActivity(intent);
     }
 
