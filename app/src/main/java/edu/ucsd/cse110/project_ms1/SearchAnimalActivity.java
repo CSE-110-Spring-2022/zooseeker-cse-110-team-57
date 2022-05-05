@@ -53,6 +53,7 @@ public class SearchAnimalActivity extends AppCompatActivity
     List<AnimalItem> selectedAnimalItemList;
     List<AnimalItem> preSelectedAnimalItemList;
     List<String> selectedAnimalNameStringList;
+    StringAndAnimalItem stringAndAnimalItem;
     TextView NoSuchAnimal;
     TextView animalNumbers;
 
@@ -186,7 +187,7 @@ public class SearchAnimalActivity extends AppCompatActivity
         SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         //convert AnimalItem into a string containing all related information of a selected animal
-        String animalItemInfoString = AnimalItemToString(newSelectedAnimalItem);
+        String animalItemInfoString = stringAndAnimalItem.AnimalItemToString(newSelectedAnimalItem);
         //Map(animal name, animal information)
         editor.putString(newSelectedAnimalItem.name, animalItemInfoString);
         editor.commit();
@@ -198,7 +199,7 @@ public class SearchAnimalActivity extends AppCompatActivity
         List<AnimalItem> selectedAnimalItemList = new ArrayList<AnimalItem>();
         //get the list of selected animal names
         Set<String> selectedAnimalNameStringSet = sharedPreferences.getAll().keySet();
-        List<String> selectedAnimalNameStringList = new ArrayList<String>(selectedAnimalNameStringSet);
+        selectedAnimalNameStringList = new ArrayList<String>(selectedAnimalNameStringSet);
 
         //check if the user hasn't selected any animal
         if (selectedAnimalNameStringList.isEmpty()) {
@@ -211,7 +212,7 @@ public class SearchAnimalActivity extends AppCompatActivity
             String animalItemInfoString = sharedPreferences.getString(animalName,
                     "No found such animal in sharedPreference");
             //get the animalItem
-            AnimalItem animalItem = StringToAnimalItem(animalItemInfoString);
+            AnimalItem animalItem = stringAndAnimalItem.StringToAnimalItem(animalItemInfoString);
             //add animalItem to the AnimalItem list
             selectedAnimalItemList.add(animalItem);
         }
@@ -220,18 +221,12 @@ public class SearchAnimalActivity extends AppCompatActivity
         return selectedAnimalItemList;
     }
 
-    public String AnimalItemToString(AnimalItem animalItem){
-        return new Gson().toJson(animalItem);
-    }
 
-    public AnimalItem StringToAnimalItem(String animalItem){
-        Gson g = new Gson();
-        AnimalItem currentAnimalItem = g.fromJson(animalItem, AnimalItem.class);
-        return currentAnimalItem;
-    }
 
     public void onPlanClick(View view) {
         Intent intent = new Intent(this, PlanActivity.class);
+        ArrayList<String> currentNameStringList = new ArrayList<String>(selectedAnimalNameStringList);
+        intent.putStringArrayListExtra("selectedAnimalNameStringList", currentNameStringList);
         startActivity(intent);
     }
 
