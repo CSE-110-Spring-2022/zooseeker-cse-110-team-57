@@ -25,12 +25,18 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
-    List<AnimalItem> selectedAnimalItem;
+    List<AnimalItem> routedAnimalItem;
     /*
     public PlanAdapter(){
 
     }
     */
+
+    public void setRouted_animal_items(List<AnimalItem> new_routed_animal_items){
+        routedAnimalItem.clear();
+        routedAnimalItem = new_routed_animal_items;
+        notifyDataSetChanged();
+    }
 
 
     @NonNull
@@ -45,12 +51,12 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setAnimalItem(selectedAnimalItem.get(position));
+        holder.setAnimalItem(routedAnimalItem.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return selectedAnimalItem.size();
+        return routedAnimalItem.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
