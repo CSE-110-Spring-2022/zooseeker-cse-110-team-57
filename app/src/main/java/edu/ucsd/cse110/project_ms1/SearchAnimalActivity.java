@@ -170,7 +170,7 @@ public class SearchAnimalActivity extends AppCompatActivity
     //When the user taps the "Add" button, add the selected animal to selectedAnimalItemList.
     @Override
     public void OnAddClick(int position) {
-        AnimalItem newSelectedAnimalItem = allAnimalItem.get(position);
+        AnimalItem newSelectedAnimalItem = search_adapter.searched_animal_items.get(position);
         saveAddToList(newSelectedAnimalItem);
         loadAddToList();
 
