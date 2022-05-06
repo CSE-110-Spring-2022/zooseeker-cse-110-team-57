@@ -22,6 +22,7 @@ public class PlanActivity extends AppCompatActivity{
     List<AnimalItem> selectedAnimalItemList;
     List<String> selectedAnimalNameStringList;
     List<route_node> routeNodeList;
+    List<String> routedAnimalNameString;
 
 
     @Override
@@ -30,6 +31,7 @@ public class PlanActivity extends AppCompatActivity{
         setContentView(R.layout.activity_plan);
 
         stringAndAnimalItem = new StringAndAnimalItem();
+        List<String> routedAnimalNameString = new ArrayList<String>();
 
         plan_adapter = new PlanAdapter();
         plan_adapter.setHasStableIds(true);
@@ -58,14 +60,19 @@ public class PlanActivity extends AppCompatActivity{
             selectedAnimalItemList.add(animalItem);
         }
         routeNodeList = AnimalItem.plan_route(selectedAnimalItemList);
-
         plan_adapter.setRouted_animal_items(routeNodeList);
 
+        for (route_node myRoute_node: routeNodeList){
+            String myAnimal = myRoute_node.animal.name;
+            routedAnimalNameString.add(myAnimal);
+        }
 
     }
 
     public void onDirectionsClick(View view) {
         Intent intent = new Intent(this, DirectionsActivity.class);
+        ArrayList<String> routedAnimalList = new ArrayList<String>(routedAnimalNameString);
+        intent.putStringArrayListExtra("routedAnimalNameList", routedAnimalList);
         startActivity(intent);
     }
 
