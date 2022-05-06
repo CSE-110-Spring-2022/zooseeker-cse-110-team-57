@@ -116,7 +116,7 @@ public class AnimalItem {
             }
 
             String address = eInfo.get(address_id).street;
-            distance = route_length(DijkstraShortestPath.findPathBetween(gInfo, "entrance_exit_gate",closest_animal.id ));
+            distance = route_length(DijkstraShortestPath.findPathBetween(gInfo, "entrance_plaza",closest_animal.id ));
             start = closest_animal.id;
             animal_items.remove(closest_animal);
             route_node myRouteNode = new route_node(closest_animal, address, distance);
