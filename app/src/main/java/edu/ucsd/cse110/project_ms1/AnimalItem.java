@@ -103,20 +103,23 @@ public class AnimalItem {
 
             //use for loop to find next closet exhibit
             for (AnimalItem item : animal_items){
-                goal=item.id;
+                goal = item.id;
                 GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(gInfo, start, goal);
                 int curr_dis = route_length(path);
-                if (curr_dis<min_distance){
+                if (curr_dis < min_distance){
                     min_distance = curr_dis;
                     closest_animal = item;
-                    address = path.getEdgeList().get(path.getEdgeList().size()).getId();
+                    int pathSize = path.getEdgeList().size();
+                    IdentifiedWeightedEdge myEdge = path.getEdgeList().get(pathSize - 1);
+                    address = myEdge.getId();
                 }
             }
 
             distance = route_length(DijkstraShortestPath.findPathBetween(gInfo, "entrance_exit_gate",closest_animal.id ));
-            start=closest_animal.id;
+            start = closest_animal.id;
             animal_items.remove(closest_animal);
-            planned_route.add(new route_node(closest_animal,address,distance));
+            route_node myRouteNode = new route_node(closest_animal, address, distance);
+            planned_route.add(myRouteNode);
         }
         return  planned_route;
     }
@@ -129,8 +132,6 @@ public class AnimalItem {
         }
         return retVal;
     }
-
-
 }
 
 

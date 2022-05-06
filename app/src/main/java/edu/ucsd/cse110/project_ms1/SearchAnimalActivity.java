@@ -164,7 +164,7 @@ public class SearchAnimalActivity extends AppCompatActivity
 
     public void saveAddToList(AnimalItem newSelectedAnimalItem){
         //link the animalItem name with the string form of animalItem
-        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         //convert AnimalItem into a string containing all related information of a selected animal
         String animalItemInfoString = stringAndAnimalItem.AnimalItemToString(newSelectedAnimalItem);
@@ -175,7 +175,7 @@ public class SearchAnimalActivity extends AppCompatActivity
     }
 
     public List<AnimalItem> loadAddToList(){
-        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
         List<AnimalItem> selectedAnimalItemList = new ArrayList<AnimalItem>();
         //get the list of selected animal names
         Set<String> selectedAnimalNameStringSet = sharedPreferences.getAll().keySet();
@@ -202,7 +202,7 @@ public class SearchAnimalActivity extends AppCompatActivity
     }
 
     public void clearSavedAnimalItem(){
-        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.commit();

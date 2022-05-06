@@ -45,7 +45,7 @@ public class PlanActivity extends AppCompatActivity{
         selectedAnimalNameStringList =
                 intent.getStringArrayListExtra("nameStringList");
 
-        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
         selectedAnimalItemList = new ArrayList<AnimalItem>();
 
         for (String animalName: selectedAnimalNameStringList){
