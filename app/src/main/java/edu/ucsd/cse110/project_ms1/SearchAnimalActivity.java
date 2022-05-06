@@ -212,12 +212,10 @@ public class SearchAnimalActivity extends AppCompatActivity
 
     public void onPlanClick(View view) {
         Intent intent = new Intent(this, PlanActivity.class);
-
         if (selectedAnimalNameStringList.isEmpty()){
             Utilities.showAlert(this, "Please select at least one animals");
             return;
         }
-
         ArrayList<String> currentNameStringList = new ArrayList<String>(selectedAnimalNameStringList);
         intent.putStringArrayListExtra("nameStringList", currentNameStringList);
         startActivity(intent);

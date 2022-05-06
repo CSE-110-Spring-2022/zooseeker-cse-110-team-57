@@ -63,19 +63,12 @@ public class PlanActivity extends AppCompatActivity{
 
 
     }
-    /*
+
     public void onDirectionsClick(View view) {
         Intent intent = new Intent(this, DirectionsActivity.class);
-
-        if (selectedAnimalNameStringList.isEmpty()){
-            showAlert;
-        }
-
-        //ArrayList<String> currentNameStringList = new ArrayList<String>(selectedAnimalNameStringList);
-        //intent.putStringArrayListExtra("nameStringList", currentNameStringList);
         startActivity(intent);
     }
-    */
+
 
 
 }
