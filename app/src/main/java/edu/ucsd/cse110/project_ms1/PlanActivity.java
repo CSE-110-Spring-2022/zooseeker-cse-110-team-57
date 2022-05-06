@@ -31,6 +31,7 @@ public class PlanActivity extends AppCompatActivity{
         setContentView(R.layout.activity_plan);
 
         stringAndAnimalItem = new StringAndAnimalItem();
+        routedAnimalNameString = new ArrayList<String>();
 
         plan_adapter = new PlanAdapter();
         plan_adapter.setHasStableIds(true);
