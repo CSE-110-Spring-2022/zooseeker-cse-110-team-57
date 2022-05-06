@@ -36,11 +36,6 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 
 
-/*
-public class SearchAnimalActivity extends AppCompatActivity
-        implements SearchView.OnQueryTextListener, SearchedAnimalsAdapter.OnAddListener {
-
- */
     public class SearchAnimalActivity extends AppCompatActivity
             implements SearchedAnimalsAdapter.OnAddListener, SearchedAnimalsAdapter.IsAnimalFoundPass {
 
