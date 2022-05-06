@@ -19,7 +19,7 @@ public class PlanActivity extends AppCompatActivity{
     public RecyclerView plan_recyclerView;
     StringAndAnimalItem stringAndAnimalItem;
     PlanAdapter plan_adapter;
-    List<AnimalItem> selectedAnimalItemList;
+
     List<String> selectedAnimalNameStringList;
     List<route_node> routeNodeList;
 
@@ -46,7 +46,7 @@ public class PlanActivity extends AppCompatActivity{
                 intent.getStringArrayListExtra("nameStringList");
 
         SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
-        selectedAnimalItemList = new ArrayList<AnimalItem>();
+        List<AnimalItem> selectedAnimalItemList = new ArrayList<AnimalItem>();
 
         for (String animalName: selectedAnimalNameStringList){
             //find the string containing all related information of a selected animal

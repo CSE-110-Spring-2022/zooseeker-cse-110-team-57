@@ -100,7 +100,9 @@ public class AnimalItem {
             String address_id = null;
             double distance = 0;
 
-
+            if (animal_items.size()==0){
+                return planned_route;
+            }
             //use for loop to find next closet exhibit
             for (AnimalItem item : animal_items){
                 goal = item.id;
