@@ -97,7 +97,7 @@ public class AnimalItem {
             //plus 1 because we need the begin and end of the route
             int min_distance=999999999;
             AnimalItem closest_animal=null;
-            String address = null;
+            String address_id = null;
             double distance = 0;
 
 
@@ -111,10 +111,11 @@ public class AnimalItem {
                     closest_animal = item;
                     int pathSize = path.getEdgeList().size();
                     IdentifiedWeightedEdge myEdge = path.getEdgeList().get(pathSize - 1);
-                    address = myEdge.getId();
+                    address_id = myEdge.getId();
                 }
             }
 
+            String address = eInfo.get(address_id).street;
             distance = route_length(DijkstraShortestPath.findPathBetween(gInfo, "entrance_exit_gate",closest_animal.id ));
             start = closest_animal.id;
             animal_items.remove(closest_animal);
