@@ -8,4 +8,13 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="main_theme_pink">#DB7093</color>
+    <color name="light_pink">#FFB6C1</color>
+    <color name="pink">#FFC0CB</color>
+    <color name="PaleVoiletRed">#DB7093</color>
+    <color name="hot_pink">#FF69B4</color>
+    <color name="Crimson">#DC143C</color>
+    <color name="Violet">#EE82EE</color>
+    <color name="MediumOrchid">#BA55D3</color>
+    <color name="MediumVioletRed">#C71585</color>
+
 </resources>

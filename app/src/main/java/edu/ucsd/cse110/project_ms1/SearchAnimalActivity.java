@@ -66,13 +66,14 @@ public class SearchAnimalActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_animal);
         try {
-            AnimalItem.loadInfo(this,"sample_node_info.json", "sample_edge_info.json","sample_zoo_graph.json");
+            AnimalItem.loadInfo(this,"sample_node_info.json",
+                    "sample_edge_info.json","sample_zoo_graph.json");
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        //---------------------------------Remember to comment this line----------------------
-        clearSavedAnimalItem();
+        //--------------Comment this line if you don't want to select animals again-------------
+        //clearSavedAnimalItem();
         //----------------------------------------------------------------------------------
 
         //make "No such animal" invisible
@@ -129,7 +130,9 @@ public class SearchAnimalActivity extends AppCompatActivity
         animalNumbers = findViewById(R.id.selected_animals_number);
         animalNumbers.setText(Integer.toString(preSelectedAnimalItemList.size()));
         for (AnimalItem selectedAnimal : preSelectedAnimalItemList){
-            selectedAnimalNameStringList.add(selectedAnimal.name);
+            if (!selectedAnimalNameStringList.contains(selectedAnimal.name)){
+                selectedAnimalNameStringList.add(selectedAnimal.name);
+            }
         }
 
         //reset the addToList
@@ -144,31 +147,7 @@ public class SearchAnimalActivity extends AppCompatActivity
         selected_recyclerView.setAdapter(addToList_adapter);
     }
 
-    //----------------------Below are the functions of SearchView--------------------------------
-/*
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        //Get the searched animals
-        List<AnimalItem> searchedAnimalsList = AnimalItem.search_by_tag(query);
-        //Check if there is no such animal
-        TextView NoSuchAnimal = findViewById(R.id.no_such_animal);
-        if (searchedAnimalsList.size() == 0){
-            NoSuchAnimal.setVisibility(View.VISIBLE);
-            return false;
-        }
-        else{
-            NoSuchAnimal.setVisibility(View.INVISIBLE);
-        }
-        //set the searched animals
-        search_adapter.setSearched_animal_items(searchedAnimalsList);
-        return true;
-    }
 
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        return false;
-    }
-*/
     //--------------------------Below is the Add Button Click--------------------------------------
     //When the user taps the "Add" button, add the selected animal to selectedAnimalItemList.
     @Override

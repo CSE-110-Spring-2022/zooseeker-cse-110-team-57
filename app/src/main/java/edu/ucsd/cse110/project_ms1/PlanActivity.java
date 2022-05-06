@@ -34,12 +34,13 @@ public class PlanActivity extends AppCompatActivity{
         plan_adapter = new PlanAdapter();
         plan_adapter.setHasStableIds(true);
 
-        plan_recyclerView = findViewById(R.id.planed_route);
+
+        plan_recyclerView = this.findViewById(R.id.planed_route);
         plan_recyclerView.setLayoutManager(new LinearLayoutManager(this));
         plan_recyclerView.setAdapter(plan_adapter);
 
-/*
-        //-----------------------------load selected animalitem----------------------------------
+
+        //-----------------------------load selected animalItem----------------------------------
         Intent intent = getIntent();
         selectedAnimalNameStringList =
                 intent.getStringArrayListExtra("nameStringList");
@@ -59,7 +60,7 @@ public class PlanActivity extends AppCompatActivity{
         routeNodeList = AnimalItem.plan_route(selectedAnimalItemList);
 
         plan_adapter.setRouted_animal_items(routeNodeList);
-*/
+
 
     }
     /*

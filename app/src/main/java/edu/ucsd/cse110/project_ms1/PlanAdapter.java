@@ -25,12 +25,12 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
-    List<route_node> routedNode;
+    private List<route_node> routedNodeList = Collections.emptyList();
 
 
-    public void setRouted_animal_items(List<route_node> new_routed_animal_node){
-        routedNode.clear();
-        routedNode = new_routed_animal_node;
+    public void setRouted_animal_items(List<route_node> new_routed_node_list){
+        this.routedNodeList.clear();
+        this.routedNodeList = new_routed_node_list;
         notifyDataSetChanged();
     }
 
@@ -47,12 +47,12 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setAnimalItem(routedNode.get(position));
+        holder.setAnimalItem(routedNodeList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return routedNode.size();
+        return routedNodeList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -67,7 +67,6 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
             this.routedExhibitName = itemView.findViewById(R.id.exhibit_name);
             this.routedExhibitDirections = itemView.findViewById(R.id.exhibit_address);
             this.routedExhibitDistance = itemView.findViewById(R.id.exhibit_distance);
-
         }
 
         public AnimalItem getAnimalItem(){
