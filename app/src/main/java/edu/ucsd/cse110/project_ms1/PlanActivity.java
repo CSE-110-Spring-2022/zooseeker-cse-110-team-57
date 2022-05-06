@@ -63,9 +63,9 @@ public class PlanActivity extends AppCompatActivity{
         plan_adapter.setRouted_animal_items(routeNodeList);
 
         for (route_node myRoute_node: routeNodeList){
-            routedAnimalNameString.add(myRoute_node.animal.name);
+            String myAnimal = myRoute_node.animal.name;
+            routedAnimalNameString.add(myAnimal);
         }
-
 
     }
 
