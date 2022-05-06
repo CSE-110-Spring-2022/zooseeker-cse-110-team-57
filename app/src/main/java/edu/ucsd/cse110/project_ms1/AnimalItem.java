@@ -91,7 +91,7 @@ public class AnimalItem {
         //begin and end positions
         String start = "entrance_exit_gate";
         String goal;
-        ArrayList<route_node> planned_route = null;
+        ArrayList<route_node> planned_route = new ArrayList<>();
 
         for (int i=0; i<animal_items.size()+1; i++){
             //plus 1 because we need the begin and end of the route
