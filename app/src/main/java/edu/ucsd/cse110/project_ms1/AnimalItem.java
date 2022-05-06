@@ -93,7 +93,7 @@ public class AnimalItem {
         String goal;
         ArrayList<route_node> planned_route = new ArrayList<>();
 
-        for (int i=0; i<animal_items.size()+1; i++){
+        for (int i=0; i <= animal_items.size()+1; i++){
             //plus 1 because we need the begin and end of the route
             int min_distance=999999999;
             AnimalItem closest_animal=null;
