@@ -24,6 +24,7 @@
         android:layout_height="40dp"
         android:text="There is no such animal"
         android:textSize="30dp"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="@+id/all_searched_animals"
         app:layout_constraintEnd_toEndOf="@+id/all_searched_animals"
         app:layout_constraintStart_toStartOf="@+id/all_searched_animals"
@@ -31,11 +32,12 @@
 
     <TextView
         android:id="@+id/below_are_selected_animals"
-        android:layout_width="200dp"
+        android:layout_width="170dp"
         android:layout_height="30dp"
         android:text="Selected animals: "
         android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/all_selected_animals"
+        android:textColor="@color/white"
+        android:background="@color/main_theme_pink"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,15 +46,15 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/all_selected_animals"
-        android:layout_width="400dp"
+        android:layout_width="370dp"
         android:layout_height="300dp"
         android:scrollbarSize="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.454"
+        app:layout_constraintHorizontal_bias="0.39"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.877" />
+        app:layout_constraintTop_toBottomOf="@+id/below_are_selected_animals"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/plan_button"
@@ -60,6 +62,8 @@
         android:layout_height="wrap_content"
         android:onClick="onPlanClick"
         android:text="Plan"
+        android:textSize="20dp"
+        android:backgroundTint="@color/main_theme_pink"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
@@ -68,13 +72,17 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/textView3"
-        android:layout_width="200dp"
+        android:id="@+id/selected_animals_number"
+        android:layout_width="230dp"
         android:layout_height="30dp"
-        android:text="TextView"
+        android:background="@color/main_theme_pink"
+        android:text=""
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="20dp"
         app:layout_constraintBottom_toTopOf="@+id/all_selected_animals"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.545"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/below_are_selected_animals"
         app:layout_constraintTop_toBottomOf="@+id/all_searched_animals"
         app:layout_constraintVertical_bias="0.0" />
