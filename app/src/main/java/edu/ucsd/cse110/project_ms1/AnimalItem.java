@@ -125,6 +125,8 @@ public class AnimalItem {
         return  planned_route;
     }
 
+
+
     // return a path's length
     public static int route_length(GraphPath<String, IdentifiedWeightedEdge> path){
         int retVal=0;
@@ -133,6 +135,7 @@ public class AnimalItem {
         }
         return retVal;
     }
+
 }
 
 
