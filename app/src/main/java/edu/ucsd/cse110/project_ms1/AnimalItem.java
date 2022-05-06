@@ -17,6 +17,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
+
 @Entity(tableName = "animal_items")
 @TypeConverters({TagConverter.class})
 public class AnimalItem {
@@ -67,7 +68,9 @@ public class AnimalItem {
     // If animal names match the tag, that also counts
     //List<AnimalItem> -return all animal under the tag
     public static List<AnimalItem> search_by_tag(String tag){
+
         List<AnimalItem> retVal =  new ArrayList<AnimalItem>();
+
         int i =0;
         for (Map.Entry<String, ZooData.VertexInfo> set : vInfo.entrySet()) {
             ZooData.VertexInfo currentVertex = set.getValue();
@@ -84,31 +87,42 @@ public class AnimalItem {
     }
 
     //return a route that has a different order of input route, so it can be a good choice for the user
-    public static List<AnimalItem> plan_route(List<AnimalItem> animal_items){
+    public static List<route_node> plan_route(List<AnimalItem> animal_items){
         //begin and end positions
         String start = "entrance_exit_gate";
         String goal;
-        ArrayList<AnimalItem> planned_route = null;
+        ArrayList<route_node> planned_route = new ArrayList<>();
 
-        for (int i=0; i<animal_items.size()+1; i++){
+        for (int i=0; i <= animal_items.size()+1; i++){
             //plus 1 because we need the begin and end of the route
             int min_distance=999999999;
             AnimalItem closest_animal=null;
+            String address_id = null;
+            double distance = 0;
 
+            if (animal_items.size()==0){
+                return planned_route;
+            }
             //use for loop to find next closet exhibit
             for (AnimalItem item : animal_items){
-                goal=item.id;
+                goal = item.id;
                 GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(gInfo, start, goal);
                 int curr_dis = route_length(path);
-                if (curr_dis<min_distance){
+                if (curr_dis < min_distance){
                     min_distance = curr_dis;
                     closest_animal = item;
+                    int pathSize = path.getEdgeList().size();
+                    IdentifiedWeightedEdge myEdge = path.getEdgeList().get(pathSize - 1);
+                    address_id = myEdge.getId();
                 }
             }
 
-            start=closest_animal.id;
+            String address = eInfo.get(address_id).street;
+            distance = route_length(DijkstraShortestPath.findPathBetween(gInfo, "entrance_plaza",closest_animal.id ));
+            start = closest_animal.id;
             animal_items.remove(closest_animal);
-            planned_route.add(closest_animal);
+            route_node myRouteNode = new route_node(closest_animal, address, distance);
+            planned_route.add(myRouteNode);
         }
         return  planned_route;
     }
@@ -121,6 +135,18 @@ public class AnimalItem {
         }
         return retVal;
     }
-
-
 }
+
+
+class route_node
+{
+    public route_node(AnimalItem animal, String address, double distance) {
+        this.animal = animal;
+        this.address = address;
+        this.distance = distance;
+    }
+
+    public AnimalItem animal;
+    public String address;
+    public double  distance;
+};

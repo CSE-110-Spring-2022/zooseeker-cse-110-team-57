@@ -6,9 +6,12 @@
         <entry key="app/src/main/res/layout/activity_add_to_list.xml" value="0.17889492753623187" />
         <entry key="app/src/main/res/layout/activity_direction.xml" value="0.23854166666666668" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.13703140830800406" />
+        <entry key="app/src/main/res/layout/activity_plan.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/activity_search_animal.xml" value="0.17889492753623187" />
+        <entry key="app/src/main/res/layout/route_plan_items.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/searched_animals.xml" value="0.17889492753623187" />
         <entry key="app/src/main/res/layout/selected_animals.xml" value="0.17889492753623187" />
+        <entry key="app/src/main/res/menu/animal_menu.xml" value="0.3098958333333333" />
       </map>
     </option>
   </component>
