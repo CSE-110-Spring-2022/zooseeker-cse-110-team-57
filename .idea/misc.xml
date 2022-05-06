@@ -3,14 +3,24 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/layout/activity_add_to_list.xml" value="0.17889492753623187" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.13703140830800406" />
-        <entry key="app/src/main/res/layout/activity_search_animal.xml" value="0.17889492753623187" />
-        <entry key="app/src/main/res/layout/searched_animals.xml" value="0.17889492753623187" />
-        <entry key="app/src/main/res/layout/selected_animals.xml" value="0.17889492753623187" />
+        <entry key="app/src/main/res/layout/activity_add_to_list.xml" value="0.11145833333333334" />
+        <entry key="app/src/main/res/layout/activity_direction.xml" value="0.2192573436792346" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_plan.xml" value="0.2563405797101449" />
+        <entry key="app/src/main/res/layout/activity_search_animal.xml" value="0.3051925659179688" />
+        <entry key="app/src/main/res/layout/direction.xml" value="0.11145833333333334" />
+        <entry key="app/src/main/res/layout/searched_animals.xml" value="0.11145833333333334" />
+        <entry key="app/src/main/res/layout/selected_animals.xml" value="0.11145833333333334" />
+        <entry key="app/src/main/res/menu/animal_menu.xml" value="0.28177083333333336" />
       </map>
     </option>
   </component>
-  <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.11145833333333334" />
+      </ProjectState>
+    </option>
+  </component>
 </project>
