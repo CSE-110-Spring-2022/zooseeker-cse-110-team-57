@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="999bea4c-ccf7-4f6c-9d73-daf5f0a960f3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/cse110/project_ms1/DirectionsActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cse110/project_ms1/StringAndAnimalItem.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cse110/project_ms1/Utilities.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../res/layout/route_plan_items.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../../../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../../../.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../../schemas/edu.ucsd.cse110.project_ms1.AnimalItemDatabase/1.json" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../../schemas/edu.ucsd.cse110.project_ms1.AnimalItemDatabase/1.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cse110/project_ms1/PlanActivity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cse110/project_ms1/SearchAnimalActivity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cse110/project_ms1/SearchedAnimalsAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/cse110/project_ms1/SearchedAnimalsAdapter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/layout/searched_animals.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/layout/searched_animals.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/layout/selected_animals.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/layout/selected_animals.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../res/values/themes.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../res/values/themes.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../test/java/edu/ucsd/cse110/project_ms1/USTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../test/java/edu/ucsd/cse110/project_ms1/USTest.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../../../.." />
+  </component>
+  <component name="ProjectId" id="28oFdtuVDsvd029jP8Ogxo9QhA1" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
+    <property name="cidr.known.project.marker" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="999bea4c-ccf7-4f6c-9d73-daf5f0a960f3" name="Default Changelist" comment="" />
+      <created>1651875121299</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1651875121299</updated>
+    </task>
+    <servers />
+  </component>
+</project>

@@ -4,6 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/layout/activity_add_to_list.xml" value="0.17889492753623187" />
+        <entry key="app/src/main/res/layout/activity_direction.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_direction2.xml" value="0.18802083333333333" />
+        <entry key="app/src/main/res/layout/activity_directions.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.13703140830800406" />
         <entry key="app/src/main/res/layout/activity_plan.xml" value="0.3098958333333333" />
         <entry key="app/src/main/res/layout/activity_search_animal.xml" value="0.17889492753623187" />
