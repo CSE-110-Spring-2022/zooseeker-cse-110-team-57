@@ -26,7 +26,6 @@ public class DirectionActivity extends AppCompatActivity {
     public StringAndAnimalItem stringAndAnimalItem;
     private ArrayList<String> orderedAnimalNameString;
     private List<AnimalItem> orderedAnimalItemList;
-    public static Graph<String, IdentifiedWeightedEdge>;
     private ArrayList<String> edgeStringList;
     private ArrayList<String> edgeWeightList;
     private List<String> directionStringList;
