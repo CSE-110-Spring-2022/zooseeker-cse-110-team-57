@@ -69,7 +69,7 @@ public class DirectionActivity extends AppCompatActivity {
 
         //Get the first Animal Exhibit Name
         start = "entrance_exit_gate";
-        goal = orderedAnimalNameString.get(0);
+        goal = orderedAnimalItemList.get(0).id;
 
         path = DijkstraShortestPath.findPathBetween(AnimalItem.gInfo, start, goal);
         for (IdentifiedWeightedEdge edge: path.getEdgeList()){
