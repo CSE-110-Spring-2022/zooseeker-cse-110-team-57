@@ -26,7 +26,6 @@ public class DirectionActivity extends AppCompatActivity {
     public StringAndAnimalItem stringAndAnimalItem;
     private ArrayList<String> orderedAnimalNameString;
     private List<AnimalItem> orderedAnimalItemList;
-    public static Graph<String, IdentifiedWeightedEdge>;
     private ArrayList<String> edgeStringList;
     private ArrayList<String> edgeWeightList;
     private List<String> directionStringList;
@@ -70,7 +69,7 @@ public class DirectionActivity extends AppCompatActivity {
 
         //Get the first Animal Exhibit Name
         start = "entrance_exit_gate";
-        goal = orderedAnimalNameString.get(0);
+        goal = orderedAnimalItemList.get(0).id;
 
         path = DijkstraShortestPath.findPathBetween(AnimalItem.gInfo, start, goal);
         for (IdentifiedWeightedEdge edge: path.getEdgeList()){
