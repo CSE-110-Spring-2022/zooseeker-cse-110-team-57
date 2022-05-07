@@ -89,20 +89,18 @@ public class AnimalItem {
     //return a route that has a different order of input route, so it can be a good choice for the user
     public static List<route_node> plan_route(List<AnimalItem> animal_items){
         //begin and end positions
-        String start = "entrance_exit_gate";
+        String start = "entrance_plaza";
         String goal;
         ArrayList<route_node> planned_route = new ArrayList<>();
-
-        for (int i=0; i <= animal_items.size()+1; i++){
+        int num_iter=animal_items.size();
+        for (int i=0; i < num_iter; i++){
             //plus 1 because we need the begin and end of the route
             int min_distance=999999999;
             AnimalItem closest_animal=null;
             String address_id = null;
             double distance = 0;
 
-            if (animal_items.size()==0){
-                return planned_route;
-            }
+
             //use for loop to find next closet exhibit
             for (AnimalItem item : animal_items){
                 goal = item.id;
