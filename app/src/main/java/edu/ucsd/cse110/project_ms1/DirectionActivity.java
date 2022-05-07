@@ -184,7 +184,7 @@ public class DirectionActivity extends AppCompatActivity {
         else if(order == 0){
             next_name = orderedAnimalNameString.get(order + 1);
             next_distance = pathDistances.get(order + 1).toString();
-            previous_name = "None";
+            previous_name = "Entrance and Exit Gate";
             previous_distance = "0.0";
         }
         else{
