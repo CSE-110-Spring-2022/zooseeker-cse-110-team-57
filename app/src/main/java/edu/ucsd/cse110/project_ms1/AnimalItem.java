@@ -137,7 +137,11 @@ public class AnimalItem {
         }
         return retVal;
     }
-
+/*
+    public GraphPath<String, IdentifiedWeightedEdge> getPathByStartAndGoal(String start, String goal){
+        return DijkstraShortestPath.findPathBetween(gInfo, start, goal);
+    }
+*/
 }
 
 
