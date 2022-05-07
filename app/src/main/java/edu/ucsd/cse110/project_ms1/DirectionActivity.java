@@ -25,7 +25,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 public class DirectionActivity extends AppCompatActivity {
     public DirectionAdapter direction_adapter;
     public RecyclerView direction_recyclerView;
-    public TextView goalExhibitTitle, startExhibitTitle, nextText, previousText;
+    public TextView goalExhibitTitle, startExhibitTitle, nextText, previousText, pathTotalDistance;
     public StringAndAnimalItem stringAndAnimalItem;
     private ArrayList<String> orderedAnimalNameString, orderedAnimalIdStringList, directionStringList;
     private List<AnimalItem> orderedAnimalItemList;
@@ -59,6 +59,7 @@ public class DirectionActivity extends AppCompatActivity {
         goalExhibitTitle = findViewById(R.id.goal_exhibit_name);
         nextText = findViewById(R.id.next_text);
         previousText = findViewById(R.id.previous_text);
+        pathTotalDistance = findViewById(R.id.path_total_distance);
 
         //get the ordered AnimalItem string
         Intent intent = getIntent();
@@ -166,8 +167,10 @@ public class DirectionActivity extends AppCompatActivity {
         //display directions
         String startExhibit = "From: "+start_name;
         String goalExhibit = "To: "+goal_name;
+        String distance = "("+pathDistances.get(order).toString()+"ft)";
         startExhibitTitle.setText(startExhibit);
         goalExhibitTitle.setText(goalExhibit);
+        pathTotalDistance.setText(distance);
         //set direction items
         directionStringList = new ArrayList<String>(setDirectionList(order));
         //set direction items in adapter

@@ -12,14 +12,14 @@
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginBottom="628dp"
+        android:background="@color/light_pink"
         android:gravity="center"
         android:text="TextView"
-        android:textSize="30dp"
-        android:background="@color/light_pink"
         android:textColor="@color/white"
+        android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintEnd_toStartOf="@+id/path_total_distance"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/start_exhibit_name"
         app:layout_constraintVertical_bias="0.0" />
@@ -28,22 +28,20 @@
         android:id="@+id/all_direction_items"
         android:layout_width="400dp"
         android:layout_height="550dp"
-        android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.454"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/goal_exhibit_name" />
 
-
     <TextView
         android:id="@+id/start_exhibit_name"
         android:layout_width="fill_parent"
         android:layout_height="30dp"
+        android:background="@color/main_theme_pink"
         android:gravity="center"
         android:text="TextView"
-        android:textSize="20dp"
-        android:background="@color/main_theme_pink"
         android:textColor="@color/white"
+        android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
@@ -103,5 +101,19 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/previous_text"
         app:layout_constraintTop_toBottomOf="@+id/all_direction_items" />
+
+    <TextView
+        android:id="@+id/path_total_distance"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:background="@color/light_pink"
+        android:gravity="center"
+        android:text="TextView"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/all_direction_items"
+        app:layout_constraintEnd_toEndOf="@+id/all_direction_items"
+        app:layout_constraintTop_toBottomOf="@+id/start_exhibit_name"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
