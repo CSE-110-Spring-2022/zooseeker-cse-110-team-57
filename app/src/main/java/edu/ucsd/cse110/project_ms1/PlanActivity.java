@@ -70,7 +70,7 @@ public class PlanActivity extends AppCompatActivity{
     }
 
     public void onDirectionsClick(View view) {
-        Intent intent = new Intent(this, DirectionsActivity.class);
+        Intent intent = new Intent(this, DirectionActivity.class);
         ArrayList<String> routedAnimalList = new ArrayList<String>(routedAnimalNameString);
         intent.putStringArrayListExtra("routedAnimalNameList", routedAnimalList);
         startActivity(intent);
