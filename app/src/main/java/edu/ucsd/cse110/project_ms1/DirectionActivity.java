@@ -100,6 +100,7 @@ public class DirectionActivity extends AppCompatActivity {
     public void setGraphPathList(){
         GraphPath<String, IdentifiedWeightedEdge> path;
         String startId, goalId;
+        int currentPathLength;
         //start from the gate
         startId = "entrance_exit_gate";
         goalId = orderedAnimalIdStringList.get(0);
@@ -107,7 +108,8 @@ public class DirectionActivity extends AppCompatActivity {
         //save path
         pathList.add(path);
         //save path total distance
-        pathDistances.add(Double.valueOf(path.getLength()));
+        currentPathLength = AnimalItem.route_length(path);
+        pathDistances.add(Double.valueOf(currentPathLength));
         //for each order animal
         for (int i = 0; i < numberOfPaths; i++){
             startId = orderedAnimalIdStringList.get(i);
@@ -116,7 +118,8 @@ public class DirectionActivity extends AppCompatActivity {
             //save path
             pathList.add(path);
             //save path total distance
-            pathDistances.add(Double.valueOf(path.getLength()));
+            currentPathLength = AnimalItem.route_length(path);
+            pathDistances.add(Double.valueOf(currentPathLength));
         }
     }
 
@@ -181,25 +184,25 @@ public class DirectionActivity extends AppCompatActivity {
         else if(order == 0){
             next_name = orderedAnimalNameString.get(order + 1);
             next_distance = pathDistances.get(order + 1).toString();
-            previous_name = "";
-            previous_distance = "0";
+            previous_name = "None";
+            previous_distance = "0.0";
         }
         else{
-            next_name = "";
-            next_distance = "0";
+            next_name = "None";
+            next_distance = "0.0";
             previous_name = orderedAnimalNameString.get(order - 1);
             previous_distance = pathDistances.get(order - 1).toString();
         }
         //set next & previous labels
         String nextT = "\""+next_name+"\" ("+next_distance+"ft)";
-        String prevT = "\""+previous_name+"\" ("+next_distance+"ft)";
+        String prevT = "\""+previous_name+"\" ("+previous_distance+"ft)";
         nextText.setText(nextT);
         previousText.setText(prevT);
     }
 
     public void onNextButtonClick(View view) {
         if (directionItemOrder == orderedAnimalItemList.size() - 1){
-            Utilities.showAlert(this, "This is the end of your tour");
+            Utilities.showAlert(this, "Reach the end of tour.");
             return;
         }
         else{
@@ -211,7 +214,7 @@ public class DirectionActivity extends AppCompatActivity {
 
     public void onBackButtonClick(View view) {
         if (directionItemOrder == 0){
-            Utilities.showAlert(this, "This is the beginning of your tour");
+            Utilities.showAlert(this, "Reach the beginning of tour.");
             return;
         }
         else{
