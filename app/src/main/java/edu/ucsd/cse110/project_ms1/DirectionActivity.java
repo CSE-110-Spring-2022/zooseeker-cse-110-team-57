@@ -29,7 +29,7 @@ public class DirectionActivity extends AppCompatActivity {
     public StringAndAnimalItem stringAndAnimalItem;
     private ArrayList<String> orderedAnimalNameString, edgeStringList, edgeWeightList;
     private List<AnimalItem> orderedAnimalItemList;
-    private List<String> directionStringList;
+    private List<String> directionStringList, start_endpoints, end_endpoints;;
     public GraphPath<String, IdentifiedWeightedEdge> path;
     public String start_id, start_name, goal_id, goal_name;
     public String entrance_id, entrance_name;
@@ -44,6 +44,8 @@ public class DirectionActivity extends AppCompatActivity {
         edgeStringList = new ArrayList<String>();
         edgeWeightList = new ArrayList<String>();
         directionStringList = new ArrayList<String>();
+        start_endpoints = new ArrayList<String>();
+        end_endpoints = new ArrayList<String>();
         orderedAnimalItemList = new ArrayList<AnimalItem>();
         stringAndAnimalItem = new StringAndAnimalItem();
         directionItemOrder = 0;
@@ -83,16 +85,25 @@ public class DirectionActivity extends AppCompatActivity {
         return orderedAnimalItemList;
     }
 
-    public void setDirectionList(String startId, String goalId, String startName, String goalName){
+    public void setDirectionList(String startId, String goalId){
+
         path = DijkstraShortestPath.findPathBetween(AnimalItem.gInfo, startId, goalId);
         for (IdentifiedWeightedEdge edge: path.getEdgeList()){
-            String currentEdge = AnimalItem.eInfo.get(edge.getId()).street;
-            edgeStringList.add(currentEdge);
-            edgeWeightList.add(Double.toString(AnimalItem.gInfo.getEdgeWeight(edge)));
+            ZooData.EdgeInfo edgeInfo = AnimalItem.eInfo.get(edge.getId());
+            edgeStringList.add(edgeInfo.street);
+
+            Graph<String, IdentifiedWeightedEdge> myGraph = AnimalItem.gInfo;
+            String start_endpoint_id = myGraph.getEdgeSource(edge);
+            String end_endpoint_id = myGraph.getEdgeTarget(edge);
+            String startName = AnimalItem.vInfo.get(start_endpoint_id).name;
+            String endName = AnimalItem.vInfo.get(end_endpoint_id).name;
+            start_endpoints.add(startName);
+            end_endpoints.add(endName);
+            edgeWeightList.add(Double.toString(myGraph.getEdgeWeight(edge)));
         }
         for (int i = 0; i < edgeStringList.size(); i++){
-            String displayInfo = "Walk "+edgeWeightList.get(i)+"ft along "+edgeStringList.get(i)
-                    +" from "+startName+" to "+goalName+".";
+            String displayInfo = "Walk "+edgeWeightList.get(i)+"ft along \""+edgeStringList.get(i)
+                    +"\" from \""+start_endpoints.get(i)+"\" to \""+end_endpoints.get(i)+"\".";
             directionStringList.add(displayInfo);
         }
     }
@@ -116,7 +127,7 @@ public class DirectionActivity extends AppCompatActivity {
         String goalExhibit = "To: "+goal_name;
         startExhibitTitle.setText(startExhibit);
         goalExhibitTitle.setText(goalExhibit);
-        setDirectionList(start_id, goal_id, start_name, goal_name);
+        setDirectionList(start_id, goal_id);
         direction_adapter.setDirectionsStringList(directionStringList);
     }
 
