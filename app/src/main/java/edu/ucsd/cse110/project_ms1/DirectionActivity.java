@@ -35,6 +35,6 @@ public class DirectionActivity extends AppCompatActivity {
             //add animalItem to the AnimalItem list
             orderedAnimalList.add(animalItem);
         }
-
+        //initialize end
     }
 }
