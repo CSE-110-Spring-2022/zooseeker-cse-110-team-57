@@ -8,7 +8,7 @@ import org.jgrapht.nio.Attribute;
  * Exactly like a DefaultWeightedEdge, but has an id field we
  * can use to look up the information about the edge with.
  */
-public class IdentifiedWeightedEdge extends DefaultWeightedEdge {
+public class IdentifiedWeightedEdge extends DefaultWeightedEdge implements Comparable<IdentifiedWeightedEdge>{
     private String id = null;
 
     public String getId() { return id; }
@@ -26,6 +26,17 @@ public class IdentifiedWeightedEdge extends DefaultWeightedEdge {
 
         if (attrName.equals("id")) {
             edge.setId(attrValue);
+        }
+    }
+
+
+    public int compareTo(IdentifiedWeightedEdge otherEdge) {
+        if(this.getWeight() < otherEdge.getWeight()){
+            return -1;
+        }else if(this.getWeight() == otherEdge.getWeight()){
+            return 0;
+        }else{
+            return 1;
         }
     }
 }

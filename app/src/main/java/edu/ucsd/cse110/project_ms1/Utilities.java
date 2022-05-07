@@ -2,13 +2,18 @@ package edu.ucsd.cse110.project_ms1;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.util.Pair;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
+import org.jgrapht.GraphTests;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 public class Utilities {
     public static void showAlert(Activity activity, String message){
@@ -45,5 +50,37 @@ public class Utilities {
             }
         }
         return graph;
+    }
+    //findcycle() for detecting cycle
+    //DegreeOf() for checking degree
+
+
+    public static ArrayList<String> TSP(Graph<String,IdentifiedWeightedEdge> g){
+        if(!GraphTests.isComplete(g)){
+            throw new IllegalArgumentException("not a complete graph");
+        }
+
+        Set<String>  vertexSet = g.vertexSet();
+
+        //new graph with vertex only
+        Graph<String,IdentifiedWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(IdentifiedWeightedEdge.class);
+        for(String s: vertexSet){
+            graph.addVertex(s);
+        }
+
+
+
+        // sorted EdgeList
+        Set<IdentifiedWeightedEdge> edgeSet = graph.edgeSet();
+        ArrayList<IdentifiedWeightedEdge> edgeList = new ArrayList<>();
+        for (IdentifiedWeightedEdge e: edgeSet){
+            edgeList.add(e);
+        }
+        Collections.sort(edgeList);
+
+        //WIP
+
+        ArrayList<String> str = new ArrayList<>();
+        return str;
     }
 }
