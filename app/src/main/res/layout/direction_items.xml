@@ -7,10 +7,10 @@
 
     <TextView
         android:id="@+id/a_direction_item"
-        android:layout_width="400dp"
+        android:layout_width="370dp"
         android:layout_height="64dp"
         android:text="TextView"
-        android:textSize="15dp"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.454"

@@ -6,41 +6,74 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".DirectionActivity">
 
+
     <TextView
-        android:id="@+id/exhibit_name"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="680dp"
+        android:id="@+id/goal_exhibit_name"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="628dp"
         android:gravity="center"
         android:text="TextView"
-        android:textSize="24sp"
+        android:textSize="30dp"
+        android:background="@color/light_pink"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/start_exhibit_name"
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/all_direction_items"
         android:layout_width="400dp"
-        android:layout_height="600dp"
+        android:layout_height="500dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.454"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/exhibit_name" />
+        app:layout_constraintTop_toBottomOf="@+id/goal_exhibit_name" />
+
+
+    <TextView
+        android:id="@+id/start_exhibit_name"
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:text="TextView"
+        android:textSize="20dp"
+        android:background="@color/main_theme_pink"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/next_btn"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="300dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="24dp"
+        android:id="@+id/next_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="NEXT"
+        android:textSize="20dp"
+        android:onClick="onNextButtonClick"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.925"
+        app:layout_constraintStart_toEndOf="@+id/previous_button"
+        app:layout_constraintTop_toBottomOf="@+id/all_direction_items"
+        app:layout_constraintVertical_bias="0.822" />
+
+    <Button
+        android:id="@+id/previous_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="PREVIOUS"
+        android:textSize="20dp"
+        android:onClick="onBackButtonClick"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/all_direction_items"
+        app:layout_constraintVertical_bias="0.822" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
