@@ -27,9 +27,8 @@ public class DirectionActivity extends AppCompatActivity {
     public RecyclerView direction_recyclerView;
     public TextView goalExhibitTitle, startExhibitTitle, nextText, previousText;
     public StringAndAnimalItem stringAndAnimalItem;
-    private ArrayList<String> orderedAnimalNameString, orderedAnimalIdStringList, edgeStringList, edgeWeightList;
+    private ArrayList<String> orderedAnimalNameString, orderedAnimalIdStringList, directionStringList;
     private List<AnimalItem> orderedAnimalItemList;
-    private List<String> directionStringList, start_endpoints, end_endpoints;;
     private List<Double> pathDistances;
     List<GraphPath<String, IdentifiedWeightedEdge>> pathList;
     public String start_id, start_name, goal_id, goal_name, next_name, next_distance,
@@ -43,11 +42,6 @@ public class DirectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_direction);
         //initiate field
-        edgeStringList = new ArrayList<String>();
-        edgeWeightList = new ArrayList<String>();
-        directionStringList = new ArrayList<String>();
-        start_endpoints = new ArrayList<String>();
-        end_endpoints = new ArrayList<String>();
         orderedAnimalIdStringList = new ArrayList<String>();
         orderedAnimalItemList = new ArrayList<AnimalItem>();
         stringAndAnimalItem = new StringAndAnimalItem();
@@ -123,9 +117,14 @@ public class DirectionActivity extends AppCompatActivity {
         }
     }
 
-    public void setDirectionList(int order){
-        GraphPath<String, IdentifiedWeightedEdge> mypath = pathList.get(order);
-        for (IdentifiedWeightedEdge edge: mypath.getEdgeList()){
+    public List<String> setDirectionList(int order){
+        GraphPath<String, IdentifiedWeightedEdge> myPath = pathList.get(order);
+        List<String> myStringList = new ArrayList<String>();
+        List<String> edgeStringList = new ArrayList<String>();
+        List<String> edgeWeightList = new ArrayList<String>();
+        List<String> start_endpoints = new ArrayList<String>();
+        List<String> end_endpoints = new ArrayList<String>();
+        for (IdentifiedWeightedEdge edge: myPath.getEdgeList()){
             //save each edge
             ZooData.EdgeInfo edgeInfo = AnimalItem.eInfo.get(edge.getId());
             edgeStringList.add(edgeInfo.street);
@@ -145,8 +144,9 @@ public class DirectionActivity extends AppCompatActivity {
         for (int i = 0; i < edgeStringList.size(); i++){
             String displayInfo = "Walk "+edgeWeightList.get(i)+"ft along \""+edgeStringList.get(i)
                     +"\" from \""+start_endpoints.get(i)+"\" to \""+end_endpoints.get(i)+"\".";
-            directionStringList.add(displayInfo);
+            myStringList.add(displayInfo);
         }
+        return myStringList;
     }
 
     public void displayDirection(int order){
@@ -169,7 +169,7 @@ public class DirectionActivity extends AppCompatActivity {
         startExhibitTitle.setText(startExhibit);
         goalExhibitTitle.setText(goalExhibit);
         //set direction items
-        setDirectionList(order);
+        directionStringList = new ArrayList<String>(setDirectionList(order));
         //set direction items in adapter
         direction_adapter.setDirectionsStringList(directionStringList);
     }
