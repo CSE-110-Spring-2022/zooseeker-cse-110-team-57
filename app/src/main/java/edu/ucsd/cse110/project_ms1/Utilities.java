@@ -60,6 +60,7 @@ public class Utilities {
             throw new IllegalArgumentException("not a complete graph");
         }
 
+        int n = g.vertexSet().size();
         Set<String>  vertexSet = g.vertexSet();
 
         //new graph with vertex only
@@ -78,7 +79,11 @@ public class Utilities {
         }
         Collections.sort(edgeList);
 
+
         //WIP
+        while(g.edgeSet().size() < n){
+
+        }
 
         ArrayList<String> str = new ArrayList<>();
         return str;
