@@ -83,8 +83,6 @@ import javax.xml.transform.TransformerFactory;
         ///AnimalItemDao animalItemDao = AnimalItemDatabase.getSingleton(this).AnimalItemDao();
         allAnimalItem = AnimalItem.search_by_tag(null);
 
-
-
         //SearchedAnimalsAdapter
         SearchedAnimalsAdapter.IsAnimalFoundPass isAnimalFoundPass = new SearchedAnimalsAdapter.IsAnimalFoundPass() {
             @Override
@@ -97,6 +95,7 @@ import javax.xml.transform.TransformerFactory;
                 }
             }
         };
+
         search_adapter = new SearchedAnimalsAdapter(this, isAnimalFoundPass);
         search_adapter.setHasStableIds(true);
 
