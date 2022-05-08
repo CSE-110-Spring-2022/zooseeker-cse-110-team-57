@@ -68,7 +68,9 @@ public class DirectionActivity extends AppCompatActivity {
         pathList = new ArrayList<>(numberOfPaths);
         pathDistances = new ArrayList<Double>(numberOfPaths);
         //set animal item list
-        orderedAnimalItemList = loadOrderedAnimals(orderedAnimalNameString);
+        List<String> orderedAnimalNameStringWithoutExitGate = new ArrayList<>(orderedAnimalNameString);
+        String exit_gate = orderedAnimalNameStringWithoutExitGate.remove(orderedAnimalNameStringWithoutExitGate.size() - 1);
+        orderedAnimalItemList = loadOrderedAnimals(orderedAnimalNameStringWithoutExitGate);
         //set graph path list for each path
         setGraphPathList();
         //set the first Exhibit
@@ -89,6 +91,7 @@ public class DirectionActivity extends AppCompatActivity {
             orderedAnimalItemList.add(animalItem);
             orderedAnimalIdStringList.add(animalItem.id);
         }
+        orderedAnimalIdStringList.add("entrance_exit_gate");
         return orderedAnimalItemList;
     }
 
