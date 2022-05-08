@@ -168,8 +168,8 @@ public class DirectionActivity extends AppCompatActivity {
             goal_name = orderedAnimalNameString.get(order);
         }
         //display directions
-        String startExhibit = "From: "+start_name;
-        String goalExhibit = "To: "+goal_name;
+        String startExhibit = "  From: "+start_name;
+        String goalExhibit = "  To: "+goal_name;
         String distance = "("+pathDistances.get(order).toString()+"ft)";
         startExhibitTitle.setText(startExhibit);
         goalExhibitTitle.setText(goalExhibit);
@@ -207,7 +207,7 @@ public class DirectionActivity extends AppCompatActivity {
     }
 
     public void onNextButtonClick(View view) {
-        if (directionItemOrder == orderedAnimalItemList.size() - 1){
+        if (directionItemOrder == orderedAnimalIdStringList.size() - 1){
             Utilities.showAlert(this, "Reach the end of tour.");
             return;
         }
