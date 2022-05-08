@@ -3,11 +3,8 @@ package edu.ucsd.cse110.project_ms1;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -25,45 +22,36 @@ import androidx.test.runner.AndroidJUnit4;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class SearchNonexistingTest {
+public class US7_PlanNoAnimalTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void searchNonexistingTest() {
-        ViewInteraction actionMenuItemView = onView(
-                allOf(withId(R.id.search_bar_2), withContentDescription("Search"),
+    public void planNoAnimalTest() {
+        ViewInteraction materialButton = onView(
+                allOf(withId(R.id.plan_button), withText("Plan"),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(androidx.appcompat.R.id.action_bar),
-                                        1),
-                                0),
+                                        withId(android.R.id.content),
+                                        0),
+                                4),
                         isDisplayed()));
-        actionMenuItemView.perform(click());
-
-        ViewInteraction searchAutoComplete = onView(
-                allOf(withId(androidx.appcompat.R.id.search_src_text),
-                        childAtPosition(
-                                allOf(withId(androidx.appcompat.R.id.search_plate),
-                                        childAtPosition(
-                                                withId(androidx.appcompat.R.id.search_edit_frame),
-                                                1)),
-                                0),
-                        isDisplayed()));
-        searchAutoComplete.perform(replaceText("grass"), closeSoftKeyboard());
+        materialButton.perform(click());
 
         ViewInteraction textView = onView(
-                allOf(withId(R.id.no_such_animal), withText("There is no such animal"),
-                        withParent(withParent(withId(android.R.id.content))),
+                allOf(IsInstanceOf.<View>instanceOf(android.widget.TextView.class), withText("Alert!"),
+                        withParent(allOf(IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
+                                withParent(IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class)))),
                         isDisplayed()));
-        textView.check(matches(withText("There is no such animal")));
+        textView.check(matches(withText("Alert!")));
     }
 
     private static Matcher<View> childAtPosition(
