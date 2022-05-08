@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -100,42 +101,11 @@ public class USTest {
         });
     }
 
-    @Test
-    public void SearchByNameTest() {
-        //User Story 1
 
-        ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
-
-        scenario.moveToState(Lifecycle.State.CREATED);
-
-        scenario.onActivity(activity -> {
-
-            List<AnimalItem> animalItem = AnimalItem.search_by_tag("Elephant Odyssey");
-
-            for(AnimalItem item : animalItem){
-                assertTrue(item.name.contains("Elephant Odyssey"));
-            }
-        });
-    }
 //================================================================================================================================================================
 
-//========================================================== US 4 ======================================================================================================
-    @Test
-    public void AddListTest() {
-        //User Story 4
-//        ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
-//        scenario.moveToState(Lifecycle.State.CREATED);
-//        scenario.onActivity(activity -> {
-//
-//            SharedPreferences preferences = activity.getPreferences(Context.MODE_PRIVATE);
-//            SharedPreferences.Editor editor = preferences.edit();
-//
-//            TextView animal = activity.findViewById(R.id."");
-//            editor.putString("",animal.getText().toString());
-//
-//
-//        });
-    }
+
+
 
 //========================================================== US 5 ======================================================================================================
     @Test
