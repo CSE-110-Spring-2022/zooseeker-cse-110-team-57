@@ -233,7 +233,6 @@ import javax.xml.transform.TransformerFactory;
             }
             @Override
             public boolean onQueryTextChange(String s) {
-                searched_recyclerView.setVisibility(View.VISIBLE);
                 search_adapter.getFilter().filter(s);
                 return false;
             }
@@ -241,7 +240,7 @@ import javax.xml.transform.TransformerFactory;
         menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem menuItem) {
-                Log.d("6666666", "onMenuItemActionExpand");
+                searched_recyclerView.setVisibility(View.VISIBLE);
                 return true;
             }
 
