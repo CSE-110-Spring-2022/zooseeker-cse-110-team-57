@@ -32,6 +32,7 @@ public class AnimalItem {
     public static Map<String, ZooData.VertexInfo> vInfo;
     public static Map<String, ZooData.EdgeInfo> eInfo;
     public static Graph<String, IdentifiedWeightedEdge> gInfo;
+    public static AnimalItem gate;
 
     //not sure if i will change this constructor
     public AnimalItem(@NonNull String id, ArrayList<String> tags, String name){
@@ -57,6 +58,13 @@ public class AnimalItem {
 
         input = context.getAssets().open(g_path);
         gInfo = ZooData.loadZooGraphJSON(input);
+
+        for (Map.Entry<String, ZooData.VertexInfo> set : vInfo.entrySet()){
+            ZooData.VertexInfo currentVertex = set.getValue();
+            if(currentVertex.kind.name().equals("GATE")){
+                gate = new AnimalItem(set.getValue().id, (ArrayList<String>) set.getValue().tags,set.getValue().name);
+            }
+        }
     }
 
     @Override
@@ -89,17 +97,20 @@ public class AnimalItem {
     //return a route that has a different order of input route, so it can be a good choice for the user
     public static List<route_node> plan_route(List<AnimalItem> animal_items){
         //begin and end positions
-        String start = "entrance_plaza";
+        String start = "entrance_exit_gate";
         String goal;
         ArrayList<route_node> planned_route = new ArrayList<>();
         int num_iter=animal_items.size();
-        for (int i=0; i < num_iter; i++){
+        for (int i=0; i < num_iter+1; i++){
             //plus 1 because we need the begin and end of the route
             int min_distance=999999999;
             AnimalItem closest_animal=null;
             String address_id = null;
             double distance = 0;
 
+            if (i==num_iter){
+                animal_items.add(gate);
+            }
 
             //use for loop to find next closet exhibit
             for (AnimalItem item : animal_items){
@@ -116,7 +127,7 @@ public class AnimalItem {
             }
 
             String address = eInfo.get(address_id).street;
-            distance = route_length(DijkstraShortestPath.findPathBetween(gInfo, "entrance_plaza",closest_animal.id ));
+            distance = route_length(DijkstraShortestPath.findPathBetween(gInfo, "entrance_exit_gate",closest_animal.id ));
             start = closest_animal.id;
             animal_items.remove(closest_animal);
             route_node myRouteNode = new route_node(closest_animal, address, distance);
