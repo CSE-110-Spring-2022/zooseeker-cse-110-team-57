@@ -83,7 +83,7 @@ public class USTest {
 
 
     @Test
-    public void SearchByNameTest() {
+    public void SearchByNameTest1() {
         //User Story 1
         ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
 
@@ -101,7 +101,7 @@ public class USTest {
     }
 
     @Test
-    public void SearchByNameTest() {
+    public void SearchByNameTest2() {
         //User Story 1
 
         ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
