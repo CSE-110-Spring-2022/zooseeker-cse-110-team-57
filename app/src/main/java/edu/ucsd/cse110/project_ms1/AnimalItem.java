@@ -89,7 +89,7 @@ public class AnimalItem {
     //return a route that has a different order of input route, so it can be a good choice for the user
     public static List<route_node> plan_route(List<AnimalItem> animal_items){
         //begin and end positions
-        String start = "entrance_exit_gate";
+        String start = "entrance_plaza";
         String goal;
         ArrayList<route_node> planned_route = new ArrayList<>();
         int num_iter=animal_items.size();
@@ -116,7 +116,7 @@ public class AnimalItem {
             }
 
             String address = eInfo.get(address_id).street;
-            distance = route_length(DijkstraShortestPath.findPathBetween(gInfo, "entrance_exit_gate",closest_animal.id ));
+            distance = route_length(DijkstraShortestPath.findPathBetween(gInfo, "entrance_plaza",closest_animal.id ));
             start = closest_animal.id;
             animal_items.remove(closest_animal);
             route_node myRouteNode = new route_node(closest_animal, address, distance);
