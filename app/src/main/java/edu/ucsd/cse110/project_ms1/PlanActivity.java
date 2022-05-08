@@ -60,8 +60,9 @@ public class PlanActivity extends AppCompatActivity{
             selectedAnimalItemList.add(animalItem);
         }
         routeNodeList = AnimalItem.plan_route(selectedAnimalItemList);
+        int exit_gate_index = routeNodeList.size() - 1;
+        route_node exit_gate_route_node = routeNodeList.remove(exit_gate_index);
         plan_adapter.setRouted_animal_items(routeNodeList);
-
         for (route_node myRoute_node: routeNodeList){
             String myAnimal = myRoute_node.animal.name;
             routedAnimalNameString.add(myAnimal);
@@ -76,7 +77,4 @@ public class PlanActivity extends AppCompatActivity{
         startActivity(intent);
 
     }
-
-
-
 }
