@@ -12,6 +12,7 @@ import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -55,12 +56,15 @@ public class Utilities {
     //DegreeOf() for checking degree
 
 
-    public static ArrayList<String> TSP(Graph<String,IdentifiedWeightedEdge> g){
+    public static ArrayList<String> TSP(Graph<String,IdentifiedWeightedEdge> g, String start){
         if(!GraphTests.isComplete(g)){
             throw new IllegalArgumentException("not a complete graph");
         }
 
+        ArrayList<String> res = new ArrayList<>();
+        int n = g.vertexSet().size();
         Set<String>  vertexSet = g.vertexSet();
+        Set<String> visited = vertexSet;
 
         //new graph with vertex only
         Graph<String,IdentifiedWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(IdentifiedWeightedEdge.class);
@@ -68,19 +72,40 @@ public class Utilities {
             graph.addVertex(s);
         }
 
+        String curr = start;
+        while(visited.size() != 0 ){
+            visited.remove(curr);
+            res.add(curr);
+            //sort the edgelist
+            Set<IdentifiedWeightedEdge> edgeSet =g.edgesOf(curr);
+            ArrayList<IdentifiedWeightedEdge> edgeList = new ArrayList<>();
+            for (IdentifiedWeightedEdge e: edgeSet){
+                edgeList.add(e);
+            }
 
+            Collections.sort(edgeList);
+            //need to check whether the list is sorted ^
+
+            for (IdentifiedWeightedEdge e: edgeList){
+                //不知道targetnode 会不会是source_node
+                String target = g.getEdgeTarget(e);
+                if (visited.contains(target)){
+                    curr = target;
+                    break;
+                }
+            }
+        }
+
+        res.add(start);
 
         // sorted EdgeList
-        Set<IdentifiedWeightedEdge> edgeSet = graph.edgeSet();
-        ArrayList<IdentifiedWeightedEdge> edgeList = new ArrayList<>();
-        for (IdentifiedWeightedEdge e: edgeSet){
-            edgeList.add(e);
-        }
-        Collections.sort(edgeList);
+//        Set<IdentifiedWeightedEdge> edgeSet = graph.edgeSet();
+//        ArrayList<IdentifiedWeightedEdge> edgeList = new ArrayList<>();
+//        for (IdentifiedWeightedEdge e: edgeSet){
+//            edgeList.add(e);
+//        }
+//        Collections.sort(edgeList);
 
-        //WIP
-
-        ArrayList<String> str = new ArrayList<>();
-        return str;
+        return res;
     }
 }

@@ -68,7 +68,7 @@ import javax.xml.transform.TransformerFactory;
         }
 
         //--------------Comment this line if you don't want to select animals again-------------
-        //clearSavedAnimalItem();
+        clearSavedAnimalItem();
         //----------------------------------------------------------------------------------
 
         //make "No such animal" invisible
@@ -83,8 +83,6 @@ import javax.xml.transform.TransformerFactory;
         ///AnimalItemDao animalItemDao = AnimalItemDatabase.getSingleton(this).AnimalItemDao();
         allAnimalItem = AnimalItem.search_by_tag(null);
 
-
-
         //SearchedAnimalsAdapter
         SearchedAnimalsAdapter.IsAnimalFoundPass isAnimalFoundPass = new SearchedAnimalsAdapter.IsAnimalFoundPass() {
             @Override
@@ -97,6 +95,7 @@ import javax.xml.transform.TransformerFactory;
                 }
             }
         };
+
         search_adapter = new SearchedAnimalsAdapter(this, isAnimalFoundPass);
         search_adapter.setHasStableIds(true);
 
@@ -194,6 +193,8 @@ import javax.xml.transform.TransformerFactory;
         addToList_adapter.setSelectedAnimalItems(selectedAnimalItemList);
 
         return selectedAnimalItemList;
+
+
     }
 
     public void clearSavedAnimalItem(){
@@ -232,8 +233,22 @@ import javax.xml.transform.TransformerFactory;
             }
             @Override
             public boolean onQueryTextChange(String s) {
+                searched_recyclerView.setVisibility(View.VISIBLE);
                 search_adapter.getFilter().filter(s);
                 return false;
+            }
+        });
+        menuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem menuItem) {
+                Log.d("6666666", "onMenuItemActionExpand");
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+                searched_recyclerView.setVisibility(View.INVISIBLE);
+                return true;
             }
         });
         return true;
@@ -248,6 +263,5 @@ import javax.xml.transform.TransformerFactory;
             NoSuchAnimal.setVisibility(View.INVISIBLE);
         }
     }
-
 }
 
