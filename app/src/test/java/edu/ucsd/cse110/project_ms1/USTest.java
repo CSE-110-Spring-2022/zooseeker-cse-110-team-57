@@ -2,6 +2,9 @@ package edu.ucsd.cse110.project_ms1;
 
 
 
+import static android.util.Log.println;
+
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -60,6 +63,7 @@ public class USTest {
             }
 
             assertTrue(allAnimals.contains("Lions"));
+
 
         });
 
@@ -148,4 +152,56 @@ public class USTest {
 //
 //        });
     }
+
+    @Test
+    public void RouteTest(){
+        //US11  without gorilla
+        List<AnimalItem> items = AnimalItem.search_by_tag(null);
+        List<route_node> nodes ;
+        double total_dis;
+
+
+        items.remove(4);
+        nodes = AnimalItem.plan_route(items);
+
+        //checking the order is right
+        assertEquals("gators", nodes.get(0).animal.id );
+        assertEquals("lions", nodes.get(1).animal.id );
+        assertEquals("elephant_odyssey", nodes.get(2).animal.id );
+        assertEquals("arctic_foxes", nodes.get(3).animal.id );
+        assertEquals("entrance_exit_gate", nodes.get(4).animal.id );
+//        assertEquals(110.0, nodes.get(1).distance, 0.01);
+
+        //checking the total distance is right
+        total_dis = total_length(nodes);
+        assertEquals(1620.0, total_dis ,0.01);
+    }
+
+
+
+
+
+    //helper function to find length of a route
+    private double total_length(List<route_node> nodes) {
+        double dis=0;
+        String goal = nodes.get(0).animal.id;
+        String start = "entrance_exit_gate";
+        for (int i =0; i<nodes.size(); i++){
+
+           double curr = AnimalItem.route_length
+                   (DijkstraShortestPath.findPathBetween(AnimalItem.gInfo, start, goal));
+
+           if (i<nodes.size()-1){
+               start = goal;
+               goal = nodes.get(i+1).animal.id;
+           }
+
+           dis+=curr;
+//           System.out.println("\ni am at "+goal);
+//           System.out.println("step is "+curr);
+//           System.out.println("total is "+dis);
+        }
+        return  dis;
+    }
 }
+
