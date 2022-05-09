@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 @RunWith(AndroidJUnit4.class)
-public class AnimalItemDataBaseTest {
+public class US0_AnimalItemDataBaseTest {
     private AnimalItemDao dao;
     private AnimalItemDatabase db;
     @Before
