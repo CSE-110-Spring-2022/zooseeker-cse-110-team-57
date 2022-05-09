@@ -249,7 +249,7 @@ public class USTest {
 
     //helper function to find length of a route
     private double total_length(List<route_node> nodes) {
-        System.out.println(nodes.size());
+        //System.out.println(nodes.size());
         double dis=0;
         String goal = nodes.get(0).animal.id;
         String start = "entrance_exit_gate";
@@ -264,9 +264,9 @@ public class USTest {
            }
 
            dis+=curr;
-           System.out.println("\ni am at "+start);
-           System.out.println("step is "+curr);
-           System.out.println("total is "+dis);
+//           System.out.println("\ni am at "+start);
+//           System.out.println("step is "+curr);
+//           System.out.println("total is "+dis);
         }
         return  dis;
     }
