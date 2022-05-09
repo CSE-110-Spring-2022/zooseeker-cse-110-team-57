@@ -3,8 +3,6 @@ package edu.ucsd.cse110.project_ms1;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -37,7 +35,7 @@ public class US7_PlanWithAnimalTest {
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void planTest() {
+    public void uS7PlanWithAnimalTest() {
         ViewInteraction actionMenuItemView = onView(
                 allOf(withId(R.id.search_bar_2), withContentDescription("Search"),
                         childAtPosition(
@@ -47,17 +45,6 @@ public class US7_PlanWithAnimalTest {
                                 0),
                         isDisplayed()));
         actionMenuItemView.perform(click());
-
-        ViewInteraction searchAutoComplete = onView(
-                allOf(withId(androidx.appcompat.R.id.search_src_text),
-                        childAtPosition(
-                                allOf(withId(androidx.appcompat.R.id.search_plate),
-                                        childAtPosition(
-                                                withId(androidx.appcompat.R.id.search_edit_frame),
-                                                1)),
-                                0),
-                        isDisplayed()));
-        searchAutoComplete.perform(replaceText("foxes"), closeSoftKeyboard());
 
         ViewInteraction materialButton = onView(
                 allOf(withId(R.id.add_to_button), withText("Add"),
@@ -69,37 +56,25 @@ public class US7_PlanWithAnimalTest {
                         isDisplayed()));
         materialButton.perform(click());
 
-        ViewInteraction appCompatImageView = onView(
-                allOf(withId(androidx.appcompat.R.id.search_close_btn), withContentDescription("Clear query"),
-                        childAtPosition(
-                                allOf(withId(androidx.appcompat.R.id.search_plate),
-                                        childAtPosition(
-                                                withId(androidx.appcompat.R.id.search_edit_frame),
-                                                1)),
-                                1),
-                        isDisplayed()));
-        appCompatImageView.perform(click());
-
-        ViewInteraction searchAutoComplete2 = onView(
-                allOf(withId(androidx.appcompat.R.id.search_src_text),
-                        childAtPosition(
-                                allOf(withId(androidx.appcompat.R.id.search_plate),
-                                        childAtPosition(
-                                                withId(androidx.appcompat.R.id.search_edit_frame),
-                                                1)),
-                                0),
-                        isDisplayed()));
-        searchAutoComplete2.perform(replaceText("alli"), closeSoftKeyboard());
-
         ViewInteraction materialButton2 = onView(
                 allOf(withId(R.id.add_to_button), withText("Add"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.all_searched_animals),
-                                        0),
+                                        1),
                                 1),
                         isDisplayed()));
         materialButton2.perform(click());
+
+        ViewInteraction materialButton3 = onView(
+                allOf(withId(R.id.add_to_button), withText("Add"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.all_searched_animals),
+                                        2),
+                                1),
+                        isDisplayed()));
+        materialButton3.perform(click());
 
         ViewInteraction appCompatImageButton = onView(
                 allOf(withContentDescription("Collapse"),
@@ -112,7 +87,7 @@ public class US7_PlanWithAnimalTest {
                         isDisplayed()));
         appCompatImageButton.perform(click());
 
-        ViewInteraction materialButton3 = onView(
+        ViewInteraction materialButton4 = onView(
                 allOf(withId(R.id.plan_button), withText("Plan"),
                         childAtPosition(
                                 childAtPosition(
@@ -120,19 +95,13 @@ public class US7_PlanWithAnimalTest {
                                         0),
                                 4),
                         isDisplayed()));
-        materialButton3.perform(click());
+        materialButton4.perform(click());
 
         ViewInteraction textView = onView(
-                allOf(withId(R.id.exhibit_distance), withText("(110.0 ft)"),
-                        withParent(withParent(withId(R.id.planed_route))),
-                        isDisplayed()));
-        textView.check(matches(withText("(110.0 ft)")));
-
-        ViewInteraction textView2 = onView(
                 allOf(withId(R.id.exhibit_distance), withText("(310.0 ft)"),
                         withParent(withParent(withId(R.id.planed_route))),
                         isDisplayed()));
-        textView2.check(matches(withText("(310.0 ft)")));
+        textView.check(matches(withText("(310.0 ft)")));
     }
 
     private static Matcher<View> childAtPosition(

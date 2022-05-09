@@ -15,6 +15,8 @@
         android:gravity="center"
         android:text="Route Plan"
         android:textSize="30dp"
+        android:scrollbarSize="5dp"
+        android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

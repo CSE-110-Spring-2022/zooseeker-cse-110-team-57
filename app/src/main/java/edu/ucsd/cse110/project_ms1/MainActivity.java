@@ -19,6 +19,12 @@ public class MainActivity extends AppCompatActivity {
 
 /**
  * Reference:
+ *
  * For techniques related to TypeConvert, this website provided much help
  * https://medium.com/@toddcookevt/android-room-storing-lists-of-objects-766cca57e3f9
+ *
+ * Also thanks for help from https://www.youtube.com/watch?v=pM1fAmUQn8g about using search
+ * bar in android studio
+ *
+ *
  */
