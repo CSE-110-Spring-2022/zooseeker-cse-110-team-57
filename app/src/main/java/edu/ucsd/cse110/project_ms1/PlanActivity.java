@@ -78,6 +78,5 @@ public class PlanActivity extends AppCompatActivity{
         ArrayList<String> routedAnimalList = new ArrayList<String>(routedAnimalNameString);
         intent.putStringArrayListExtra("routedAnimalNameList", routedAnimalList);
         startActivity(intent);
-
     }
 }

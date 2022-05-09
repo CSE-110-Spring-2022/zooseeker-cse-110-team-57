@@ -32,6 +32,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
@@ -127,18 +128,37 @@ public class USTest {
     @Test
     public void AddListTest() {
         //User Story 4
-//        ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
-//        scenario.moveToState(Lifecycle.State.CREATED);
-//        scenario.onActivity(activity -> {
-//
-//            SharedPreferences preferences = activity.getPreferences(Context.MODE_PRIVATE);
-//            SharedPreferences.Editor editor = preferences.edit();
-//
-//            TextView animal = activity.findViewById(R.id."");
-//            editor.putString("",animal.getText().toString());
-//
-//
-//        });
+        ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
+
+        scenario.moveToState(Lifecycle.State.CREATED);
+
+        ArrayList<String> list = new ArrayList<>(Arrays.asList());
+
+        AnimalItem animalItem = new AnimalItem("1",list,"panda");
+        scenario.onActivity(activity -> {
+            activity.saveAddToList(animalItem);
+            List<AnimalItem> res =  activity.loadAddToList();
+            for(AnimalItem item : res){
+                assertTrue(item.name.contains("panda"));
+            }
+        });
+
+    }
+
+    @Test
+    public void AddListTest_empty() {
+        //User Story 4
+        ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
+
+        scenario.moveToState(Lifecycle.State.CREATED);
+
+        ArrayList<String> list = new ArrayList<>(Arrays.asList());
+
+        scenario.onActivity(activity -> {
+            List<AnimalItem> res =  activity.loadAddToList();
+            assertTrue(res.isEmpty());
+        });
+
     }
 
 //========================================================== US 5 ======================================================================================================
