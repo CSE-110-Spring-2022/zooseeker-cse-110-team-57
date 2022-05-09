@@ -29,13 +29,13 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class US7_PlanNoAnimalTest {
+public class US7PlanNoAnimalTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void planNoAnimalTest() {
+    public void uS7PlanNoAnimalTest() {
         ViewInteraction materialButton = onView(
                 allOf(withId(R.id.plan_button), withText("Plan"),
                         childAtPosition(
@@ -47,11 +47,10 @@ public class US7_PlanNoAnimalTest {
         materialButton.perform(click());
 
         ViewInteraction textView = onView(
-                allOf(IsInstanceOf.<View>instanceOf(android.widget.TextView.class), withText("Alert!"),
-                        withParent(allOf(IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class),
-                                withParent(IsInstanceOf.<View>instanceOf(android.widget.LinearLayout.class)))),
+                allOf(withId(android.R.id.message), withText("Please select at least one animals"),
+                        withParent(withParent(IsInstanceOf.<View>instanceOf(android.widget.ScrollView.class))),
                         isDisplayed()));
-        textView.check(matches(withText("Alert!")));
+        textView.check(matches(withText("Please select at least one animals")));
     }
 
     private static Matcher<View> childAtPosition(
