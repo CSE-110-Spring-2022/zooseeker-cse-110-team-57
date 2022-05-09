@@ -74,8 +74,7 @@ import javax.xml.transform.TransformerFactory;
         TextView BelowAreSelectedAnimals = findViewById(R.id.below_are_selected_animals);
         BelowAreSelectedAnimals.setVisibility(View.VISIBLE);
         stringAndAnimalItem = new StringAndAnimalItem();
-
-
+        
         //AnimalItemDao
         ///AnimalItemDao animalItemDao = AnimalItemDatabase.getSingleton(this).AnimalItemDao();
         allAnimalItem = AnimalItem.search_by_tag(null);
