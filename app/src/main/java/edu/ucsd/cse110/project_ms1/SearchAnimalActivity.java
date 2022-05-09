@@ -41,12 +41,9 @@ import javax.xml.transform.TransformerFactory;
 
     public RecyclerView searched_recyclerView;
     public RecyclerView selected_recyclerView;
-    SearchView searchView;
-    AnimalViewModel viewModel;
     SearchedAnimalsAdapter search_adapter;
     AddToListAdapter addToList_adapter;
     List<AnimalItem> allAnimalItem;
-    List<AnimalItem> searchedAnimalItemList;
     List<AnimalItem> selectedAnimalItemList;
     List<AnimalItem> preSelectedAnimalItemList;
     List<String> selectedAnimalNameStringList;
