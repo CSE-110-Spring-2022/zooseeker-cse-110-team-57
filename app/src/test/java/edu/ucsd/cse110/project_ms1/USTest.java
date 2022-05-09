@@ -2,6 +2,7 @@ package edu.ucsd.cse110.project_ms1;
 
 
 
+import org.jgrapht.Graph;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -30,6 +31,21 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.View;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @RunWith(AndroidJUnit4.class)
 public class USTest {
@@ -148,4 +164,40 @@ public class USTest {
 //
 //        });
     }
+
+    @Test
+    public void planActivity(){
+        List<route_node> routeNodeList;
+
+        List<String> selectedAnimalNameStringList = new ArrayList<>();
+        selectedAnimalNameStringList.add("Alligators");
+        selectedAnimalNameStringList.add("Lions");
+        selectedAnimalNameStringList.add("Gorillas");
+        StringAndAnimalItem stringAndAnimalItem = new StringAndAnimalItem();
+
+        List<String> selectedAnimalAddress = new ArrayList<>();
+        selectedAnimalAddress.add("Reptile Road");
+        selectedAnimalAddress.add("Sharp Teeth Shortcut");
+        selectedAnimalAddress.add("Africa Rocks Street");
+
+        List<Double> selectedAnimalDistance = new ArrayList<>();
+        selectedAnimalDistance.add(110.0);
+        selectedAnimalDistance.add(310.0);
+        selectedAnimalDistance.add(210.0);
+
+        List<AnimalItem> selectedAnimalItemList = AnimalItem.search_by_tag(null);
+        selectedAnimalItemList.remove(0);
+        selectedAnimalItemList.remove(2);
+        routeNodeList = AnimalItem.plan_route(selectedAnimalItemList);
+
+
+        for (int i = 0; i < routeNodeList.size() - 1; i++){
+            assertEquals(routeNodeList.get(i).animal.name, selectedAnimalNameStringList.get(i));
+            assertEquals(routeNodeList.get(i).address, selectedAnimalAddress.get(i));
+            assertEquals(Double.toString(routeNodeList.get(i).distance), Double.toString(selectedAnimalDistance.get(i)));
+        }
+
+    }
+
+
 }
