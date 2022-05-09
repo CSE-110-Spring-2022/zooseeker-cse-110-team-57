@@ -9,12 +9,11 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/all_searched_animals"
-        android:layout_width="400dp"
+        android:layout_width="0dp"
         android:layout_height="350dp"
-        android:layout_marginTop="4dp"
         android:scrollbarSize="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/below_are_selected_animals"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.545"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,72 +21,67 @@
         android:id="@+id/no_such_animal"
         android:layout_width="fill_parent"
         android:layout_height="40dp"
+        android:gravity="center"
         android:text="There is no such animal"
         android:textSize="30dp"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="@+id/all_searched_animals"
-        app:layout_constraintEnd_toEndOf="@+id/all_searched_animals"
-        app:layout_constraintStart_toStartOf="@+id/all_searched_animals"
-        app:layout_constraintTop_toTopOf="@+id/all_searched_animals" />
+        app:layout_constraintBottom_toBottomOf="@+id/selected_animals_number"
+        app:layout_constraintEnd_toEndOf="@id/all_searched_animals"
+        app:layout_constraintStart_toStartOf="@id/all_searched_animals"
+        app:layout_constraintTop_toBottomOf="@+id/all_searched_animals" />
 
     <TextView
         android:id="@+id/below_are_selected_animals"
-        android:layout_width="170dp"
-        android:layout_height="30dp"
-        android:text="Selected animals: "
-        android:textSize="20dp"
-        android:textColor="@color/white"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@color/main_theme_pink"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:text="Selected animals: "
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/all_selected_animals"
+        app:layout_constraintEnd_toStartOf="@+id/selected_animals_number"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/all_searched_animals"
-        app:layout_constraintVertical_bias="0.021" />
+        app:layout_constraintTop_toTopOf="@id/selected_animals_number"
+        app:layout_constraintVertical_bias="0.5" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/all_selected_animals"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="280dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:scrollbarSize="5dp"
-        app:layout_constraintBottom_toTopOf="@id/plan_button"
+        app:layout_constraintBottom_toTopOf="@+id/plan_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.39"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/below_are_selected_animals"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/selected_animals_number" />
 
     <Button
         android:id="@+id/plan_button"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="0dp"
         android:backgroundTint="@color/main_theme_pink"
         android:onClick="onPlanClick"
         android:text="Plan"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintHorizontal_bias="0.92"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/all_selected_animals"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/all_selected_animals" />
 
     <TextView
         android:id="@+id/selected_animals_number"
-        android:layout_width="230dp"
+        android:layout_width="100dp"
         android:layout_height="30dp"
         android:background="@color/main_theme_pink"
-        android:text=""
         android:gravity="center"
+        android:text=""
         android:textColor="@color/white"
         android:textSize="20dp"
         app:layout_constraintBottom_toTopOf="@+id/all_selected_animals"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/below_are_selected_animals"
-        app:layout_constraintTop_toBottomOf="@+id/all_searched_animals"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/all_searched_animals" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
