@@ -68,7 +68,7 @@ import javax.xml.transform.TransformerFactory;
         }
 
         //--------------Comment this line if you don't want to select animals again-------------
-        clearSavedAnimalItem();
+        //clearSavedAnimalItem();
         //----------------------------------------------------------------------------------
 
         //make "No such animal" invisible
