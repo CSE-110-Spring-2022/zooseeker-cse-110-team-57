@@ -16,6 +16,8 @@
         android:text="TextView"
         android:textColor="@color/white"
         android:textSize="22dp"
+        android:scrollbarSize="5dp"
+        android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@+id/all_direction_items"
         app:layout_constraintEnd_toStartOf="@+id/path_total_distance"
         app:layout_constraintHorizontal_bias="1.0"
