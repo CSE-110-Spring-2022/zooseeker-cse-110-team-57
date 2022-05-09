@@ -1,35 +1,26 @@
 package edu.ucsd.cse110.project_ms1;
 
 
-
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
 
-import android.content.SharedPreferences;
-
-import android.util.Log;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
-
-import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RunWith(AndroidJUnit4.class)
 public class USTest {
@@ -121,31 +112,72 @@ public class USTest {
 
 //========================================================== US 4 ======================================================================================================
     @Test
-    public void AddListTest() {
+    public void saveListTest() {
         //User Story 4
-//        ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
-//        scenario.moveToState(Lifecycle.State.CREATED);
-//        scenario.onActivity(activity -> {
-//
-//            SharedPreferences preferences = activity.getPreferences(Context.MODE_PRIVATE);
-//            SharedPreferences.Editor editor = preferences.edit();
-//
-//            TextView animal = activity.findViewById(R.id."");
-//            editor.putString("",animal.getText().toString());
-//
-//
-//        });
+        //testing saveAddToList() and loadAddToList()
+        ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
+        scenario.moveToState(Lifecycle.State.CREATED);
+        scenario.onActivity(activity -> {
+            String animalId = "lions";
+            String animalName = "Lion";
+            ArrayList<String> tags = new ArrayList<>(Arrays.asList("lions"));
+            AnimalItem animalItem = new AnimalItem(animalId, tags , animalName);
+
+            activity.saveAddToList(animalItem);
+            List<AnimalItem> animalItems = activity.loadAddToList();
+            List<AnimalItem> actualValue = animalItems.stream().filter(animalItem1 -> animalItem1.name.equals(animalName)).collect(Collectors.toList());
+
+            assertEquals(animalName,actualValue.get(0).name);
+        });
     }
 
 //========================================================== US 5 ======================================================================================================
     @Test
     public void displayNumbOfExhibit() {
-//        ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
-//        scenario.moveToState(Lifecycle.State.CREATED);
-//        scenario.onActivity(activity -> {
-//
-//
-//
-//        });
+        //testing the number of animal in the list
+        ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
+        scenario.moveToState(Lifecycle.State.CREATED);
+        scenario.onActivity(activity -> {
+            //clear the list -set number of animals in list to 0
+            activity.clearSavedAnimalItem();
+            int actualSize = activity.addToList_adapter.getItemCount();
+            //before putting animal in the list
+            assertEquals(0,actualSize);
+
+
+            //add 1 animal in list
+            String animalId = "lions";
+            String animalName = "Lion";
+            ArrayList<String> tags = new ArrayList<>(Arrays.asList("lions"));
+            AnimalItem animalItem = new AnimalItem(animalId, tags , animalName);
+
+            activity.saveAddToList(animalItem);
+            activity.loadAddToList();
+
+            //after load
+            actualSize = activity.addToList_adapter.getItemCount();
+            assertEquals(1,actualSize);
+
+            //add 1 more animal in list
+            animalId = "cat";
+            animalName = "yomi";
+            tags = new ArrayList<>(Arrays.asList("lions"));
+            animalItem = new AnimalItem(animalId, tags , animalName);
+
+            activity.saveAddToList(animalItem);
+            activity.loadAddToList();
+
+            actualSize = activity.addToList_adapter.getItemCount();
+            assertEquals(2,actualSize);
+
+            activity.clearSavedAnimalItem();
+
+        });
     }
+
+//========================================================== US 7 ======================================================================================================
+
+
+
+
 }
