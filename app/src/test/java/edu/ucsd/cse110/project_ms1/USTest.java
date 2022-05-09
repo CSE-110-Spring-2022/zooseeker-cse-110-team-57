@@ -180,7 +180,6 @@ public class USTest {
         List<route_node> nodes ;
         double total_dis;
 
-
         items.remove(4);
         nodes = AnimalItem.plan_route(items);
 
@@ -197,12 +196,41 @@ public class USTest {
         assertEquals(1620.0, total_dis ,0.01);
     }
 
+    @Test
+    public void RouteTest2(){
+        //US11  only mammals
+        List<AnimalItem> items = AnimalItem.search_by_tag("mammal");
+        assertEquals(4,items.size());
+
+        List<route_node> nodes = AnimalItem.plan_route(items);
+        double total_dis;
+
+        //checking the total distance is right
+        total_dis = total_length(nodes);
+        assertEquals(1720.0, total_dis ,0.01);
+    }
+
+    @Test
+    public void RouteTest3(){
+        //US11  only lions
+        List<AnimalItem> items = AnimalItem.search_by_tag("lions");
+
+        List<route_node> nodes = AnimalItem.plan_route(items);
+        assertEquals(2,nodes.size());
+        double total_dis;
+
+        //checking the total distance is right
+        total_dis = total_length(nodes);
+        assertEquals(620, total_dis ,0.01);
+    }
+
 
 
 
 
     //helper function to find length of a route
     private double total_length(List<route_node> nodes) {
+        System.out.println(nodes.size());
         double dis=0;
         String goal = nodes.get(0).animal.id;
         String start = "entrance_exit_gate";
@@ -217,9 +245,9 @@ public class USTest {
            }
 
            dis+=curr;
-//           System.out.println("\ni am at "+goal);
-//           System.out.println("step is "+curr);
-//           System.out.println("total is "+dis);
+           System.out.println("\ni am at "+start);
+           System.out.println("step is "+curr);
+           System.out.println("total is "+dis);
         }
         return  dis;
     }
