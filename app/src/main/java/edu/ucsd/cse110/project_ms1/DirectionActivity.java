@@ -98,7 +98,7 @@ public class DirectionActivity extends AppCompatActivity {
     public void setGraphPathList(){
         GraphPath<String, IdentifiedWeightedEdge> path;
         String startId, goalId;
-        int currentPathLength;
+        double currentPathLength;
         //start from the gate
         startId = "entrance_exit_gate";
         goalId = orderedAnimalIdStringList.get(0);

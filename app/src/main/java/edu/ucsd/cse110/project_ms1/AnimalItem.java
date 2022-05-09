@@ -103,7 +103,7 @@ public class AnimalItem {
         int num_iter=animal_items.size();
         for (int i=0; i < num_iter+1; i++){
             //plus 1 because we need the begin and end of the route
-            int min_distance=999999999;
+            double min_distance=99999999.9;
             AnimalItem closest_animal=null;
             String address_id = null;
             double distance = 0;
@@ -116,7 +116,7 @@ public class AnimalItem {
             for (AnimalItem item : animal_items){
                 goal = item.id;
                 GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(gInfo, start, goal);
-                int curr_dis = route_length(path);
+                double curr_dis = route_length(path);
                 if (curr_dis < min_distance){
                     min_distance = curr_dis;
                     closest_animal = item;
@@ -139,8 +139,8 @@ public class AnimalItem {
 
 
     // return a path's length
-    public static int route_length(GraphPath<String, IdentifiedWeightedEdge> path){
-        int retVal=0;
+    public static double route_length(GraphPath<String, IdentifiedWeightedEdge> path){
+        double retVal=0;
         for (IdentifiedWeightedEdge e : path.getEdgeList()){
             retVal+= gInfo.getEdgeWeight(e);
         }
