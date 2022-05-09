@@ -160,12 +160,36 @@ public class USTest {
 //========================================================== US 5 ======================================================================================================
     @Test
     public void displayNumbOfExhibit() {
+        ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
+        scenario.moveToState(Lifecycle.State.CREATED);
+        ArrayList<String> list = new ArrayList<>(Arrays.asList());
+        AnimalItem animalItem = new AnimalItem("1",list,"panda");
+        scenario.onActivity(activity -> {
+            TextView text = activity.findViewById(R.id.selected_animals_number);
+            assertTrue(Integer.valueOf(text.getText().toString()) == 0);
+
+        });
+    }
+
+//    @Test
+//    public void displayNumbOfExhibit_addone() {
+//        SearchedAnimalsAdapter.OnAddListener myAddListener = new SearchedAnimalsAdapter.OnAddListener() {
+//            @Override
+//            public void OnAddClick(int position) {
+//
+//            }
+//        };
 //        ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
 //        scenario.moveToState(Lifecycle.State.CREATED);
+//        ArrayList<String> list = new ArrayList<>(Arrays.asList());
+//        AnimalItem animalItem = new AnimalItem("1",list,"panda");
+//        AnimalItem animalItem1 = new AnimalItem("1",list,"cat");
 //        scenario.onActivity(activity -> {
-//
-//
+//            TextView text = activity.findViewById(R.id.selected_animals_number);
+//            assertTrue(Integer.valueOf(text.getText().toString()) == 0);
+//            activity.onAdd
+//            myAddListener.OnAddClick();
 //
 //        });
-    }
+//    }
 }
