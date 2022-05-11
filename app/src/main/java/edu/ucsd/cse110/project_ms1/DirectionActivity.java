@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 public class DirectionActivity extends AppCompatActivity {
     int order;
@@ -47,8 +49,10 @@ public class DirectionActivity extends AppCompatActivity {
             String startExhibit = DirectionHelper.getNodeName(orderedAnimalList.get(i));
             String goalExhibit = DirectionHelper.getNodeName(orderedAnimalList.get(i+1));
             List<String> paths = DirectionHelper.displayPath(path,startExhibit);
+            Collections.reverse(path);
+            List<String> prevPaths = DirectionHelper.displayPath(path,goalExhibit);
             Double distance = DirectionHelper.totalDistance(path);
-            DirectionData walk = new DirectionData(startExhibit,goalExhibit,distance,paths);
+            DirectionData walk = new DirectionData(startExhibit,goalExhibit,distance,paths,prevPaths);
             zooRoute.put(i,walk);
         }
 
@@ -60,15 +64,11 @@ public class DirectionActivity extends AppCompatActivity {
         direction_recyclerView.setLayoutManager(new LinearLayoutManager(this));
         direction_recyclerView.setAdapter(direction_adapter);
 
-        display(order);
+        display(order,true);
 
     } //Initial End
 
-    public void display(int index){
-        DirectionData pathData = zooRoute.get(index);
-
-        List<String> path = new ArrayList<>(pathData.paths);
-        direction_adapter.setDirectionsStringList(path);
+    public void display(int index, boolean isNext){
 
         TextView start = findViewById(R.id.start_exhibit_name);
         TextView end = findViewById(R.id.goal_exhibit_name);
@@ -78,10 +78,25 @@ public class DirectionActivity extends AppCompatActivity {
         Button prevbtn = findViewById(R.id.previous_button);
         Button nextbtn = findViewById(R.id.next_button);
 
+        DirectionData pathData = zooRoute.get(index);
+        List<String> path;
+        String startText;
+        String endText;
+        if (isNext){
+            path = new ArrayList<>(pathData.paths);
+            startText = "From: "+ pathData.startExhibit;
+            endText = "To: "+ pathData.goalExhibit;
+        }else{
+            path = new ArrayList<>(pathData.prevPaths);
+            startText = "From: "+ pathData.goalExhibit;
+            endText = "To: "+ pathData.startExhibit;
+        }
+        direction_adapter.setDirectionsStringList(path);
 
-        start.setText("From: "+ pathData.startExhibit);
-        end.setText("To: "+ pathData.goalExhibit);
-        distance.setText(Double.toString(pathData.distance));
+
+        start.setText(startText);
+        end.setText(endText);
+        distance.setText(Double.toString(pathData.distance) + " ft");
 
         //setting next button and next direction distance
         //disable the prev btn at the first page and next btn at last page.
@@ -112,10 +127,10 @@ public class DirectionActivity extends AppCompatActivity {
     public void onNextButtonClick(View view) {
         order++;
         if(order < zooRoute.size()){
-            display(order);
+            display(order,true);
         }else{
             order = zooRoute.size()-1;
-            display(order);
+            display(order,true);
             Utilities.showAlert(this, "invalid Action");
         }
     }
@@ -123,10 +138,10 @@ public class DirectionActivity extends AppCompatActivity {
     public void onBackButtonClick(View view) {
         order--;
         if(order >= 0){
-            display(order);
+            display(order,false);
         }else{
             order = 0;
-            display(order);
+            display(order,false);
             Utilities.showAlert(this, "invalid Action");
         }
     }

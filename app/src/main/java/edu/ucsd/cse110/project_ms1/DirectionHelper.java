@@ -102,8 +102,8 @@ public class DirectionHelper {
             display.add(edgeInfo);
         }
         return display;
-
     }
+
 
     public static double totalDistance(List<IdentifiedWeightedEdge> path){
         double distance = 0.0;
