@@ -16,4 +16,12 @@ public class DirectionData {
         this.paths = paths;
         this.prevPaths = prevPaths;
     }
+
+    String getStartExhibit(){
+        return startExhibit;
+    }
+
+    String getGoalExhibit(){
+        return goalExhibit;
+    }
 }

@@ -21,20 +21,15 @@ public class MainActivity extends AppCompatActivity {
         switch(ActivityTarget){
             case "PlanActivity":
                 intent = new Intent(this, PlanActivity.class);
-                startActivity(intent);
                 break;
-
             case "DirectionActivity":
                 intent = new Intent(this, DirectionActivity.class);
-                startActivity(intent);
                 break;
-
             default:
                 intent = new Intent(this, SearchAnimalActivity.class);
-                startActivity(intent);
                 break;
         }
-
+        startActivity(intent);
     }
 }
 

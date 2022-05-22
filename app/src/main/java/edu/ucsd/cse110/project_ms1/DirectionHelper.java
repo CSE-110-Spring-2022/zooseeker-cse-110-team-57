@@ -131,9 +131,20 @@ public class DirectionHelper {
         ArrayList<String> retainedDirections = new ArrayList<>();
         SharedPreferences sharedPreferences = context.getSharedPreferences("Team57", Activity.MODE_PRIVATE);
         retainedDirections.add(sharedPreferences.getString("currentOrder", "0"));
-        retainedDirections.add(sharedPreferences.getString("currentStart", "entrance_exit_gate"));
+        retainedDirections.add(sharedPreferences.getString("currentStart", "Entrance and Exit Gate"));
         retainedDirections.add(sharedPreferences.getString("currentGoal", ""));
         return retainedDirections;
+    }
+
+    public static boolean isNext(HashMap<Integer,DirectionData> zooRoute, String source){
+        String edgeSource = zooRoute.get(0).getStartExhibit();
+        Log.d("edgeSource in displayPath",edgeSource);
+        Log.d("source in displayPath",source);
+        if(edgeSource.equals(source)){
+            return true;
+        }else{
+            return false;
+        }
     }
 
 }

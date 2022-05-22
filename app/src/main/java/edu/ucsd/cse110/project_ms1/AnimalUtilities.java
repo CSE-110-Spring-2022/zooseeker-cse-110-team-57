@@ -28,6 +28,8 @@ public class AnimalUtilities {
     }
 
 
+
+
     //get the closest landmark of current location
     public static ZooData.VertexInfo getClosestLandmark(LatLng current){
         return null;

@@ -10,6 +10,7 @@ public class LatLngs {
 
     public static LatLng currentLocationLatLng;
 
+
     @NonNull
     public static LatLng midpoint(LatLng l1, LatLng l2) {
         return new LatLng(

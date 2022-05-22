@@ -46,10 +46,6 @@ public class DirectionActivity extends AppCompatActivity {
         //(order -order of animal in the route , paths -list of edges in the path)
         HashMap<Integer,List<IdentifiedWeightedEdge>> route = DirectionHelper.findRoute(orderedAnimalList);
         zooRoute = new HashMap<>();
-        ArrayList<String> retainedDirections = DirectionHelper.loadDirectionsInformation(this);
-        order = Integer.valueOf(retainedDirections.indexOf(0));
-
-
 
         //find the path and info, then save it for recycle use.
         for(int i = 0; i < route.size(); i++){
@@ -72,15 +68,19 @@ public class DirectionActivity extends AppCompatActivity {
         direction_recyclerView.setLayoutManager(new LinearLayoutManager(this));
         direction_recyclerView.setAdapter(direction_adapter);
 
-        /*
-        if (retainedDirections.indexOf(1)."entrance_exit_gate"){
+        //Get the order
+        List<String> retainedDirections = DirectionHelper.loadDirectionsInformation(this);
+        order = Integer.valueOf(retainedDirections.indexOf(0));
+
+
+        if (DirectionHelper.isNext(zooRoute, retainedDirections.get(1))){
             display(order,true);
         }
         else{
-                   6666666666
+            display(order,false);
         }
-        */
-        display(order,true);
+
+
 
 
     } //Initial End
