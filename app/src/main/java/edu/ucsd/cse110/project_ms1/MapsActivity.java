@@ -25,16 +25,15 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-//import com.example.googlemapactivitytemplate.databinding.ActivityMapsBinding;
+import edu.ucsd.cse110.project_ms1.databinding.ActivityDirectionBinding;
 //import androidx.databinding.DataBindingUtil;
-
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private final PermissionChecker permissionChecker = new PermissionChecker(this);
     private GoogleMap map;
-    private ActivityMapsBinding binding;
+    private ActivityDirectionBinding binding;
 
     private Location lastVisitedLocation;
 
@@ -42,7 +41,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityMapsBinding.inflate(getLayoutInflater());
+        binding = ActivityDirectionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -81,7 +80,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             //Move the camera and zoom to the right level
             map.moveCamera(CameraUpdateFactory.newLatLng(cameraPosition));
-            map.moveCamera(CameraUpdateFactory.zoomTo(11.5f));}
+            map.moveCamera(CameraUpdateFactory.zoomTo(11.5f));
+        }
 
 
 
