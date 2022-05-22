@@ -63,6 +63,11 @@ import javax.xml.transform.TransformerFactory;
         } catch (IOException e) {
             e.printStackTrace();
         }
+        SharedPreferences preference = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preference.edit();
+        editor.putString("currentActivity", "SearchAnimalActivity");
+        editor.commit();
+        editor.apply();
 
         //--------------Comment this line if you don't want to select animals again-------------
         //clearSavedAnimalItem();

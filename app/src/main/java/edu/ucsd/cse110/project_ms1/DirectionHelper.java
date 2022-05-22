@@ -117,13 +117,23 @@ public class DirectionHelper {
         return AnimalItem.vInfo.get(id).name;
     }
 
-    public static void saveDirectionsInformation(Context context, String startName, String goalName){
+    public static void saveDirectionsInformation(Context context, String startName, String goalName, int order){
         SharedPreferences sharedPreferences = context.getSharedPreferences("Team57", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("currentStart", startName);
         editor.putString("currentGoal", goalName);
+        editor.putString("currentOrder", Integer.toString(order));
         editor.commit();
         editor.apply();
+    }
+
+    public static ArrayList<String> loadDirectionsInformation(Context context){
+        ArrayList<String> retainedDirections = new ArrayList<>();
+        SharedPreferences sharedPreferences = context.getSharedPreferences("Team57", Activity.MODE_PRIVATE);
+        retainedDirections.add(sharedPreferences.getString("currentOrder", "0"));
+        retainedDirections.add(sharedPreferences.getString("currentStart", "entrance_exit_gate"));
+        retainedDirections.add(sharedPreferences.getString("currentGoal", ""));
+        return retainedDirections;
     }
 
 }

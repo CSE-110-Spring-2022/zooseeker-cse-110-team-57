@@ -2,18 +2,39 @@ package edu.ucsd.cse110.project_ms1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = new Intent(this, SearchAnimalActivity.class);
-        startActivity(intent);
+        SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
+
+        String ActivityTarget = sharedPreferences.getString("currentActivity", "SearchAnimalActivity");
+        switch(ActivityTarget){
+            case "PlanActivity":
+                intent = new Intent(this, PlanActivity.class);
+                startActivity(intent);
+                break;
+
+            case "DirectionActivity":
+                intent = new Intent(this, DirectionActivity.class);
+                startActivity(intent);
+                break;
+
+            default:
+                intent = new Intent(this, SearchAnimalActivity.class);
+                startActivity(intent);
+                break;
+        }
+
     }
 }
 
