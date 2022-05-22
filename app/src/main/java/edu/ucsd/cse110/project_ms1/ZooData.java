@@ -27,17 +27,20 @@ public class ZooData {
             @SerializedName("intersection") INTERSECTION
         }
 
-        VertexInfo(String id, Kind kind, String name, List<String> tags) {
+        VertexInfo(String id, Kind kind, String name, List<String> tags, Double lat, Double lon) {
             this.id = id;
             this.kind = kind;
             this.name = name;
             this.tags = tags;
+            this.lat = lat;
+            this.lon = lon;
         }
 
         public String id;
         public Kind kind;
         public String name;
         public List<String> tags;
+        public Double lat, lon;
     }
 
     public static class EdgeInfo {
