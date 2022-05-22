@@ -12,12 +12,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Collections;
 
-public class DirectionActivity extends AppCompatActivity {
+public class DirectionActivity extends AppCompatActivity implements OnLocationChangeListener {
     int order;
 
     HashMap<Integer, DirectionData> zooRoute;
@@ -180,20 +183,9 @@ public class DirectionActivity extends AppCompatActivity {
         }
     }
 
-    public void onDetailButtonClick(View view) {
-        Button button = findViewById(R.id.detail_button);
-        String text = button.getText().toString();
-        if(text.equals("Detail")){
-            button.setText("Brief");
-            displayDetail();
-        }else if(text.equals("Brief")){
-            button.setText("Detail");
-            displayBrief();
-        }else{
-            button.setText("Brief");
-        }
-
+    @Override
+    public void OnLocationChange(LatLng current) {
+        ZooData.VertexInfo closestlandmark = AnimalUtilities.getClosestLandmark(current);
 
     }
-
 }

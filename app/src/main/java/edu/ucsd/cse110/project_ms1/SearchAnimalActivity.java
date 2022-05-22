@@ -214,6 +214,13 @@ import javax.xml.transform.TransformerFactory;
             Utilities.showAlert(this, "Please select at least one animals");
             return;
         }
+/*
+        SharedPreferences preference = getSharedPreferences("Team57", 0);
+        SharedPreferences.Editor editor = preference.edit();
+        editor.putString("selectedAnimalNameStringList", selectedAnimalNameStringList);
+        editor.commit();
+        editor.apply();
+*/
         ArrayList<String> currentNameStringList = new ArrayList<String>(selectedAnimalNameStringList);
         intent.putStringArrayListExtra("nameStringList", currentNameStringList);
         startActivity(intent);
