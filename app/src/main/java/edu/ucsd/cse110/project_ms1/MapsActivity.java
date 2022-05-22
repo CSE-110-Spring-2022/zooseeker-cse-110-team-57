@@ -130,11 +130,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 public void onLocationChanged(@NonNull Location location){
                     Log.d("LAB7", String.format("Location changed: %s", location));
 
+                    LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
                     var marker = new MarkerOptions().
-                            position(new LatLng(
-                                    location.getLatitude(), location.getLongitude()
-                            )).title("Navigation Step");
+                            position(current).title("Navigation Step");
                     map.addMarker(marker);
+
+                    LatLngs.currentLocationLatLng = current;
                 }
             };
             locationManager.requestLocationUpdates(provider, 0, 0f, locationListener);

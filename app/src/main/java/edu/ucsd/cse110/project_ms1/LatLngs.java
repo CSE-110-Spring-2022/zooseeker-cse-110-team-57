@@ -8,6 +8,8 @@ public class LatLngs {
     public static final LatLng UCSD_LATLNG = new LatLng(32.8801, -117.2340);
     public static final LatLng ZOO_LATLNG = new LatLng(32.7353, -117.1490);
 
+    public static LatLng currentLocationLatLng;
+
     @NonNull
     public static LatLng midpoint(LatLng l1, LatLng l2) {
         return new LatLng(

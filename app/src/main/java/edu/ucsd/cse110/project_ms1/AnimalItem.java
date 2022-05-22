@@ -7,6 +7,8 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -146,11 +148,14 @@ public class AnimalItem {
         }
         return retVal;
     }
-/*
-    public GraphPath<String, IdentifiedWeightedEdge> getPathByStartAndGoal(String start, String goal){
-        return DijkstraShortestPath.findPathBetween(gInfo, start, goal);
+
+    //get the closest landmark of current location
+    /*
+    public ZooData.VertexInfo getClosestLandmark(LatLng current){
+
     }
-*/
+    */
+
 }
 
 
