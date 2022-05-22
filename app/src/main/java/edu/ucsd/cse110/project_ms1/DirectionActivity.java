@@ -64,7 +64,7 @@ public class DirectionActivity extends AppCompatActivity {
         direction_adapter = new DirectionAdapter();
         direction_adapter.setHasStableIds(true);
 
-        direction_recyclerView = this.findViewById(R.id.brief_path);
+        direction_recyclerView = this.findViewById(R.id.all_direction_items);
         direction_recyclerView.setLayoutManager(new LinearLayoutManager(this));
         direction_recyclerView.setAdapter(direction_adapter);
 

@@ -41,10 +41,9 @@
         android:layout_height="430dp"
         app:layout_constraintBottom_toTopOf="@+id/previous_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/goal_exhibit_name"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/goal_exhibit_name" />
 
     <TextView
         android:id="@+id/start_exhibit_name"
