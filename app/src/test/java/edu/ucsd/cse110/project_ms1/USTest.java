@@ -3,28 +3,17 @@ package edu.ucsd.cse110.project_ms1;
 
 
 
-import static android.util.Log.println;
-
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 
 import static org.junit.Assert.*;
 
 import android.content.Context;
 
-import android.content.SharedPreferences;
-
-import android.util.Log;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
@@ -35,21 +24,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.view.View;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 @RunWith(AndroidJUnit4.class)
 public class USTest {
@@ -150,7 +124,7 @@ public class USTest {
 
         ArrayList<String> list = new ArrayList<>(Arrays.asList());
 
-        AnimalItem animalItem = new AnimalItem("1",list,"panda");
+        AnimalItem animalItem = new AnimalItem("1",list,"panda", null);
         scenario.onActivity(activity -> {
             activity.saveAddToList(animalItem);
             List<AnimalItem> res =  activity.loadAddToList();
@@ -183,7 +157,7 @@ public class USTest {
         ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
         scenario.moveToState(Lifecycle.State.CREATED);
         ArrayList<String> list = new ArrayList<>(Arrays.asList());
-        AnimalItem animalItem = new AnimalItem("1",list,"panda");
+        AnimalItem animalItem = new AnimalItem("1",list,"panda", null);
         scenario.onActivity(activity -> {
             TextView text = activity.findViewById(R.id.selected_animals_number);
             assertTrue(Integer.valueOf(text.getText().toString()) == 0);

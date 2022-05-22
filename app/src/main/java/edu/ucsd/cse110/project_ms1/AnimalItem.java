@@ -30,6 +30,8 @@ public class AnimalItem {
     public ArrayList<String> tags;
     public String name; //essentially, the name is the tag in json file
     public boolean searched;
+    public boolean visited;
+    public LatLng position;
 
     public static Map<String, ZooData.VertexInfo> vInfo;
     public static Map<String, ZooData.EdgeInfo> eInfo;
@@ -37,11 +39,14 @@ public class AnimalItem {
     public static AnimalItem gate;
 
     //not sure if i will change this constructor
-    public AnimalItem(@NonNull String id, ArrayList<String> tags, String name){
+    public AnimalItem(@NonNull String id, ArrayList<String> tags, String name, LatLng position){
         this.id = id;
         this.name = name;
         this.tags = tags;
         this.searched = false;
+        this.visited = false;
+        this.position = position;
+
 
         //this.exhibit = exhibit;
     }
@@ -64,7 +69,7 @@ public class AnimalItem {
         for (Map.Entry<String, ZooData.VertexInfo> set : vInfo.entrySet()){
             ZooData.VertexInfo currentVertex = set.getValue();
             if(currentVertex.kind.name().equals("GATE")){
-                gate = new AnimalItem(set.getValue().id, (ArrayList<String>) set.getValue().tags,set.getValue().name);
+                gate = new AnimalItem(set.getValue().id, (ArrayList<String>) set.getValue().tags,set.getValue().name, null);
             }
         }
     }
@@ -87,7 +92,7 @@ public class AnimalItem {
             if(currentVertex.kind.name().equals("EXHIBIT")){
                 if (tag==null || currentVertex.tags.contains(tag.toLowerCase()) ||
                         currentVertex.name.toLowerCase().contains(tag.toLowerCase())){
-                    retVal.add(new AnimalItem(set.getValue().id, (ArrayList<String>) set.getValue().tags,set.getValue().name));
+                    retVal.add(new AnimalItem(set.getValue().id, (ArrayList<String>) set.getValue().tags,set.getValue().name, null));
                 }
             }
 
@@ -114,19 +119,12 @@ public class AnimalItem {
                 animal_items.add(gate);
             }
 
-            //use for loop to find next closet exhibit
-            for (AnimalItem item : animal_items){
-                goal = item.id;
-                GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(gInfo, start, goal);
-                double curr_dis = route_length(path);
-                if (curr_dis < min_distance){
-                    min_distance = curr_dis;
-                    closest_animal = item;
-                    int pathSize = path.getEdgeList().size();
-                    IdentifiedWeightedEdge myEdge = path.getEdgeList().get(pathSize - 1);
-                    address_id = myEdge.getId();
-                }
-            }
+            closest_animal = AnimalUtilities.getClosestAnimalItem(animal_items, start, min_distance, closest_animal);
+
+            GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(gInfo, start, closest_animal.id);
+            int pathSize = path.getEdgeList().size();
+            IdentifiedWeightedEdge myEdge = path.getEdgeList().get(pathSize - 1);
+            address_id = myEdge.getId();
 
             String address = eInfo.get(address_id).street;
             distance = route_length(DijkstraShortestPath.findPathBetween(gInfo, "entrance_exit_gate",closest_animal.id ));
@@ -139,7 +137,6 @@ public class AnimalItem {
     }
 
 
-
     // return a path's length
     public static double route_length(GraphPath<String, IdentifiedWeightedEdge> path){
         double retVal=0;
@@ -149,12 +146,6 @@ public class AnimalItem {
         return retVal;
     }
 
-    //get the closest landmark of current location
-    /*
-    public ZooData.VertexInfo getClosestLandmark(LatLng current){
-
-    }
-    */
 
 }
 

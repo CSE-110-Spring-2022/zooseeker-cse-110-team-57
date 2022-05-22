@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
@@ -43,8 +42,8 @@ public class US0_AnimalItemDataBaseTest {
 
     @Test
     public void testInsert(){
-        AnimalItem item1 = new AnimalItem("entrance_exit_gate", new ArrayList<>(Arrays.asList("gate","monkey")),"Entrance and Exit Gate");
-        AnimalItem item2 = new AnimalItem("entrance_plaza", new ArrayList<>(Arrays.asList("gate","monkey")),"Entrance Plaza");
+        AnimalItem item1 = new AnimalItem("entrance_exit_gate", new ArrayList<>(Arrays.asList("gate","monkey")),"Entrance and Exit Gate", null);
+        AnimalItem item2 = new AnimalItem("entrance_plaza", new ArrayList<>(Arrays.asList("gate","monkey")),"Entrance Plaza", null);
 
         long id1 = dao.insert(item1);
         long id2 = dao.insert(item2);
@@ -54,7 +53,7 @@ public class US0_AnimalItemDataBaseTest {
 
     @Test
     public void testGet() {
-        AnimalItem insertedItem = new AnimalItem("entrance_exit_gate", new ArrayList<>(Arrays.asList("gate","monkey")),"Entrance and Exit Gate");
+        AnimalItem insertedItem = new AnimalItem("entrance_exit_gate", new ArrayList<>(Arrays.asList("gate","monkey")),"Entrance and Exit Gate", null);
         long unique_id = dao.insert(insertedItem);
 
         AnimalItem item = dao.get(unique_id);
@@ -67,7 +66,7 @@ public class US0_AnimalItemDataBaseTest {
 
     @Test
     public void testUpdate(){
-        AnimalItem insertedItem = new AnimalItem("entrance_exit_gate", new ArrayList<>(Arrays.asList("gate","monkey")),"Entrance and Exit Gate");
+        AnimalItem insertedItem = new AnimalItem("entrance_exit_gate", new ArrayList<>(Arrays.asList("gate","monkey")),"Entrance and Exit Gate", null);
         long id = dao.insert(insertedItem);
 
         insertedItem = dao.get(id);
@@ -83,7 +82,7 @@ public class US0_AnimalItemDataBaseTest {
 
     @Test
     public void testDelete(){
-        AnimalItem insertedItem = new AnimalItem("entrance_exit_gate", new ArrayList<>(Arrays.asList("gate","monkey")),"Entrance and Exit Gate");
+        AnimalItem insertedItem = new AnimalItem("entrance_exit_gate", new ArrayList<>(Arrays.asList("gate","monkey")),"Entrance and Exit Gate", null);
         long unique_id = dao.insert(insertedItem);
 
         AnimalItem item = dao.get(unique_id);
