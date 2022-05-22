@@ -150,11 +150,16 @@ public class AnimalItem {
     }
 
     //get the closest landmark of current location
-    /*
     public ZooData.VertexInfo getClosestLandmark(LatLng current){
-
+        Double min;
+        for (ZooData.VertexInfo landmark: ){
+            LatLng landmarkPosistion = new LatLng(landmark.lat, landmark.lng);
+            Double distance = ;
+            if (distance < min){
+                min = distance;
+            }
+        }
     }
-    */
 
 }
 
