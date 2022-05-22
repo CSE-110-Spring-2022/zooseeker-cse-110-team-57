@@ -22,7 +22,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 
 @Entity(tableName = "animal_items")
-@TypeConverters({TagConverter.class})
+@TypeConverters({TagConverter.class,LLConverter.class})
 public class AnimalItem {
     @PrimaryKey(autoGenerate = true)
     public long unique_id;
