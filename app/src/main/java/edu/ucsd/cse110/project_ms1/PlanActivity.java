@@ -52,9 +52,16 @@ public class PlanActivity extends AppCompatActivity{
         Intent intent = getIntent();
         selectedAnimalNameStringList =
                 intent.getStringArrayListExtra("nameStringList");
-
         SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
         List<AnimalItem> selectedAnimalItemList = new ArrayList<AnimalItem>();
+
+        if (selectedAnimalNameStringList == null){
+            Set<String> selectedAnimalNameStringSet = sharedPreferences.getAll().keySet();
+            selectedAnimalNameStringSet.remove("currentActivity");
+            selectedAnimalNameStringList = new ArrayList<String>(selectedAnimalNameStringSet);
+        }
+
+
 
         for (String animalName: selectedAnimalNameStringList){
             //find the string containing all related information of a selected animal
@@ -80,6 +87,7 @@ public class PlanActivity extends AppCompatActivity{
     }
 
     public void onDirectionsClick(View view) {
+
         Intent intent = new Intent(this, DirectionActivity.class);
         ArrayList<String> routedAnimalList = new ArrayList<String>(routedAnimalNameString);
         intent.putStringArrayListExtra("routedAnimalNameList", routedAnimalList);
