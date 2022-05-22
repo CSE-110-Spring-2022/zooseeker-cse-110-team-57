@@ -6,8 +6,8 @@ public class DirectionData {
     public String startExhibit;
     public String goalExhibit;
     double distance;
-    List<String> detailPaths;
-    List<String> detailPrevPaths;
+    List<String> detailPath;
+    List<String> detailPrevPath;
     List<String> briefPath;
     List<String> briefPrevPath;
     DirectionData(String startExhibit,
@@ -21,8 +21,8 @@ public class DirectionData {
         this.startExhibit = startExhibit;
         this.goalExhibit = goalExhibit;
         this.distance = distance;
-        this.detailPaths = paths;
-        this.detailPrevPaths = prevPaths;
+        this.detailPath = paths;
+        this.detailPrevPath = prevPaths;
         this.briefPath = briefPath;
         this.briefPrevPath = briefPrevPath;
     }

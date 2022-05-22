@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.project_ms1;
 //package com.example.googlemapactivitytemplate;
+
+
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -14,7 +16,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -54,7 +55,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         var mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
     }
 
     /**
@@ -128,6 +131,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             position(current).title("Navigation Step");
                     map.addMarker(marker);
                     //update current location latitude & longtitude
+
                     LatLngs.currentLocationLatLng = current;
                     onLocationChangeListener.OnLocationChange(current);
                 }

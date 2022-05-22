@@ -60,6 +60,15 @@ public class DirectionHelper {
         return route;
     }
 
+    public static List<IdentifiedWeightedEdge> findPathBetween(String source,String goal){
+
+            GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(AnimalItem.gInfo, source, goal);
+            //list of street in this walk.
+            List<IdentifiedWeightedEdge> streets = path.getEdgeList();
+
+        return streets;
+    }
+
 
     public static List<String> detailPath(List<IdentifiedWeightedEdge> path, String start){
         List<String> display = new ArrayList<>();
@@ -85,7 +94,6 @@ public class DirectionHelper {
             distance = AnimalItem.gInfo.getEdgeWeight(edge);
             //If we continues on the same street.
             String nextStreet = AnimalItem.eInfo.get(edge.getId()).street;
-
 
             if(street.equals(nextStreet)){
                 edgeInfo = "Continue on " + street + " " + distance + " ft towards " + target;
@@ -125,7 +133,6 @@ public class DirectionHelper {
             Double distance = AnimalItem.gInfo.getEdgeWeight(edge);
             //If we continues on the same street.
             String nextStreet = AnimalItem.eInfo.get(edge.getId()).street;
-
 
             if(street.equals(nextStreet)){
                 totalDistance += distance;

@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Collections;
 
 public class DirectionActivity extends AppCompatActivity implements OnLocationChangeListener {
     int order;
@@ -105,24 +104,26 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         TextView distance = findViewById(R.id.path_total_distance);
         Button prevBtn = findViewById(R.id.previous_button);
         Button nextBtn = findViewById(R.id.next_button);
+        Button detailBtn = findViewById(R.id.detail_button);
+        detailBtn.setText("Brief");
 
         DirectionData pathData = zooRoute.get(index);
         List<String> path;
         String startText;
         String endText;
+
         if (isNext) {
-            path = new ArrayList<>(pathData.detailPaths);
+            path = new ArrayList<>(pathData.briefPath);
             startText = "From: " + pathData.startExhibit;
             endText = "To: " + pathData.goalExhibit;
             DirectionHelper.saveDirectionsInformation(this, pathData.startExhibit, pathData.goalExhibit, order);
         } else {
-            path = new ArrayList<>(pathData.detailPrevPaths);
+            path = new ArrayList<>(pathData.briefPath);
             startText = "From: " + pathData.goalExhibit;
             endText = "To: " + pathData.startExhibit;
             DirectionHelper.saveDirectionsInformation(this, pathData.goalExhibit, pathData.startExhibit, order);
         }
         direction_adapter.setDirectionsStringList(path);
-
 
         start.setText(startText);
         end.setText(endText);
@@ -154,11 +155,16 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         }
     }
 
-    public void displayDetail(){
-
+    public void displayDetail(String source,String goal){
+        List<IdentifiedWeightedEdge> path = DirectionHelper.findPathBetween(source,goal);
+        List<String> pathDisplay = DirectionHelper.detailPath(path,source);
+        direction_adapter.setDirectionsStringList(pathDisplay);
     }
-    public void displayBrief(){
 
+    public void displayBrief(String source,String goal){
+        List<IdentifiedWeightedEdge> path = DirectionHelper.findPathBetween(source,goal);
+        List<String> pathDisplay = DirectionHelper.briefPath(path,source);
+        direction_adapter.setDirectionsStringList(pathDisplay);
     }
 
     public void onNextButtonClick(View view) {
