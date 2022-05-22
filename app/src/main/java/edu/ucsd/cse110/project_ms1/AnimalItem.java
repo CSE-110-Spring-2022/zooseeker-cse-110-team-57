@@ -32,7 +32,7 @@ public class AnimalItem {
     public String name; //essentially, the name is the tag in json file
     public boolean searched;
     public boolean visited;
-    public String position;
+    public LatLng position;
 
     public static Map<String, ZooData.VertexInfo> vInfo;
     public static Map<String, ZooData.EdgeInfo> eInfo;
@@ -46,7 +46,7 @@ public class AnimalItem {
         this.tags = tags;
         this.searched = false;
         this.visited = false;
-        this.position = position.toString();
+        this.position = position;
 
         //this.exhibit = exhibit;
     }

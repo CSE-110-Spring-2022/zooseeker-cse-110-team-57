@@ -53,7 +53,7 @@ public class AnimalUtilities {
         return 0;
     }
 
-    public static boolean off_route (int visiting_order, List<route_node> route, LatLng curr_position){
+    public static boolean check_off_route (int visiting_order, List<route_node> route, LatLng curr_position){
         // all visited, going to the gate
         if (visiting_order == route.size())
             return false;
