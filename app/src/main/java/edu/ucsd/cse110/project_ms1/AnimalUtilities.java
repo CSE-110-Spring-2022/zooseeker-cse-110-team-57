@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.project_ms1;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
@@ -20,5 +22,26 @@ public class AnimalUtilities {
             }
         }
         return closest_animal;
+    }
+
+    //get the closest landmark of current location
+    public static ZooData.VertexInfo getClosestLandmark(LatLng current){
+        return null;
+//        Double min;
+//        ZooData.VertexInfo closest;
+//        for (ZooData.VertexInfo landmark: "wait for stater code // all vertex with latlng"){
+//            LatLng landmarkPosistion = new LatLng(landmark.lat, landmark.lng);
+//            // Or maybe a vertex and a latlng and then find a path ...? most likely. wait for start code
+//            Double distance = ;
+//            if (distance < min){
+//                min = distance;
+//                closest = landmark;
+//            }
+//        }
+//        return closest;
+    }
+
+    public static  double get_distance(LatLng l1, LatLng l2){
+        return 0;
     }
 }
