@@ -1,13 +1,18 @@
 package edu.ucsd.cse110.project_ms1;
 //package com.example.googlemapactivitytemplate;
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.PermissionChecker;
 import androidx.fragment.app.FragmentActivity;
 
@@ -25,17 +30,26 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.Arrays;
+
 import edu.ucsd.cse110.project_ms1.databinding.ActivityDirectionBinding;
 //import androidx.databinding.DataBindingUtil;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private final PermissionChecker permissionChecker = new PermissionChecker(this);
     private GoogleMap map;
     private ActivityDirectionBinding binding;
 
     private Location lastVisitedLocation;
+
+    private final ActivityResultLauncher<String[]> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), perms -> {
+                perms.forEach((perm, isGranted) -> {
+                    Log.i("LAB7", String.format("Permission %s granted: %s", perm, isGranted));
+                });
+            });
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +78,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         map = googleMap;
 
         //Map Setup
-        {//Enable zoom controls
+        {
+            //Enable zoom controls
             var uiSettings = map.getUiSettings();
             uiSettings.setZoomControlsEnabled(true);
 
@@ -87,7 +102,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //permissions Setup
         {
-            if (permissionChecker.ensurePermissions()) return;
+            var requiredPermissions = new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+
+            };
+
+            var hasNoLocationPerms = Arrays.stream(requiredPermissions)
+                    .map(perm -> ContextCompat.checkSelfPermission(this, perm))
+                    .allMatch(status -> status == PackageManager.PERMISSION_DENIED);
+
+            if (hasNoLocationPerms) {
+                requestPermissionLauncher.launch(requiredPermissions);
+                //the activity will be restarted when permission change
+                //this entire method will be re-run, but we won't get stuck here
+                return;
+            }
         }
 
 
@@ -112,9 +142,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    private boolean ensurePermissions() {
-
-        return permissionChecker.ensurePermissions();
-    }
 
 }
