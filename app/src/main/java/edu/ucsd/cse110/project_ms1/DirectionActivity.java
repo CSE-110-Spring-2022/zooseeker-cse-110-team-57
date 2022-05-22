@@ -80,7 +80,7 @@ public class DirectionActivity extends AppCompatActivity {
                    6666666666
         }
         */
-
+        display(order,true);
 
 
     } //Initial End
