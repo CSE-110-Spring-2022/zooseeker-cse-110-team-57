@@ -117,6 +117,13 @@ public class DirectionHelper {
         return AnimalItem.vInfo.get(id).name;
     }
 
-
+    public static void saveDirectionsInformation(Context context, String startName, String goalName){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("Team57", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("currentStart", startName);
+        editor.putString("currentGoal", goalName);
+        editor.commit();
+        editor.apply();
+    }
 
 }

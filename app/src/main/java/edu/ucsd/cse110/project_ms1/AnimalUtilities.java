@@ -6,7 +6,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import java.util.List;
 
 public class AnimalUtilities {
-    static AnimalItem getClosestAnimalItem(List<AnimalItem> animal_items, String start, double min_distance, AnimalItem closest_animal) {
+    public static AnimalItem getClosestAnimalItem(List<AnimalItem> animal_items, String start, double min_distance, AnimalItem closest_animal) {
         String goal;
         //use for loop to find next closet exhibit
         for (AnimalItem item : animal_items) {
@@ -21,4 +21,7 @@ public class AnimalUtilities {
         }
         return closest_animal;
     }
+
+
+
 }

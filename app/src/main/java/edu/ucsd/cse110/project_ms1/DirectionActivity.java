@@ -86,10 +86,12 @@ public class DirectionActivity extends AppCompatActivity {
             path = new ArrayList<>(pathData.paths);
             startText = "From: "+ pathData.startExhibit;
             endText = "To: "+ pathData.goalExhibit;
+            DirectionHelper.saveDirectionsInformation(this, pathData.startExhibit, pathData.goalExhibit);
         }else{
             path = new ArrayList<>(pathData.prevPaths);
             startText = "From: "+ pathData.goalExhibit;
             endText = "To: "+ pathData.startExhibit;
+            DirectionHelper.saveDirectionsInformation(this, pathData.goalExhibit, pathData.startExhibit);
         }
         direction_adapter.setDirectionsStringList(path);
 
@@ -145,6 +147,7 @@ public class DirectionActivity extends AppCompatActivity {
             Utilities.showAlert(this, "invalid Action");
         }
     }
+
 
 
 }
