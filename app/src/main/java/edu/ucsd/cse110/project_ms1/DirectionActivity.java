@@ -1,6 +1,8 @@
 package edu.ucsd.cse110.project_ms1;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -25,9 +27,13 @@ public class DirectionActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_direction);
+        SharedPreferences preference = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preference.edit();
+        editor.putString("currentActivity", "DirectionActivity");
+        editor.commit();
+        editor.apply();
 
         //grab ordered list of animal id, begin from first item in the route.
         Intent intent = getIntent();
@@ -40,7 +46,9 @@ public class DirectionActivity extends AppCompatActivity {
         //(order -order of animal in the route , paths -list of edges in the path)
         HashMap<Integer,List<IdentifiedWeightedEdge>> route = DirectionHelper.findRoute(orderedAnimalList);
         zooRoute = new HashMap<>();
-        order = 0;
+        ArrayList<String> retainedDirections = DirectionHelper.loadDirectionsInformation(this);
+        order = Integer.valueOf(retainedDirections.indexOf(0));
+
 
 
         //find the path and info, then save it for recycle use.
@@ -64,12 +72,20 @@ public class DirectionActivity extends AppCompatActivity {
         direction_recyclerView.setLayoutManager(new LinearLayoutManager(this));
         direction_recyclerView.setAdapter(direction_adapter);
 
-        display(order,true);
+        /*
+        if (retainedDirections.indexOf(1)."entrance_exit_gate"){
+            display(order,true);
+        }
+        else{
+                   6666666666
+        }
+        */
+
+
 
     } //Initial End
 
     public void display(int index, boolean isNext){
-
         TextView start = findViewById(R.id.start_exhibit_name);
         TextView end = findViewById(R.id.goal_exhibit_name);
         TextView next = findViewById(R.id.next_text);
@@ -86,10 +102,12 @@ public class DirectionActivity extends AppCompatActivity {
             path = new ArrayList<>(pathData.paths);
             startText = "From: "+ pathData.startExhibit;
             endText = "To: "+ pathData.goalExhibit;
+            DirectionHelper.saveDirectionsInformation(this, pathData.startExhibit, pathData.goalExhibit, order);
         }else{
             path = new ArrayList<>(pathData.prevPaths);
             startText = "From: "+ pathData.goalExhibit;
             endText = "To: "+ pathData.startExhibit;
+            DirectionHelper.saveDirectionsInformation(this, pathData.goalExhibit, pathData.startExhibit, order);
         }
         direction_adapter.setDirectionsStringList(path);
 
@@ -145,6 +163,7 @@ public class DirectionActivity extends AppCompatActivity {
             Utilities.showAlert(this, "invalid Action");
         }
     }
+
 
 
 }

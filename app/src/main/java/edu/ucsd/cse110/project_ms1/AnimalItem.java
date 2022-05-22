@@ -20,6 +20,7 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 
+
 @Entity(tableName = "animal_items")
 @TypeConverters({TagConverter.class,LLConverter.class})
 public class AnimalItem {
@@ -31,7 +32,7 @@ public class AnimalItem {
     public String name; //essentially, the name is the tag in json file
     public boolean searched;
     public boolean visited;
-    public LatLng position;
+    public String position;
 
     public static Map<String, ZooData.VertexInfo> vInfo;
     public static Map<String, ZooData.EdgeInfo> eInfo;
@@ -45,8 +46,7 @@ public class AnimalItem {
         this.tags = tags;
         this.searched = false;
         this.visited = false;
-        this.position = position;
-
+        this.position = position.toString();
 
         //this.exhibit = exhibit;
     }
