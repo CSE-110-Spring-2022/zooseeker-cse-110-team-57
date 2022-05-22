@@ -25,8 +25,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import com.example.googlemapactivitytemplate.databinding.ActivityMapsBinding;
-import androidx.databinding.DataBindingUtil
+//import com.example.googlemapactivitytemplate.databinding.ActivityMapsBinding;
+//import androidx.databinding.DataBindingUtil;
 
 
 
