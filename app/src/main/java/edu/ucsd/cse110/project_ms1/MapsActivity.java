@@ -13,15 +13,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.PermissionChecker;
 import androidx.fragment.app.FragmentActivity;
-
-import android.content.Context;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
-import android.util.Log;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -36,12 +28,13 @@ import edu.ucsd.cse110.project_ms1.databinding.ActivityDirectionBinding;
 //import androidx.databinding.DataBindingUtil;
 
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback{
 
     private GoogleMap map;
     private ActivityDirectionBinding binding;
-
     private Location lastVisitedLocation;
+    OnLocationChangeListener onLocationChangeListener;
 
     private final ActivityResultLauncher<String[]> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), perms -> {
@@ -134,14 +127,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     var marker = new MarkerOptions().
                             position(current).title("Navigation Step");
                     map.addMarker(marker);
-
+                    //update current location latitude & longtitude
                     LatLngs.currentLocationLatLng = current;
+                    onLocationChangeListener.OnLocationChange(current);
                 }
             };
             locationManager.requestLocationUpdates(provider, 0, 0f, locationListener);
         }
 
     }
+/*
+    @Override
+    public void OnLocationChange(LatLng current) {
+        onLocationChangeListener.OnLocationChange(LatLngs.currentLocationLatLng);
+    }
 
-
+ */
 }

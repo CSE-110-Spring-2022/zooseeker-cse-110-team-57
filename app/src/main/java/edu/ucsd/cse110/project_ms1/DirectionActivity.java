@@ -14,14 +14,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.SharedPreferences;
 
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Collections;
-import java.util.stream.Collectors;
 
-public class DirectionActivity extends AppCompatActivity {
+public class DirectionActivity extends AppCompatActivity implements OnLocationChangeListener {
     int order;
 
     HashMap<Integer,DirectionData> zooRoute;
@@ -174,6 +175,9 @@ public class DirectionActivity extends AppCompatActivity {
         }
     }
 
-
-
+    @Override
+    public void OnLocationChange(LatLng current) {
+        ZooData.VertexInfo closestlandmark = AnimalUtilities.getClosestLandmark(current);
+        
+    }
 }
