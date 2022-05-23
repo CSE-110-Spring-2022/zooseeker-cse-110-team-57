@@ -71,7 +71,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         //Get the order
         List<String> retainedDirections = DirectionHelper.loadDirectionsInformation(this);
-        order = Integer.valueOf(retainedDirections.indexOf(0));
+        order = Integer.valueOf(retainedDirections.get(0));
 
 
         if (DirectionHelper.isNext(zooRoute, retainedDirections.get(1))){
