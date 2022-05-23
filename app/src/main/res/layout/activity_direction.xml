@@ -116,7 +116,6 @@
         android:text="Clear"
         android:onClick="onClearButtonClick"
         android:textSize="20sp"
-        android:onClick="onClearButtonClick"
         app:layout_constraintBottom_toTopOf="@+id/detail_button"
         app:layout_constraintEnd_toStartOf="@id/replan_button"
         app:layout_constraintHorizontal_bias="0.0"
