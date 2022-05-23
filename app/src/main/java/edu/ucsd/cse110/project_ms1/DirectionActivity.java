@@ -70,7 +70,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         direction_recyclerView.setLayoutManager(new LinearLayoutManager(this));
         direction_recyclerView.setAdapter(direction_adapter);
 
-        //Get the order
+        //Get the order and isNext
         List<String> retainedInfo = DirectionHelper.loadDirectionsInformation(this);
         order = Integer.valueOf(retainedInfo.get(0));
         isNext = Boolean.valueOf(retainedInfo.get(1));

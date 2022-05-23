@@ -130,7 +130,7 @@ public class DirectionHelper {
         List<String> retainedInfo = new ArrayList<String>();
         SharedPreferences sharedPreferences = context.getSharedPreferences("Team57", Activity.MODE_PRIVATE);
         String currentOrder = sharedPreferences.getString("currentOrder", "0");
-        String currentIsNext = sharedPreferences.getString("currentIsNext", "0");
+        String currentIsNext = sharedPreferences.getString("currentIsNext", "true");
         retainedInfo.add(currentOrder);
         retainedInfo.add(currentIsNext);
         return retainedInfo;
