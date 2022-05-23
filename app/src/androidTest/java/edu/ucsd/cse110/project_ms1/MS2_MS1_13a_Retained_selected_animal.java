@@ -38,67 +38,67 @@ public class MS2_MS1_13a_Retained_selected_animal {
     @Test
     public void mS2_MS1_13a_Retained_selected_animal() {
         ViewInteraction textView = onView(
-allOf(withId(R.id.selected_animals_number), withText("0"),
-withParent(withParent(withId(android.R.id.content))),
-isDisplayed()));
+                allOf(withId(R.id.selected_animals_number), withText("0"),
+                        withParent(withParent(withId(android.R.id.content))),
+                        isDisplayed()));
         textView.check(matches(withText("0")));
-        
+
         ViewInteraction actionMenuItemView = onView(
-allOf(withId(R.id.search_bar_2), withContentDescription("Search"),
-childAtPosition(
-childAtPosition(
-withId(androidx.appcompat.R.id.action_bar),
-1),
-0),
-isDisplayed()));
+                allOf(withId(R.id.search_bar_2), withContentDescription("Search"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(androidx.appcompat.R.id.action_bar),
+                                        1),
+                                0),
+                        isDisplayed()));
         actionMenuItemView.perform(click());
-        
+
         ViewInteraction materialButton = onView(
-allOf(withId(R.id.add_to_button), withText("Add"),
-childAtPosition(
-childAtPosition(
-withId(R.id.all_searched_animals),
-0),
-1),
-isDisplayed()));
+                allOf(withId(R.id.add_to_button), withText("Add"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.all_searched_animals),
+                                        0),
+                                1),
+                        isDisplayed()));
         materialButton.perform(click());
-        
+
         ViewInteraction appCompatImageButton = onView(
-allOf(withContentDescription("Collapse"),
-childAtPosition(
-allOf(withId(androidx.appcompat.R.id.action_bar),
-childAtPosition(
-withId(androidx.appcompat.R.id.action_bar_container),
-0)),
-1),
-isDisplayed()));
+                allOf(withContentDescription("Collapse"),
+                        childAtPosition(
+                                allOf(withId(androidx.appcompat.R.id.action_bar),
+                                        childAtPosition(
+                                                withId(androidx.appcompat.R.id.action_bar_container),
+                                                0)),
+                                1),
+                        isDisplayed()));
         appCompatImageButton.perform(click());
-        
+
         ViewInteraction textView2 = onView(
-allOf(withId(R.id.selected_animals_number), withText("1"),
-withParent(withParent(withId(android.R.id.content))),
-isDisplayed()));
+                allOf(withId(R.id.selected_animals_number), withText("1"),
+                        withParent(withParent(withId(android.R.id.content))),
+                        isDisplayed()));
         textView2.check(matches(withText("1")));
-        
+
         ViewInteraction textView3 = onView(
-allOf(withId(R.id.an_selected_animal), withText("Crocodiles"),
-withParent(withParent(withId(R.id.all_selected_animals))),
-isDisplayed()));
+                allOf(withId(R.id.an_selected_animal), withText("Crocodiles"),
+                        withParent(withParent(withId(R.id.all_selected_animals))),
+                        isDisplayed()));
         textView3.check(matches(withText("Crocodiles")));
-        
+
         ViewInteraction textView4 = onView(
-allOf(withId(R.id.selected_animals_number), withText("1"),
-withParent(withParent(withId(android.R.id.content))),
-isDisplayed()));
+                allOf(withId(R.id.selected_animals_number), withText("1"),
+                        withParent(withParent(withId(android.R.id.content))),
+                        isDisplayed()));
         textView4.check(matches(withText("1")));
-        
+
         ViewInteraction textView5 = onView(
-allOf(withId(R.id.an_selected_animal), withText("Crocodiles"),
-withParent(withParent(withId(R.id.all_selected_animals))),
-isDisplayed()));
+                allOf(withId(R.id.an_selected_animal), withText("Crocodiles"),
+                        withParent(withParent(withId(R.id.all_selected_animals))),
+                        isDisplayed()));
         textView5.check(matches(withText("Crocodiles")));
-        }
-    
+    }
+
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
 
@@ -113,8 +113,8 @@ isDisplayed()));
             public boolean matchesSafely(View view) {
                 ViewParent parent = view.getParent();
                 return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup)parent).getChildAt(position));
+                        && view.equals(((ViewGroup) parent).getChildAt(position));
             }
         };
     }
-    }
+}
