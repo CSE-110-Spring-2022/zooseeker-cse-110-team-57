@@ -21,6 +21,7 @@ import java.util.Collections;
 
 public class DirectionActivity extends AppCompatActivity implements OnLocationChangeListener {
     int order;
+    boolean isNext;
 
     HashMap<Integer,DirectionData> zooRoute;
     DirectionAdapter direction_adapter;
@@ -70,19 +71,10 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         direction_recyclerView.setAdapter(direction_adapter);
 
         //Get the order
-        List<String> retainedDirections = DirectionHelper.loadDirectionsInformation(this);
-        order = Integer.valueOf(retainedDirections.get(0));
-
-        TextView start = findViewById(R.id.start_exhibit_name);
-        String source = start.getText().toString();
-        if (DirectionHelper.isNext(zooRoute, order, source)){
-            display(order,true);
-        }
-        else{
-            display(order,false);
-        }
-
-
+        List<String> retainedInfo = DirectionHelper.loadDirectionsInformation(this);
+        order = Integer.valueOf(retainedInfo.get(0));
+        isNext = Boolean.valueOf(retainedInfo.get(1));
+        display(order, isNext);
 
 
     } //Initial End
@@ -104,12 +96,12 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             path = new ArrayList<>(pathData.paths);
             startText = "From: "+ pathData.startExhibit;
             endText = "To: "+ pathData.goalExhibit;
-            DirectionHelper.saveDirectionsInformation(this, pathData.startExhibit, pathData.goalExhibit, order);
+            DirectionHelper.saveDirectionsInformation(this, order, true);
         }else{
             path = new ArrayList<>(pathData.prevPaths);
             startText = "From: "+ pathData.goalExhibit;
             endText = "To: "+ pathData.startExhibit;
-            DirectionHelper.saveDirectionsInformation(this, pathData.goalExhibit, pathData.startExhibit, order);
+            DirectionHelper.saveDirectionsInformation(this, order, false);
         }
         direction_adapter.setDirectionsStringList(path);
 
