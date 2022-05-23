@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
         //goToDirectionActivity();
         //-----------------------------------------------------------------------------------------
 
-        
         SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
         String ActivityTarget = sharedPreferences.getString("currentActivity", "SearchAnimalActivity");
         switch(ActivityTarget){
