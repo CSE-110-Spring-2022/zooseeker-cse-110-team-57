@@ -73,8 +73,9 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         List<String> retainedDirections = DirectionHelper.loadDirectionsInformation(this);
         order = Integer.valueOf(retainedDirections.get(0));
 
-
-        if (DirectionHelper.isNext(zooRoute, retainedDirections.get(1))){
+        TextView start = findViewById(R.id.start_exhibit_name);
+        String source = start.getText().toString();
+        if (DirectionHelper.isNext(zooRoute, order, source)){
             display(order,true);
         }
         else{

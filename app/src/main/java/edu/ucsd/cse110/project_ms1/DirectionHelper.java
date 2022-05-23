@@ -136,8 +136,8 @@ public class DirectionHelper {
         return retainedDirections;
     }
 
-    public static boolean isNext(HashMap<Integer,DirectionData> zooRoute, String source){
-        String edgeSource = zooRoute.get(0).getStartExhibit();
+    public static boolean isNext(HashMap<Integer,DirectionData> zooRoute, int order, String source){
+        String edgeSource = zooRoute.get(order).getStartExhibit();
         Log.d("edgeSource in displayPath",edgeSource);
         Log.d("source in displayPath",source);
         if(edgeSource.equals(source)){
