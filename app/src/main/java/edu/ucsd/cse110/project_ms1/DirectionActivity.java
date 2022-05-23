@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     DirectionAdapter direction_adapter;
     RecyclerView direction_recyclerView;
     List<String> orderedAnimalList;
-
+    List<AnimalItem> animalItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,33 +43,22 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         ArrayList<String> orderedAnimal = intent.getStringArrayListExtra("routedAnimalNameList");
         //remove the Entrance and Exit Gate
         orderedAnimal.remove(orderedAnimal.size() - 1);
-        orderedAnimalList = DirectionHelper.loadAnimalItem(this, orderedAnimal);
+        animalItems = DirectionHelper.loadAnimalItem(this, orderedAnimal);
+
+        //find the shortest Path by given ordered route.
+        //(order -order of animal in the route , paths -list of edges in the path)
+        List<route_node> planned_route = AnimalItem.plan_route(animalItems);
+
+        for(route_node node : planned_route){
+            orderedAnimalList.add(node.animal.name);
+        }
 
         //we need add the front gate into orderedAnimalList, so that route begin at gate
         orderedAnimalList.add(0, "entrance_exit_gate");
         orderedAnimalList.add(orderedAnimalList.size(), "entrance_exit_gate");
+        //<order -the index of exhibit in the route, edges -the edges between exhibits
+        //HashMap<Integer, List<IdentifiedWeightedEdge>> route = DirectionHelper.findRoute(planned_route);
 
-        //find the shortest Path by given ordered route.
-        //(order -order of animal in the route , paths -list of edges in the path)
-        HashMap<Integer, List<IdentifiedWeightedEdge>> route = DirectionHelper.findRoute(orderedAnimalList);
-        zooRoute = new HashMap<>();
-
-
-        //find the path and info, then save it for recycle use.
-        for (int i = 0; i < route.size(); i++) {
-            List<IdentifiedWeightedEdge> path = route.get(i);
-            String startExhibit = DirectionHelper.getNodeName(orderedAnimalList.get(i));
-            String goalExhibit = DirectionHelper.getNodeName(orderedAnimalList.get(i + 1));
-            List<String> paths = DirectionHelper.detailPath(path, startExhibit);
-            List<String> briefPaths = DirectionHelper.briefPath(path, startExhibit);
-            Collections.reverse(path);
-            List<String> prevPaths = DirectionHelper.detailPath(path, goalExhibit);
-            List<String> briefPrevPaths = DirectionHelper.briefPath(path, goalExhibit);
-            Double distance = DirectionHelper.totalDistance(path);
-            //temp
-            DirectionData walk = new DirectionData(startExhibit, goalExhibit, distance, paths, prevPaths, briefPaths, briefPrevPaths);
-            zooRoute.put(i, walk);
-        }
 
         //adapter
         direction_adapter = new DirectionAdapter();
@@ -106,35 +94,42 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         Button detailBtn = findViewById(R.id.detail_button);
         detailBtn.setText("Brief");
 
-        DirectionData pathData = zooRoute.get(index);
-        List<String> path;
-        String startText;
-        String endText;
-
+        String sourceExhibit;
+        String goalExhibit;
+        List<IdentifiedWeightedEdge> path;
         if (isNext) {
-            path = new ArrayList<>(pathData.briefPath);
-            startText = "From: " + pathData.startExhibit;
-            endText = "To: " + pathData.goalExhibit;
-            DirectionHelper.saveDirectionsInformation(this, pathData.startExhibit, pathData.goalExhibit, order);
+            sourceExhibit = orderedAnimalList.get(index);
+            goalExhibit = orderedAnimalList.get(index+1);
+            path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
+            DirectionHelper.saveDirectionsInformation(this, DirectionHelper.getNodeName(sourceExhibit), DirectionHelper.getNodeName(goalExhibit), order);
         } else {
-            path = new ArrayList<>(pathData.briefPath);
-            startText = "From: " + pathData.goalExhibit;
-            endText = "To: " + pathData.startExhibit;
-            DirectionHelper.saveDirectionsInformation(this, pathData.goalExhibit, pathData.startExhibit, order);
+            sourceExhibit = orderedAnimalList.get(index);
+            goalExhibit = orderedAnimalList.get(index-1);
+            path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
+            DirectionHelper.saveDirectionsInformation(this, DirectionHelper.getNodeName(sourceExhibit), DirectionHelper.getNodeName(goalExhibit), order);
         }
-        direction_adapter.setDirectionsStringList(path);
+        List<String> pathDisplay = new ArrayList<>(DirectionHelper.briefPath(path,goalExhibit));;
+
+        String startText = "From: " + DirectionHelper.getNodeName(sourceExhibit);
+        String endText = "To: " + DirectionHelper.getNodeName(goalExhibit);
+
+
+        direction_adapter.setDirectionsStringList(pathDisplay);
 
         start.setText(startText);
         end.setText(endText);
-        distance.setText(Double.toString(pathData.distance) + " ft");
+        distance.setText(Double.toString(DirectionHelper.totalDistance(path)) + " ft");
 
         //setting next button and next direction distance
         //disable the prev btn at the first page and next btn at last page.
 
-        if (index < zooRoute.size() - 1) {
+        if (index < orderedAnimalList.size() - 2) {
             nextBtn.setEnabled(true);
-            DirectionData nextData = zooRoute.get(index + 1);
-            String nextText = (nextData.goalExhibit + "  " + nextData.distance + " ft");
+            String nextSource = orderedAnimalList.get(index+1);
+            String nextGoal = orderedAnimalList.get(index+2);
+            List<IdentifiedWeightedEdge> nextPath = DirectionHelper.findPathBetween(nextSource,nextGoal);
+            double nextDistance = DirectionHelper.totalDistance(nextPath);
+            String nextText = (nextGoal + "  " + nextDistance + " ft");
             next.setText(nextText);
         } else {
             nextBtn.setEnabled(false);
@@ -148,8 +143,11 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         } else {
             prevBtn.setEnabled(true);
-            DirectionData prevData = zooRoute.get(index - 1);
-            String prevText = (prevData.goalExhibit + "  " + prevData.distance + " ft");
+            String current = orderedAnimalList.get(index);
+            String lastSource = orderedAnimalList.get(index-1);
+            List<IdentifiedWeightedEdge> prevPath = DirectionHelper.findPathBetween(current,lastSource);
+            double prevDistance = DirectionHelper.totalDistance(prevPath);
+            String prevText = (lastSource + "  " + prevDistance + " ft");
             prev.setText(prevText);
         }
     }

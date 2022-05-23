@@ -21,7 +21,7 @@ public class DirectionHelper {
         return route;
     }
 
-    public static List<String> loadAnimalItem(Context context, ArrayList<String> orderedAnimal){
+    public static List<AnimalItem> loadAnimalItem(Context context, ArrayList<String> orderedAnimal){
         SharedPreferences sharedPreferences = context.getSharedPreferences("Team57", Activity.MODE_PRIVATE);
         StringAndAnimalItem stringAndAnimalItem = new StringAndAnimalItem();
         List<AnimalItem> orderedAnimalItemList = new ArrayList<>();
@@ -38,17 +38,17 @@ public class DirectionHelper {
             orderedAnimalItemList.add(animalItem);
         }
 
-        return animalInRoute(orderedAnimalItemList);
+        return orderedAnimalItemList;
     }
 
 
-    public static HashMap<Integer,List<IdentifiedWeightedEdge>> findRoute(List<String> orderedAnimalList){
+    public static HashMap<Integer,List<IdentifiedWeightedEdge>> findRoute(List<route_node> planned_route){
         //  (order,paths)
         HashMap<Integer,List<IdentifiedWeightedEdge>> route = new HashMap<>();
 
-        for(int i = 0;i < orderedAnimalList.size() - 1 ;i++){
-            String source = orderedAnimalList.get(i);
-            String sink = orderedAnimalList.get(i+1);
+        for(int i = 0;i < planned_route.size() - 1 ;i++){
+            String source = planned_route.get(i).animal.name;
+            String sink = planned_route.get(i+1).animal.name;
 
             GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(AnimalItem.gInfo, source, sink);
             //list of street in this walk.
@@ -146,8 +146,6 @@ public class DirectionHelper {
         }
         return display;
     }
-
-
 
 
 
