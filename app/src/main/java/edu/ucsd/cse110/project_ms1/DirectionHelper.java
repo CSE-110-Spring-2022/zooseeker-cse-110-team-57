@@ -11,7 +11,6 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class DirectionHelper {
 
@@ -22,7 +21,7 @@ public class DirectionHelper {
         return route;
     }
 
-    public static List<String> loadAnimalItem(Context context, List<String> orderedAnimal){
+    public static List<AnimalItem> loadAnimalItem(Context context, ArrayList<String> orderedAnimal){
         SharedPreferences sharedPreferences = context.getSharedPreferences("Team57", Activity.MODE_PRIVATE);
         StringAndAnimalItem stringAndAnimalItem = new StringAndAnimalItem();
         List<AnimalItem> orderedAnimalItemList = new ArrayList<>();
@@ -39,22 +38,17 @@ public class DirectionHelper {
             orderedAnimalItemList.add(animalItem);
         }
 
-        return animalInRoute(orderedAnimalItemList);
+        return orderedAnimalItemList;
     }
 
 
-    public static HashMap<Integer,List<IdentifiedWeightedEdge>> findRoute(List<String> orderedAnimalList){
+    public static HashMap<Integer,List<IdentifiedWeightedEdge>> findRoute(List<route_node> planned_route){
         //  (order,paths)
         HashMap<Integer,List<IdentifiedWeightedEdge>> route = new HashMap<>();
 
-        //we need add the front gate into orderedAnimalList, so that route begin at gate
-        orderedAnimalList.add(0,"entrance_exit_gate");
-        orderedAnimalList.add(orderedAnimalList.size(),"entrance_exit_gate");
-
-
-        for(int i = 0;i < orderedAnimalList.size() - 1 ;i++){
-            String source = orderedAnimalList.get(i);
-            String sink = orderedAnimalList.get(i+1);
+        for(int i = 0;i < planned_route.size() - 1 ;i++){
+            String source = planned_route.get(i).animal.name;
+            String sink = planned_route.get(i+1).animal.name;
 
             GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(AnimalItem.gInfo, source, sink);
             //list of street in this walk.
@@ -66,8 +60,17 @@ public class DirectionHelper {
         return route;
     }
 
+    public static List<IdentifiedWeightedEdge> findPathBetween(String source,String goal){
 
-    public static List<String> displayPath(List<IdentifiedWeightedEdge> path,String start){
+            GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(AnimalItem.gInfo, source, goal);
+            //list of street in this walk.
+            List<IdentifiedWeightedEdge> streets = path.getEdgeList();
+
+        return streets;
+    }
+
+
+    public static List<String> detailPath(List<IdentifiedWeightedEdge> path, String start){
         List<String> display = new ArrayList<>();
         String street = path.get(0).getId();
         String source = start;
@@ -92,7 +95,6 @@ public class DirectionHelper {
             //If we continues on the same street.
             String nextStreet = AnimalItem.eInfo.get(edge.getId()).street;
 
-
             if(street.equals(nextStreet)){
                 edgeInfo = "Continue on " + street + " " + distance + " ft towards " + target;
             }else{
@@ -103,6 +105,48 @@ public class DirectionHelper {
         }
         return display;
     }
+
+    public static List<String> briefPath(List<IdentifiedWeightedEdge> path, String startNode){
+        List<String> display = new ArrayList<>();
+        String street = path.get(0).getId();
+        String source = startNode;
+        String target;
+        String edgeInfo;
+        Double totalDistance = 0.0;
+
+        for(IdentifiedWeightedEdge edge : path){
+            //target node name
+            String edgeSource = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeSource(edge)).name;
+            /*
+            Log.d("edgeSource in displayPath",edgeSource);
+            Log.d("source in displayPath",source);
+            */
+            if(edgeSource.equals(source)){
+                target = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeTarget(edge)).name;
+            }else{
+                target = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeSource(edge)).name;
+            }
+            //move the source toward node in the path
+            source = new String(target);
+
+            //distance that user need to walk on this street.
+            Double distance = AnimalItem.gInfo.getEdgeWeight(edge);
+            //If we continues on the same street.
+            String nextStreet = AnimalItem.eInfo.get(edge.getId()).street;
+
+            if(street.equals(nextStreet)){
+                totalDistance += distance;
+                continue;
+            }else{
+                edgeInfo = "Proceed on " + street + " " + totalDistance + " ft towards " + target;
+                street = nextStreet;
+            }
+
+            display.add(edgeInfo);
+        }
+        return display;
+    }
+
 
 
     public static double totalDistance(List<IdentifiedWeightedEdge> path){
