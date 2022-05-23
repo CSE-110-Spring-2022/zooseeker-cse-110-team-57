@@ -94,43 +94,49 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         TextView next = findViewById(R.id.next_text);
         TextView prev = findViewById(R.id.previous_text);
         TextView distance = findViewById(R.id.path_total_distance);
-                    // Button prevBtn = findViewById(R.id.previous_button);
-                    // Button nextBtn = findViewById(R.id.next_button);
-                    
-
-                    // String sourceExhibit;
-                    // String goalExhibit;
-                    // List<IdentifiedWeightedEdge> path;
-                    // if (isNext) {
-                    //     sourceExhibit = orderedAnimalList.get(index);
-                    //     goalExhibit = orderedAnimalList.get(index+1);
-                    //     path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
-                    //     DirectionHelper.saveDirectionsInformation(this, DirectionHelper.getNodeName(sourceExhibit), DirectionHelper.getNodeName(goalExhibit), order);
-                    // } else {
-                    //     sourceExhibit = orderedAnimalList.get(index);
-                    //     goalExhibit = orderedAnimalList.get(index-1);
-                    //     path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
-                    //     DirectionHelper.saveDirectionsInformation(this, DirectionHelper.getNodeName(sourceExhibit), DirectionHelper.getNodeName(goalExhibit), order);
-        Button prevbtn = findViewById(R.id.previous_button);
-        Button nextbtn = findViewById(R.id.next_button);
+         Button prevBtn = findViewById(R.id.previous_button);
+         Button nextBtn = findViewById(R.id.next_button);
         Button detailBtn = findViewById(R.id.detail_button);
         detailBtn.setText("Brief");
 
-        DirectionData pathData = zooRoute.get(index);
-        List<String> path;
-        String startText;
-        String endText;
-        if (isNext){
-            path = new ArrayList<>(pathData.paths);
-            startText = "From: "+ pathData.startExhibit;
-            endText = "To: "+ pathData.goalExhibit;
-            DirectionHelper.saveDirectionsInformation(this, order, true);
-        }else{
-            path = new ArrayList<>(pathData.prevPaths);
-            startText = "From: "+ pathData.goalExhibit;
-            endText = "To: "+ pathData.startExhibit;
-            DirectionHelper.saveDirectionsInformation(this, order, false);
-        }
+
+         String sourceExhibit;
+         String goalExhibit;
+         List<IdentifiedWeightedEdge> path;
+
+         if (isNext) {
+             sourceExhibit = orderedAnimalList.get(index);
+             goalExhibit = orderedAnimalList.get(index+1);
+             path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
+             DirectionHelper.saveDirectionsInformation(this, DirectionHelper.getNodeName(sourceExhibit), DirectionHelper.getNodeName(goalExhibit), order);
+         } else {
+             sourceExhibit = orderedAnimalList.get(index);
+             goalExhibit = orderedAnimalList.get(index-1);
+             path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
+             DirectionHelper.saveDirectionsInformation(this, DirectionHelper.getNodeName(sourceExhibit), DirectionHelper.getNodeName(goalExhibit), order);
+                        //        Button prevbtn = findViewById(R.id.previous_button);
+                        //        Button nextbtn = findViewById(R.id.next_button);
+                        //        Button detailBtn = findViewById(R.id.detail_button);
+                        //        detailBtn.setText("Brief");
+                        //
+                        //        DirectionData pathData = zooRoute.get(index);
+                        //        List<String> path;
+                        //        String startText;
+                        //        String endText;
+                        //        if (isNext){
+                        //            path = new ArrayList<>(pathData.paths);
+                        //            startText = "From: "+ pathData.startExhibit;
+                        //            endText = "To: "+ pathData.goalExhibit;
+                        //            DirectionHelper.saveDirectionsInformation(this, order, true);
+                        //        }else{
+                        //            path = new ArrayList<>(pathData.prevPaths);
+                        //            startText = "From: "+ pathData.goalExhibit;
+                        //            endText = "To: "+ pathData.startExhibit;
+                        //            DirectionHelper.saveDirectionsInformation(this, order, false);
+         }
+
+
+
         List<String> pathDisplay = new ArrayList<>(DirectionHelper.briefPath(path,goalExhibit));;
 
         String startText = "From: " + DirectionHelper.getNodeName(sourceExhibit);
