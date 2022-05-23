@@ -58,6 +58,8 @@ public class PlanActivity extends AppCompatActivity{
         if (selectedAnimalNameStringList == null){
             Set<String> selectedAnimalNameStringSet = sharedPreferences.getAll().keySet();
             selectedAnimalNameStringSet.remove("currentActivity");
+            selectedAnimalNameStringSet.remove("currentOrder");
+            selectedAnimalNameStringSet.remove("currentIsNext");
             selectedAnimalNameStringSet.remove("route");
             selectedAnimalNameStringList = new ArrayList<String>(selectedAnimalNameStringSet);
         }

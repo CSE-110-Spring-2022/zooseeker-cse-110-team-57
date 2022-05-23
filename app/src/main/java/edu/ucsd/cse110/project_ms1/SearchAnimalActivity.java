@@ -175,6 +175,8 @@ import javax.xml.transform.TransformerFactory;
         //get the list of selected animal names
         Set<String> selectedAnimalNameStringSet = sharedPreferences.getAll().keySet();
         selectedAnimalNameStringSet.remove("currentActivity");
+        selectedAnimalNameStringSet.remove("currentOrder");
+        selectedAnimalNameStringSet.remove("currentIsNext");
         selectedAnimalNameStringSet.remove("route");
         selectedAnimalNameStringList = new ArrayList<String>(selectedAnimalNameStringSet);
 
