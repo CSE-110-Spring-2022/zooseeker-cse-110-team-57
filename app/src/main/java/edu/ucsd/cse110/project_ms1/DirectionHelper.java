@@ -22,7 +22,7 @@ public class DirectionHelper {
         return route;
     }
 
-    public static List<String> loadAnimalItem(Context context, ArrayList<String> orderedAnimal){
+    public static List<String> loadAnimalItem(Context context, List<String> orderedAnimal){
         SharedPreferences sharedPreferences = context.getSharedPreferences("Team57", Activity.MODE_PRIVATE);
         StringAndAnimalItem stringAndAnimalItem = new StringAndAnimalItem();
         List<AnimalItem> orderedAnimalItemList = new ArrayList<>();

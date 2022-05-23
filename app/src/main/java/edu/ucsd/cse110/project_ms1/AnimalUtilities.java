@@ -83,6 +83,12 @@ public class AnimalUtilities {
         //concat (first half of) original and rest_route
         List<route_node> newRoute = Stream.concat(route.stream(), rest_route.stream())
                 .collect(Collectors.toList());
+
+
+        List<String> newNames = new ArrayList<>();
+        for (route_node r : newRoute){
+            newNames.add(r.animal.name);
+        }
         return  newRoute;
     }
 

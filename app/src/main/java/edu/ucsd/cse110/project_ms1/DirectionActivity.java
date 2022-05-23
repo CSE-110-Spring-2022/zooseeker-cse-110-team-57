@@ -11,8 +11,11 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import android.content.SharedPreferences;
+
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Collections;
@@ -37,7 +40,14 @@ public class DirectionActivity extends AppCompatActivity {
 
         //grab ordered list of animal id, begin from first item in the route.
         Intent intent = getIntent();
-        ArrayList<String> orderedAnimal = intent.getStringArrayListExtra("routedAnimalNameList");
+        List<String> orderedAnimal = intent.getStringArrayListExtra("routedAnimalNameList");
+        if (orderedAnimal == null){
+            SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
+            String concated_animal_names = sharedPreferences.getString("route",
+                    "No found such animal in sharedPreference");
+            orderedAnimal = Arrays.asList(concated_animal_names.split("\\s*,\\s*"));
+        }
+
         //remove the Entrance and Exit Gate
         orderedAnimal.remove(orderedAnimal.size() - 1);
         List<String> orderedAnimalList = DirectionHelper.loadAnimalItem(this, orderedAnimal);

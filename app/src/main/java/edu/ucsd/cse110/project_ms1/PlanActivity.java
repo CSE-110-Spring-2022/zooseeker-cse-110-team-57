@@ -87,10 +87,26 @@ public class PlanActivity extends AppCompatActivity{
     }
 
     public void onDirectionsClick(View view) {
+        saveToSharedPreference(routedAnimalNameString);
 
+        //start the direction page
         Intent intent = new Intent(this, DirectionActivity.class);
         ArrayList<String> routedAnimalList = new ArrayList<String>(routedAnimalNameString);
         intent.putStringArrayListExtra("routedAnimalNameList", routedAnimalList);
         startActivity(intent);
+    }
+
+    public void saveToSharedPreference(List<String> animal_names) {
+        //save routedAnimalNameString to sharedPreference
+        //link the animalItem name with the string form of animalItem
+        SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        //convert AnimalItem into a string containing all related information of a selected animal
+        String joined = String.join(",", animal_names );
+
+        //Map(animal name, animal information)
+        editor.putString("route", joined);
+        editor.commit();
+        editor.apply();
     }
 }
