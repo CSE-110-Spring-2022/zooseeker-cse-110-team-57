@@ -15,11 +15,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
-        //----------------Comment this line if you want to direct to the page before the app is killed----------------
+        //--------Comment these lines if you want to direct to the page before the app is killed----------------
         goToSearchAnimalActivity();
+        //goToPlanActivity();
+        //goToDirectionActivity();
         //-----------------------------------------------------------------------------------------
 
+        
+        SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
         String ActivityTarget = sharedPreferences.getString("currentActivity", "SearchAnimalActivity");
         switch(ActivityTarget){
             case "PlanActivity":
@@ -39,6 +42,22 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         //set the currentActivity to be SearchAnimalActivity
         editor.putString("currentActivity", "SearchAnimalActivity");
+        editor.commit();
+        editor.apply();
+    }
+    public void goToPlanActivity(){
+        SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        //set the currentActivity to be SearchAnimalActivity
+        editor.putString("currentActivity", "PlanActivity");
+        editor.commit();
+        editor.apply();
+    }
+    public void goToDirectionActivity(){
+        SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        //set the currentActivity to be SearchAnimalActivity
+        editor.putString("currentActivity", "DirectionActivity");
         editor.commit();
         editor.apply();
     }
