@@ -30,11 +30,7 @@ public class PlanActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan);
-        SharedPreferences preference = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preference.edit();
-        editor.putString("currentActivity", "PlanActivity");
-        editor.commit();
-        editor.apply();
+        Utilities.changeCurrentActivity(this, "PlanActivity");
 
         stringAndAnimalItem = new StringAndAnimalItem();
         routedAnimalNameString = new ArrayList<String>();

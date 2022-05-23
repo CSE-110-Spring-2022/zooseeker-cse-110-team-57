@@ -3,6 +3,7 @@ package edu.ucsd.cse110.project_ms1;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -38,28 +39,13 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void goToSearchAnimalActivity(){
-        SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        //set the currentActivity to be SearchAnimalActivity
-        editor.putString("currentActivity", "SearchAnimalActivity");
-        editor.commit();
-        editor.apply();
+        Utilities.changeCurrentActivity(this, "SearchAnimalActivity");
     }
     public void goToPlanActivity(){
-        SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        //set the currentActivity to be SearchAnimalActivity
-        editor.putString("currentActivity", "PlanActivity");
-        editor.commit();
-        editor.apply();
+        Utilities.changeCurrentActivity(this, "PlanActivity");
     }
     public void goToDirectionActivity(){
-        SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        //set the currentActivity to be SearchAnimalActivity
-        editor.putString("currentActivity", "DirectionActivity");
-        editor.commit();
-        editor.apply();
+        Utilities.changeCurrentActivity(this, "DirectionActivity");
     }
 }
 

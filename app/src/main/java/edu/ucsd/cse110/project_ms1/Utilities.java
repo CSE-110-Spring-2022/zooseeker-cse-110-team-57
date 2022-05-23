@@ -42,6 +42,15 @@ public class Utilities {
 
     }
 
+    public static void changeCurrentActivity(Context context, String activity){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("Team57", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        //set the currentActivity to be SearchAnimalActivity
+        editor.putString("currentActivity", activity);
+        editor.commit();
+        editor.apply();
+    }
+
     public static Graph<String,IdentifiedWeightedEdge> completeG (Graph<String,IdentifiedWeightedEdge> g, ArrayList<String> vertex) {
         Graph<String,IdentifiedWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(IdentifiedWeightedEdge.class);
         // add vertex to graph

@@ -32,11 +32,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_direction);
-        SharedPreferences preference = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preference.edit();
-        editor.putString("currentActivity", "DirectionActivity");
-        editor.commit();
-        editor.apply();
+        Utilities.changeCurrentActivity(this, "DirectionActivity");
 
         //grab ordered list of animal id, begin from first item in the route.
         intent = getIntent();
