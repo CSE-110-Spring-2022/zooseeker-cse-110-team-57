@@ -21,7 +21,7 @@ import java.util.List;
 
 public class DirectionActivity extends AppCompatActivity implements OnLocationChangeListener {
     int order;
-
+    String currentLocation; //current exhibit or closest exhibit
     HashMap<Integer, DirectionData> zooRoute;
     DirectionAdapter direction_adapter;
     RecyclerView direction_recyclerView;
@@ -83,7 +83,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         //Get the order
         List<String> retainedDirections = DirectionHelper.loadDirectionsInformation(this);
         order = Integer.valueOf(retainedDirections.indexOf(0));
-
+        currentLocation = "entrance_exit_gate";
 
         if (DirectionHelper.isNext(zooRoute, retainedDirections.get(1))){
             display(order,true);
@@ -91,7 +91,6 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         else{
             display(order,false);
         }
-
 
 
     } //Initial End
@@ -187,6 +186,22 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             display(order, false);
             Utilities.showAlert(this, "invalid Action");
         }
+    }
+
+
+    public void onClearButtonClick(View view) {
+        zooRoute.clear();
+
+        String startExhibit = DirectionHelper.getNodeName(currentLocation);
+        String goalExhibit = DirectionHelper.getNodeName("entrance_exit_gate");
+        List<IdentifiedWeightedEdge> path = DirectionHelper.findPathBetween(startExhibit,goalExhibit);
+        List<String> paths = DirectionHelper.detailPath(path, startExhibit);
+        List<String> briefPaths = DirectionHelper.briefPath(path, startExhibit);
+        Double distance = DirectionHelper.totalDistance(path);
+        //temp
+        DirectionData walk = new DirectionData(startExhibit, goalExhibit, distance, paths, paths, briefPaths, briefPaths);
+        zooRoute.put(0, walk);
+        display(0,true);
     }
 
     @Override
