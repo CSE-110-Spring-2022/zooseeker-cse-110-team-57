@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.project_ms1;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,7 +22,7 @@ public class PlanActivity extends AppCompatActivity{
 
     List<String> selectedAnimalNameStringList;
     List<route_node> routeNodeList;
-    List<String> routedAnimalNameString;
+    List<String> routedAnimalNameStrings;
 
 
     @Override
@@ -37,7 +36,7 @@ public class PlanActivity extends AppCompatActivity{
         editor.apply();
 
         stringAndAnimalItem = new StringAndAnimalItem();
-        routedAnimalNameString = new ArrayList<String>();
+        routedAnimalNameStrings = new ArrayList<String>();
 
         plan_adapter = new PlanAdapter();
         plan_adapter.setHasStableIds(true);
@@ -81,17 +80,17 @@ public class PlanActivity extends AppCompatActivity{
 
         for (route_node myRoute_node: routeNodeList){
             String myAnimal = myRoute_node.animal.name;
-            routedAnimalNameString.add(myAnimal);
+            routedAnimalNameStrings.add(myAnimal);
         }
 
     }
 
     public void onDirectionsClick(View view) {
-        saveToSharedPreference(routedAnimalNameString);
+        saveToSharedPreference(routedAnimalNameStrings);
 
         //start the direction page
         Intent intent = new Intent(this, DirectionActivity.class);
-        ArrayList<String> routedAnimalList = new ArrayList<String>(routedAnimalNameString);
+        ArrayList<String> routedAnimalList = new ArrayList<String>(routedAnimalNameStrings);
         intent.putStringArrayListExtra("routedAnimalNameList", routedAnimalList);
         startActivity(intent);
     }

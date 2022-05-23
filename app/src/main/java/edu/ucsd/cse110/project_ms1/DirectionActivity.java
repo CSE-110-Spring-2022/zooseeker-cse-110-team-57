@@ -29,6 +29,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     RecyclerView direction_recyclerView;
     List<String> orderedAnimalList;
     List<AnimalItem> animalItems;
+    List<route_node> planned_route;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +58,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         //find the shortest Path by given ordered route.
         //(order -order of animal in the route , paths -list of edges in the path)
-        List<route_node> planned_route = AnimalItem.plan_route(animalItems);
+        planned_route = AnimalItem.plan_route(animalItems);
 
         for(route_node node : planned_route){
             orderedAnimalList.add(node.animal.name);
@@ -65,7 +66,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         //we need add the front gate into orderedAnimalList, so that route begin at gate
 //        orderedAnimalList.add(0, "entrance_exit_gate");
-        orderedAnimalList.add(orderedAnimalList.size(), "entrance_exit_gate");
+        orderedAnimalList.add("entrance_exit_gate");
         //<order -the index of exhibit in the route, edges -the edges between exhibits
         //HashMap<Integer, List<IdentifiedWeightedEdge>> route = DirectionHelper.findRoute(planned_route);
 
@@ -215,8 +216,28 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     @Override
     public void OnLocationChange(LatLng current) {
         ZooData.VertexInfo closestlandmark = AnimalUtilities.getClosestLandmark(current);
-        if (AnimalUtilities.check_off_route(orig)){
-            AnimalUtilities.reroute(order,orig)
+        if (AnimalUtilities.check_off_route(order,planned_route,current)){
+            boolean user_want_update = true;
+            if (user_want_update) {
+                planned_route = AnimalUtilities.reroute(order, planned_route, current);
+
+                //pop out a notification window
+
+                //save to SharedPreferences
+                List<String> animal_strings = new ArrayList<>();
+                for (route_node myRoute_node : planned_route) {
+                    String myAnimal = myRoute_node.animal.name;
+                    animal_strings.add(myAnimal);
+                }
+                SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                String joined = String.join(",", animal_strings);
+                editor.putString("route", joined);
+                editor.commit();
+                editor.apply();
+
+                //apply changes to display?
+            }
         }
 
     }
