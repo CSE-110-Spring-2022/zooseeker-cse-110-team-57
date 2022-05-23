@@ -178,6 +178,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     @Override
     public void OnLocationChange(LatLng current) {
         ZooData.VertexInfo closestlandmark = AnimalUtilities.getClosestLandmark(current);
-        
+        if (AnimalUtilities.check_off_route(orig)){
+            AnimalUtilities.reroute(order,orig)
+        }
     }
 }
