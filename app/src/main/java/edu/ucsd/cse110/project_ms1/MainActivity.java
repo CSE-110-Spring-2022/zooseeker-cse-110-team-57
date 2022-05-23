@@ -16,6 +16,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
+        //----------------Comment this line if you want to direct to the page before the app is killed----------------
+        goToSearchAnimalActivity();
+        //-----------------------------------------------------------------------------------------
 
         String ActivityTarget = sharedPreferences.getString("currentActivity", "SearchAnimalActivity");
         switch(ActivityTarget){
@@ -30,6 +33,14 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         startActivity(intent);
+    }
+    public void goToSearchAnimalActivity(){
+        SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        //set the currentActivity to be SearchAnimalActivity
+        editor.putString("currentActivity", "SearchAnimalActivity");
+        editor.commit();
+        editor.apply();
     }
 }
 
