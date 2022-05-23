@@ -54,7 +54,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         }
 
         //we need add the front gate into orderedAnimalList, so that route begin at gate
-        orderedAnimalList.add(0, "entrance_exit_gate");
+//        orderedAnimalList.add(0, "entrance_exit_gate");
         orderedAnimalList.add(orderedAnimalList.size(), "entrance_exit_gate");
         //<order -the index of exhibit in the route, edges -the edges between exhibits
         //HashMap<Integer, List<IdentifiedWeightedEdge>> route = DirectionHelper.findRoute(planned_route);
