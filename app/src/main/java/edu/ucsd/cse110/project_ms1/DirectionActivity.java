@@ -1,6 +1,5 @@
 package edu.ucsd.cse110.project_ms1;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.content.SharedPreferences;
 
 
 import com.google.android.gms.maps.model.LatLng;
@@ -30,7 +28,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     ArrayList<String> orderedAnimal;
     DirectionAdapter direction_adapter;
     RecyclerView direction_recyclerView;
-    List<String> orderedAnimalList;
+    List<String> orderedAnimalList_Names;
+    List<String> orderedAnimalList_IDs;
     List<AnimalItem> animalItems;
     List<route_node> planned_route;
 
@@ -60,13 +59,19 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         //(order -order of animal in the route , paths -list of edges in the path)
         planned_route = AnimalItem.plan_route(animalItems);
 
+        orderedAnimalList_Names = new ArrayList<>();
+        orderedAnimalList_IDs = new ArrayList<>();
+
         for(route_node node : planned_route){
-            orderedAnimalList.add(node.animal.name);
+            orderedAnimalList_Names.add(node.animal.name);
+            orderedAnimalList_IDs.add(node.animal.id);
         }
 
         //we need add the front gate into orderedAnimalList, so that route begin at gate
-//        orderedAnimalList.add(0, "entrance_exit_gate");
-        orderedAnimalList.add("entrance_exit_gate");
+        orderedAnimalList_Names.add(0, "Entrance and Exit Gate");
+        orderedAnimalList_IDs.add(0, "entrance_exit_gate");
+
+//        orderedAnimalList.add("entrance_exit_gate");
         //<order -the index of exhibit in the route, edges -the edges between exhibits
         //HashMap<Integer, List<IdentifiedWeightedEdge>> route = DirectionHelper.findRoute(planned_route);
 
@@ -104,14 +109,14 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
          String goalExhibit;
          List<IdentifiedWeightedEdge> path;
          if (isNext){
-             sourceExhibit = orderedAnimalList.get(index);
-             goalExhibit = orderedAnimalList.get(index+1);
+             sourceExhibit = orderedAnimalList_IDs.get(index);
+             goalExhibit = orderedAnimalList_IDs.get(index+1);
              path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
              DirectionHelper.saveDirectionsInformation(this, order, true);
          }
          else{
-             sourceExhibit = orderedAnimalList.get(index);
-             goalExhibit = orderedAnimalList.get(index-1);
+             sourceExhibit = orderedAnimalList_Names.get(index);
+             goalExhibit = orderedAnimalList_Names.get(index-1);
              path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
              DirectionHelper.saveDirectionsInformation(this, order, false);
          }
@@ -133,10 +138,10 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         //setting next button and next direction distance
         //disable the prev btn at the first page and next btn at last page.
 
-        if (index < orderedAnimalList.size() - 2) {
+        if (index < orderedAnimalList_Names.size() - 2) {
             nextBtn.setEnabled(true);
-            String nextSource = orderedAnimalList.get(index+1);
-            String nextGoal = orderedAnimalList.get(index+2);
+            String nextSource = orderedAnimalList_IDs.get(index+1);
+            String nextGoal = orderedAnimalList_IDs.get(index+2);
             List<IdentifiedWeightedEdge> nextPath = DirectionHelper.findPathBetween(nextSource,nextGoal);
             double nextDistance = DirectionHelper.totalDistance(nextPath);
             String nextText = (nextGoal + "  " + nextDistance + " ft");
@@ -153,8 +158,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         } else {
             prevBtn.setEnabled(true);
-            String current = orderedAnimalList.get(index);
-            String lastSource = orderedAnimalList.get(index-1);
+            String current = orderedAnimalList_Names.get(index);
+            String lastSource = orderedAnimalList_Names.get(index-1);
             List<IdentifiedWeightedEdge> prevPath = DirectionHelper.findPathBetween(current,lastSource);
             double prevDistance = DirectionHelper.totalDistance(prevPath);
             String prevText = (lastSource + "  " + prevDistance + " ft");

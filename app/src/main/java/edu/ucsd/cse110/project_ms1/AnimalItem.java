@@ -69,7 +69,12 @@ public class AnimalItem {
         for (Map.Entry<String, ZooData.VertexInfo> set : vInfo.entrySet()){
             ZooData.VertexInfo currentVertex = set.getValue();
             if(currentVertex.kind.name().equals("GATE")){
-                gate = new AnimalItem(set.getValue().id, (ArrayList<String>) set.getValue().tags,set.getValue().name, null);
+                gate = new AnimalItem(
+                        set.getValue().id,
+                        (ArrayList<String>) set.getValue().tags,
+                        set.getValue().name,
+                        new LatLng(currentVertex.lat,currentVertex.lng)
+                );
             }
         }
     }
@@ -93,7 +98,12 @@ public class AnimalItem {
                 if (tag==null ||
                        AnimalUtilities.matchByTag(currentVertex.tags, tag.toLowerCase()) ||
                         currentVertex.name.toLowerCase().contains(tag.toLowerCase())){
-                    retVal.add(new AnimalItem(set.getValue().id, (ArrayList<String>) set.getValue().tags,set.getValue().name, null));
+                    retVal.add(new AnimalItem(
+                            set.getValue().id,
+                            (ArrayList<String>) set.getValue().tags,
+                            set.getValue().name,
+                            currentVertex.lat ==null ? null : new LatLng(currentVertex.lat,currentVertex.lng)
+                    ));
                 }
             }
 
