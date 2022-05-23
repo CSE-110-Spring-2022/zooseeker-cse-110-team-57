@@ -70,7 +70,7 @@ import javax.xml.transform.TransformerFactory;
         editor.apply();
 
         //--------------Comment this line if you don't want to select animals again-------------
-        //clearSavedAnimalItem();
+        //Utilities.clearSavedAnimalItem(this);
         //----------------------------------------------------------------------------------
 
         //make "No such animal" invisible
@@ -202,14 +202,7 @@ import javax.xml.transform.TransformerFactory;
 
     }
 
-    public void clearSavedAnimalItem(){
-        SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.commit();
-        editor.apply();
 
-    }
 
     public void onPlanClick(View view) {
         Intent intent = new Intent(this, PlanActivity.class);

@@ -22,7 +22,8 @@ import java.util.Collections;
 public class DirectionActivity extends AppCompatActivity implements OnLocationChangeListener {
     int order;
     boolean isNext;
-
+    Intent intent;
+    ArrayList<String> orderedAnimal;
     HashMap<Integer,DirectionData> zooRoute;
     DirectionAdapter direction_adapter;
     RecyclerView direction_recyclerView;
@@ -38,8 +39,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         editor.apply();
 
         //grab ordered list of animal id, begin from first item in the route.
-        Intent intent = getIntent();
-        ArrayList<String> orderedAnimal = intent.getStringArrayListExtra("routedAnimalNameList");
+        intent = getIntent();
+        orderedAnimal = intent.getStringArrayListExtra("routedAnimalNameList");
         //remove the Entrance and Exit Gate
         orderedAnimal.remove(orderedAnimal.size() - 1);
         List<String> orderedAnimalList = DirectionHelper.loadAnimalItem(this, orderedAnimal);
@@ -127,7 +128,6 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         if(index == 0){
             prevbtn.setEnabled(false);
             prev.setText("Begin of tour");
-
         }else{
             prevbtn.setEnabled(true);
             DirectionData prevData = zooRoute.get(index-1);
@@ -135,6 +135,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             prev.setText(prevText);
         }
     }
+
 
     public void onNextButtonClick(View view) {
         order++;
@@ -161,6 +162,13 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     @Override
     public void OnLocationChange(LatLng current) {
         ZooData.VertexInfo closestlandmark = AnimalUtilities.getClosestLandmark(current);
-        
+
+    }
+
+    public void onClearButtonClick(View view) {
+        orderedAnimal.clear();
+        Utilities.clearSavedAnimalItem(this);
+        intent = new Intent(this, SearchAnimalActivity.class);
+        startActivity(intent);
     }
 }
