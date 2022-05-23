@@ -25,6 +25,9 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     int order;
     String currentLocation; //current exhibit or closest exhibit
     HashMap<Integer, DirectionData> zooRoute;
+    boolean isNext;
+    Intent intent;
+    ArrayList<String> orderedAnimal;
     DirectionAdapter direction_adapter;
     RecyclerView direction_recyclerView;
     List<String> orderedAnimalList;
@@ -36,11 +39,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_direction);
 
-        SharedPreferences preference = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preference.edit();
-        editor.putString("currentActivity", "DirectionActivity");
-        editor.commit();
-        editor.apply();
+        Utilities.changeCurrentActivity(this, "DirectionActivity");
+
 
         //grab ordered list of animal id, begin from first item in the route.
         Intent intent = getIntent();
@@ -79,17 +79,11 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         direction_recyclerView.setLayoutManager(new LinearLayoutManager(this));
         direction_recyclerView.setAdapter(direction_adapter);
 
-        //Get the order
-        List<String> retainedDirections = DirectionHelper.loadDirectionsInformation(this);
-        order = Integer.valueOf(retainedDirections.indexOf(0));
-        currentLocation = "entrance_exit_gate";
-
-        if (DirectionHelper.isNext(zooRoute, retainedDirections.get(1))){
-            display(order,true);
-        }
-        else{
-            display(order,false);
-        }
+        //Get the order and isNext
+        List<String> retainedInfo = DirectionHelper.loadDirectionsInformation(this);
+        order = Integer.valueOf(retainedInfo.get(0));
+        isNext = Boolean.valueOf(retainedInfo.get(1));
+        display(order, isNext);
 
 
     } //Initial End
@@ -100,24 +94,42 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         TextView next = findViewById(R.id.next_text);
         TextView prev = findViewById(R.id.previous_text);
         TextView distance = findViewById(R.id.path_total_distance);
-        Button prevBtn = findViewById(R.id.previous_button);
-        Button nextBtn = findViewById(R.id.next_button);
+                    // Button prevBtn = findViewById(R.id.previous_button);
+                    // Button nextBtn = findViewById(R.id.next_button);
+                    
+
+                    // String sourceExhibit;
+                    // String goalExhibit;
+                    // List<IdentifiedWeightedEdge> path;
+                    // if (isNext) {
+                    //     sourceExhibit = orderedAnimalList.get(index);
+                    //     goalExhibit = orderedAnimalList.get(index+1);
+                    //     path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
+                    //     DirectionHelper.saveDirectionsInformation(this, DirectionHelper.getNodeName(sourceExhibit), DirectionHelper.getNodeName(goalExhibit), order);
+                    // } else {
+                    //     sourceExhibit = orderedAnimalList.get(index);
+                    //     goalExhibit = orderedAnimalList.get(index-1);
+                    //     path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
+                    //     DirectionHelper.saveDirectionsInformation(this, DirectionHelper.getNodeName(sourceExhibit), DirectionHelper.getNodeName(goalExhibit), order);
+        Button prevbtn = findViewById(R.id.previous_button);
+        Button nextbtn = findViewById(R.id.next_button);
         Button detailBtn = findViewById(R.id.detail_button);
         detailBtn.setText("Brief");
 
-        String sourceExhibit;
-        String goalExhibit;
-        List<IdentifiedWeightedEdge> path;
-        if (isNext) {
-            sourceExhibit = orderedAnimalList.get(index);
-            goalExhibit = orderedAnimalList.get(index+1);
-            path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
-            DirectionHelper.saveDirectionsInformation(this, DirectionHelper.getNodeName(sourceExhibit), DirectionHelper.getNodeName(goalExhibit), order);
-        } else {
-            sourceExhibit = orderedAnimalList.get(index);
-            goalExhibit = orderedAnimalList.get(index-1);
-            path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
-            DirectionHelper.saveDirectionsInformation(this, DirectionHelper.getNodeName(sourceExhibit), DirectionHelper.getNodeName(goalExhibit), order);
+        DirectionData pathData = zooRoute.get(index);
+        List<String> path;
+        String startText;
+        String endText;
+        if (isNext){
+            path = new ArrayList<>(pathData.paths);
+            startText = "From: "+ pathData.startExhibit;
+            endText = "To: "+ pathData.goalExhibit;
+            DirectionHelper.saveDirectionsInformation(this, order, true);
+        }else{
+            path = new ArrayList<>(pathData.prevPaths);
+            startText = "From: "+ pathData.goalExhibit;
+            endText = "To: "+ pathData.startExhibit;
+            DirectionHelper.saveDirectionsInformation(this, order, false);
         }
         List<String> pathDisplay = new ArrayList<>(DirectionHelper.briefPath(path,goalExhibit));;
 
@@ -159,6 +171,10 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             List<IdentifiedWeightedEdge> prevPath = DirectionHelper.findPathBetween(current,lastSource);
             double prevDistance = DirectionHelper.totalDistance(prevPath);
             String prevText = (lastSource + "  " + prevDistance + " ft");
+                    // }else{
+                    //     prevbtn.setEnabled(true);
+                    //     DirectionData prevData = zooRoute.get(index-1);
+                    //     String prevText = (prevData.goalExhibit + "  " + prevData.distance + " ft");
             prev.setText(prevText);
         }
     }
@@ -240,5 +256,13 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             }
         }
 
+
+    }
+
+    public void onClearButtonClick(View view) {
+        orderedAnimal.clear();
+        Utilities.clearSavedAnimalItem(this);
+        intent = new Intent(this, SearchAnimalActivity.class);
+        startActivity(intent);
     }
 }

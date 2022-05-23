@@ -25,5 +25,6 @@ public class MS2_USTest {
     @Test
     public void Mocking_of_Location(){
 
+        return;
     }
 }

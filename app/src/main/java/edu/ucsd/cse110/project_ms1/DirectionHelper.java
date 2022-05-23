@@ -161,27 +161,27 @@ public class DirectionHelper {
         return AnimalItem.vInfo.get(id).name;
     }
 
-    public static void saveDirectionsInformation(Context context, String startName, String goalName, int order){
+    public static void saveDirectionsInformation(Context context, int order, boolean isNext){
         SharedPreferences sharedPreferences = context.getSharedPreferences("Team57", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("currentStart", startName);
-        editor.putString("currentGoal", goalName);
         editor.putString("currentOrder", Integer.toString(order));
+        editor.putString("currentIsNext", String.valueOf(isNext));
         editor.commit();
         editor.apply();
     }
 
-    public static ArrayList<String> loadDirectionsInformation(Context context){
-        ArrayList<String> retainedDirections = new ArrayList<>();
+    public static List<String> loadDirectionsInformation(Context context){
+        List<String> retainedInfo = new ArrayList<String>();
         SharedPreferences sharedPreferences = context.getSharedPreferences("Team57", Activity.MODE_PRIVATE);
-        retainedDirections.add(sharedPreferences.getString("currentOrder", "0"));
-        retainedDirections.add(sharedPreferences.getString("currentStart", "Entrance and Exit Gate"));
-        retainedDirections.add(sharedPreferences.getString("currentGoal", ""));
-        return retainedDirections;
+        String currentOrder = sharedPreferences.getString("currentOrder", "0");
+        String currentIsNext = sharedPreferences.getString("currentIsNext", "true");
+        retainedInfo.add(currentOrder);
+        retainedInfo.add(currentIsNext);
+        return retainedInfo;
     }
-
-    public static boolean isNext(HashMap<Integer,DirectionData> zooRoute, String source){
-        String edgeSource = zooRoute.get(0).getStartExhibit();
+/*
+    public static boolean isNext(HashMap<Integer,DirectionData> zooRoute, int order, String source){
+        String edgeSource = zooRoute.get(order).getStartExhibit();
         Log.d("edgeSource in displayPath",edgeSource);
         Log.d("source in displayPath",source);
         if(edgeSource.equals(source)){
@@ -190,5 +190,7 @@ public class DirectionHelper {
             return false;
         }
     }
+
+ */
 
 }

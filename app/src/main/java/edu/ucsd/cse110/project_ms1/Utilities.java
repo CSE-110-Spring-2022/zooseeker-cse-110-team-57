@@ -2,6 +2,8 @@ package edu.ucsd.cse110.project_ms1;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Pair;
 
 import org.jgrapht.Graph;
@@ -29,6 +31,24 @@ public class Utilities {
 
         AlertDialog alertDialog = alertBuilder.create();
         alertDialog.show();
+    }
+
+    public static void clearSavedAnimalItem(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("Team57", 0);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.commit();
+        editor.apply();
+
+    }
+
+    public static void changeCurrentActivity(Context context, String activity){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("Team57", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        //set the currentActivity to be SearchAnimalActivity
+        editor.putString("currentActivity", activity);
+        editor.commit();
+        editor.apply();
     }
 
     public static Graph<String,IdentifiedWeightedEdge> completeG (Graph<String,IdentifiedWeightedEdge> g, ArrayList<String> vertex) {

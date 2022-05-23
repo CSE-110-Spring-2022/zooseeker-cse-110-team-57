@@ -63,14 +63,10 @@ import javax.xml.transform.TransformerFactory;
         } catch (IOException e) {
             e.printStackTrace();
         }
-        SharedPreferences preference = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preference.edit();
-        editor.putString("currentActivity", "SearchAnimalActivity");
-        editor.commit();
-        editor.apply();
+        Utilities.changeCurrentActivity(this, "SearchAnimalActivity");
 
         //--------------Comment this line if you don't want to select animals again-------------
-        //clearSavedAnimalItem();
+        //Utilities.clearSavedAnimalItem(this);
         //----------------------------------------------------------------------------------
 
         //make "No such animal" invisible
@@ -175,6 +171,9 @@ import javax.xml.transform.TransformerFactory;
         //get the list of selected animal names
         Set<String> selectedAnimalNameStringSet = sharedPreferences.getAll().keySet();
         selectedAnimalNameStringSet.remove("currentActivity");
+        selectedAnimalNameStringSet.remove("currentOrder");
+        selectedAnimalNameStringSet.remove("currentIsNext");
+        selectedAnimalNameStringSet.remove("route");
         selectedAnimalNameStringList = new ArrayList<String>(selectedAnimalNameStringSet);
 
         //check if the user hasn't selected any animal
@@ -199,14 +198,7 @@ import javax.xml.transform.TransformerFactory;
 
     }
 
-    public void clearSavedAnimalItem(){
-        SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.commit();
-        editor.apply();
 
-    }
 
     public void onPlanClick(View view) {
         Intent intent = new Intent(this, PlanActivity.class);
