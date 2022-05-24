@@ -54,6 +54,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             String concated_animal_names = sharedPreferences.getString("route",
                     "No found such animal in sharedPreference");
             orderedAnimal = Arrays.asList(concated_animal_names.split("\\s*,\\s*"));
+            DirectionHelper.restoreCurrentOrderAndIsNext(this);
         }
 
         //remove the Entrance and Exit Gate

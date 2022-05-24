@@ -179,6 +179,15 @@ public class DirectionHelper {
         retainedInfo.add(currentIsNext);
         return retainedInfo;
     }
+
+    public static void restoreCurrentOrderAndIsNext(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("Team57", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("currentOrder", "0");
+        editor.putString("currentIsNext", "true");
+        editor.commit();
+        editor.apply();
+    }
 /*
     public static boolean isNext(HashMap<Integer,DirectionData> zooRoute, int order, String source){
         String edgeSource = zooRoute.get(order).getStartExhibit();
