@@ -115,6 +115,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         String sourceExhibit;
         String goalExhibit;
         List<IdentifiedWeightedEdge> path;
+
+        //Set the "From" and "To"
         if (isNext){
             sourceExhibit = orderedAnimalList_IDs.get(index);
             goalExhibit = orderedAnimalList_IDs.get(index+1);
@@ -127,24 +129,18 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
             DirectionHelper.saveDirectionsInformation(this, order, false);
         }
-
-
-
-        List<String> pathDisplay = new ArrayList<>(DirectionHelper.briefPath(path,goalExhibit));;
-
         String startText = "From: " + DirectionHelper.getNodeName(sourceExhibit);
         String endText = "To: " + DirectionHelper.getNodeName(goalExhibit);
-
-
-        direction_adapter.setDirectionsStringList(pathDisplay);
-
         start.setText(startText);
         end.setText(endText);
         distance.setText(Double.toString(DirectionHelper.totalDistance(path)) + " ft");
 
+        List<String> pathDisplay = new ArrayList<>(DirectionHelper.briefPath(path,goalExhibit));;
+        direction_adapter.setDirectionsStringList(pathDisplay);
+
+
         //setting next button and next direction distance
         //disable the prev btn at the first page and next btn at last page.
-
         if (going_forward) {
             // next button
             if (index < orderedAnimalList_Names.size() - 2) {
@@ -156,17 +152,17 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
                 String nextGoalName = orderedAnimalList_Names.get(index + 2);
                 String nextText = (nextGoalName + "  " + nextDistance + " ft");
                 next.setText(nextText);
-            } else {
+            }
+            else {
                 nextBtn.setEnabled(false);
                 next.setText("End of tour");
             }
-
             //setting previous button and previous direction distance
             if (index == 0) {
                 prevBtn.setEnabled(false);
                 prev.setText("Beginning of tour");
-
-            } else {
+            }
+            else {
                 prevBtn.setEnabled(true);
                 String current = orderedAnimalList_IDs.get(index);
                 String lastSource = orderedAnimalList_IDs.get(index - 1);
@@ -184,21 +180,23 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             String nextGoal = orderedAnimalList_IDs.get(index);
             List<IdentifiedWeightedEdge> nextPath = DirectionHelper.findPathBetween(nextSource, nextGoal);
             double nextDistance = DirectionHelper.totalDistance(nextPath);
-            String nextText = (nextGoal + "  " + nextDistance + " ft");
+            String nextGoalName = orderedAnimalList_Names.get(index);
+            String nextText = (nextGoalName + "  " + nextDistance + " ft");
             next.setText(nextText);
 
             // previous button
             if (index == 1) {
                 prevBtn.setEnabled(false);
                 prev.setText("Beginning of tour");
-
-            } else {
+            }
+            else {
                 prevBtn.setEnabled(true);
                 String current = orderedAnimalList_IDs.get(index-1);
                 String lastSource = orderedAnimalList_IDs.get(index - 2);
                 List<IdentifiedWeightedEdge> prevPath = DirectionHelper.findPathBetween(current, lastSource);
                 double prevDistance = DirectionHelper.totalDistance(prevPath);
-                String prevText = (lastSource + "  " + prevDistance + " ft");
+                String lastSourceName = orderedAnimalList_Names.get(index - 2);
+                String prevText = (lastSourceName + "  " + prevDistance + " ft");
                 prev.setText(prevText);
             }
         }
@@ -239,6 +237,9 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         }
         going_forward = false;
         if (order >= 0) {
+            if (order >= orderedAnimalList_IDs.size()){
+                order = orderedAnimalList_IDs.size()-1;
+            }
             display(order, false);
         } else {
             order = 0;
