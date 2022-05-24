@@ -32,6 +32,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     List<String> orderedAnimalList_IDs;
     List<AnimalItem> animalItems;
     List<route_node> planned_route;
+    boolean going_forward;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         setContentView(R.layout.activity_direction);
 
         Utilities.changeCurrentActivity(this, "DirectionActivity");
-
+        going_forward = true;
 
         //grab ordered list of animal id, begin from first item in the route.
         Intent intent = getIntent();
@@ -138,43 +139,60 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         //setting next button and next direction distance
         //disable the prev btn at the first page and next btn at last page.
 
-        if (index < orderedAnimalList_Names.size() - 2) {
+        if (going_forward) {
+            // next button
+            if (index < orderedAnimalList_Names.size() - 2) {
+                nextBtn.setEnabled(true);
+                String nextSource = orderedAnimalList_IDs.get(index + 1);
+                String nextGoal = orderedAnimalList_IDs.get(index + 2);
+                List<IdentifiedWeightedEdge> nextPath = DirectionHelper.findPathBetween(nextSource, nextGoal);
+                double nextDistance = DirectionHelper.totalDistance(nextPath);
+                String nextText = (nextGoal + "  " + nextDistance + " ft");
+                next.setText(nextText);
+            } else {
+                nextBtn.setEnabled(false);
+                next.setText("End of tour");
+            }
+
+            //setting previous button and previous direction distance
+            if (index == 0) {
+                prevBtn.setEnabled(false);
+                prev.setText("Beginning of tour");
+
+            } else {
+                prevBtn.setEnabled(true);
+                String current = orderedAnimalList_IDs.get(index);
+                String lastSource = orderedAnimalList_IDs.get(index - 1);
+                List<IdentifiedWeightedEdge> prevPath = DirectionHelper.findPathBetween(current, lastSource);
+                double prevDistance = DirectionHelper.totalDistance(prevPath);
+                String prevText = (lastSource + "  " + prevDistance + " ft");
+                prev.setText(prevText);
+            }
+        }
+        else{
+            //next button
             nextBtn.setEnabled(true);
-            String nextSource = orderedAnimalList_IDs.get(index+1);
-            String nextGoal = orderedAnimalList_IDs.get(index+2);
-            List<IdentifiedWeightedEdge> nextPath = DirectionHelper.findPathBetween(nextSource,nextGoal);
+            String nextSource = orderedAnimalList_IDs.get(index - 1);
+            String nextGoal = orderedAnimalList_IDs.get(index);
+            List<IdentifiedWeightedEdge> nextPath = DirectionHelper.findPathBetween(nextSource, nextGoal);
             double nextDistance = DirectionHelper.totalDistance(nextPath);
             String nextText = (nextGoal + "  " + nextDistance + " ft");
             next.setText(nextText);
-        } else {
-            nextBtn.setEnabled(false);
-            next.setText("End of tour");
-        }
 
-        //setting previous button and previous direction distance
-        if (index == 0) {
-            prevBtn.setEnabled(false);
-            prev.setText("Begin of tour");
+            // previous button
+            if (index == 1) {
+                prevBtn.setEnabled(false);
+                prev.setText("Beginning of tour");
 
-        }
-
-        else if (index == 1 ){
-            prevBtn.setEnabled(false);
-            prev.setText("No more previous exhibit");
-        }
-
-        else {
-            prevBtn.setEnabled(true);
-            String current = orderedAnimalList_IDs.get(index);
-            String lastSource = orderedAnimalList_IDs.get(index-1);
-            List<IdentifiedWeightedEdge> prevPath = DirectionHelper.findPathBetween(current,lastSource);
-            double prevDistance = DirectionHelper.totalDistance(prevPath);
-            String prevText = (lastSource + "  " + prevDistance + " ft");
-                    // }else{
-                    //     prevbtn.setEnabled(true);
-                    //     DirectionData prevData = zooRoute.get(index-1);
-                    //     String prevText = (prevData.goalExhibit + "  " + prevData.distance + " ft");
-            prev.setText(prevText);
+            } else {
+                prevBtn.setEnabled(true);
+                String current = orderedAnimalList_IDs.get(index-1);
+                String lastSource = orderedAnimalList_IDs.get(index - 2);
+                List<IdentifiedWeightedEdge> prevPath = DirectionHelper.findPathBetween(current, lastSource);
+                double prevDistance = DirectionHelper.totalDistance(prevPath);
+                String prevText = (lastSource + "  " + prevDistance + " ft");
+                prev.setText(prevText);
+            }
         }
     }
 
@@ -192,6 +210,10 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
     public void onNextButtonClick(View view) {
         order++;
+        if (!going_forward){
+            order-=2;
+        }
+        going_forward = true;
         if (order < planned_route.size()+1) {
             display(order, true);
         } else {
@@ -199,10 +221,15 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             display(order, true);
             Utilities.showAlert(this, "invalid Action");
         }
+        int a =1;
     }
 
     public void onBackButtonClick(View view) {
         order--;
+        if (going_forward){
+            order+=2;
+        }
+        going_forward = false;
         if (order >= 0) {
             display(order, false);
         } else {
@@ -210,6 +237,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             display(order, false);
             Utilities.showAlert(this, "invalid Action");
         }
+        int a =1;
     }
 
 
