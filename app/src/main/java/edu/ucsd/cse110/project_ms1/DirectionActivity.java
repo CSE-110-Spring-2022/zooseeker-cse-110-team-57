@@ -299,7 +299,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         orderedAnimal.clear();
         Utilities.clearSavedAnimalItem(this);
         intent = new Intent(this, SearchAnimalActivity.class);
-        startActivity(intent);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
     }
 
     // Direction Display
@@ -311,7 +312,6 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     public void setDirectionDisplay() {
         if (displayStatus) {
             detailBtn.setText("DETAIL");
-
         }
         else {
             detailBtn.setText("BRIEF");

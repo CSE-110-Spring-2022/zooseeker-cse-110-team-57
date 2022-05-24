@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -39,6 +40,7 @@ import javax.xml.transform.TransformerFactory;
     public class SearchAnimalActivity extends AppCompatActivity
             implements SearchedAnimalsAdapter.OnAddListener, SearchedAnimalsAdapter.IsAnimalFoundPass {
 
+        private static final int ACTIVITY_CONSTANT = 0;
         public RecyclerView searched_recyclerView;
         public RecyclerView selected_recyclerView;
         SearchedAnimalsAdapter search_adapter;
@@ -201,7 +203,7 @@ import javax.xml.transform.TransformerFactory;
             }
             ArrayList<String> currentNameStringList = new ArrayList<String>(selectedAnimalNameStringList);
             intent.putStringArrayListExtra("nameStringList", currentNameStringList);
-            startActivity(intent);
+            startActivityForResult(intent, ACTIVITY_CONSTANT);
         }
 
 
@@ -254,6 +256,18 @@ import javax.xml.transform.TransformerFactory;
             selectedAnimalItemList = loadAddToList();
             addToList_adapter.setSelectedAnimalItems(selectedAnimalItemList);
             animalNumbers.setText(Integer.toString(preSelectedAnimalItemList.size()));
+        }
+
+        //https://stackoverflow.com/questions/9664108/how-to-finish-parent-activity-from-child-activity
+        @Override
+        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            // TODO Auto-generated method stub
+            super.onActivityResult(requestCode, resultCode, data);
+            if(requestCode == ACTIVITY_CONSTANT)
+            {
+                Button button = findViewById(R.id.clear_button);
+                button.performClick();
+            }
         }
     }
 

@@ -16,6 +16,7 @@ import java.util.Set;
 
 public class PlanActivity extends AppCompatActivity{
 
+    private static final int ACTIVITY_CONSTANT = 0;
     public RecyclerView plan_recyclerView;
     StringAndAnimalItem stringAndAnimalItem;
     PlanAdapter plan_adapter;
@@ -91,7 +92,7 @@ public class PlanActivity extends AppCompatActivity{
         Intent intent = new Intent(this, DirectionActivity.class);
         ArrayList<String> routedAnimalList = new ArrayList<String>(routedAnimalNameStrings);
         intent.putStringArrayListExtra("routedAnimalNameList", routedAnimalList);
-        startActivity(intent);
+        startActivityForResult(intent, ACTIVITY_CONSTANT);
     }
 
     public void saveToSharedPreference(List<String> animal_names) {
@@ -106,5 +107,16 @@ public class PlanActivity extends AppCompatActivity{
         editor.putString("route", joined);
         editor.commit();
         editor.apply();
+    }
+
+    //https://stackoverflow.com/questions/9664108/how-to-finish-parent-activity-from-child-activity
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == ACTIVITY_CONSTANT)
+        {
+            finish();
+        }
     }
 }
