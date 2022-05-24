@@ -23,8 +23,8 @@ public class AnimalUtilities {
             if (curr_dis < min_distance) {
                 min_distance = curr_dis;
                 closest_animal = item;
-
             }
+
         }
         return closest_animal;
     }
