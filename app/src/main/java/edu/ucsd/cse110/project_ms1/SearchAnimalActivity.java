@@ -266,6 +266,9 @@ import javax.xml.transform.TransformerFactory;
 
         public void onClearClick(View view) {
             Utilities.clearSavedAnimalItem(this);
+            selectedAnimalItemList = loadAddToList();
+            addToList_adapter.setSelectedAnimalItems(selectedAnimalItemList);
+            animalNumbers.setText(Integer.toString(preSelectedAnimalItemList.size()));
         }
     }
 
