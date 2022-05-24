@@ -48,12 +48,12 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         //grab ordered list of animal id, begin from first item in the route.
         Intent intent = getIntent();
-        List<String> orderedAnimal = intent.getStringArrayListExtra("routedAnimalNameList");
+        orderedAnimal = intent.getStringArrayListExtra("routedAnimalNameList");
         if (orderedAnimal == null){
             SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
             String concated_animal_names = sharedPreferences.getString("route",
                     "No found such animal in sharedPreference");
-            orderedAnimal = Arrays.asList(concated_animal_names.split("\\s*,\\s*"));
+            orderedAnimal = (ArrayList<String>) Arrays.asList(concated_animal_names.split("\\s*,\\s*"));
             DirectionHelper.restoreCurrentOrderAndIsNext(this);
         }
 
