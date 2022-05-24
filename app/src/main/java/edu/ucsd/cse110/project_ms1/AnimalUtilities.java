@@ -2,6 +2,7 @@ package edu.ucsd.cse110.project_ms1;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
@@ -16,7 +17,8 @@ public class AnimalUtilities {
         //use for loop to find next closet exhibit
         for (AnimalItem item : animal_items) {
             goal = item.id;
-            GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(AnimalItem.gInfo, start, goal);
+            Graph<String, IdentifiedWeightedEdge>  graph = AnimalItem.gInfo;
+            GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(graph, start, goal);
             double curr_dis = AnimalItem.route_length(path);
             if (curr_dis < min_distance) {
                 min_distance = curr_dis;

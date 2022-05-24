@@ -115,8 +115,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
              DirectionHelper.saveDirectionsInformation(this, order, true);
          }
          else{
-             sourceExhibit = orderedAnimalList_Names.get(index);
-             goalExhibit = orderedAnimalList_Names.get(index-1);
+             sourceExhibit = orderedAnimalList_IDs.get(index);
+             goalExhibit = orderedAnimalList_IDs.get(index-1);
              path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
              DirectionHelper.saveDirectionsInformation(this, order, false);
          }
@@ -158,8 +158,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         } else {
             prevBtn.setEnabled(true);
-            String current = orderedAnimalList_Names.get(index);
-            String lastSource = orderedAnimalList_Names.get(index-1);
+            String current = orderedAnimalList_IDs.get(index);
+            String lastSource = orderedAnimalList_IDs.get(index-1);
             List<IdentifiedWeightedEdge> prevPath = DirectionHelper.findPathBetween(current,lastSource);
             double prevDistance = DirectionHelper.totalDistance(prevPath);
             String prevText = (lastSource + "  " + prevDistance + " ft");
@@ -185,10 +185,10 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
     public void onNextButtonClick(View view) {
         order++;
-        if (order < zooRoute.size()) {
+        if (order < planned_route.size()+1) {
             display(order, true);
         } else {
-            order = zooRoute.size() - 1;
+            order = planned_route.size() ;
             display(order, true);
             Utilities.showAlert(this, "invalid Action");
         }
