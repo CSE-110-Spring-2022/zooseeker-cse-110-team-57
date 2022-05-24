@@ -153,7 +153,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
                 String nextGoal = orderedAnimalList_IDs.get(index + 2);
                 List<IdentifiedWeightedEdge> nextPath = DirectionHelper.findPathBetween(nextSource, nextGoal);
                 double nextDistance = DirectionHelper.totalDistance(nextPath);
-                String nextText = (nextGoal + "  " + nextDistance + " ft");
+                String nextGoalName = orderedAnimalList_Names.get(index + 2);
+                String nextText = (nextGoalName + "  " + nextDistance + " ft");
                 next.setText(nextText);
             } else {
                 nextBtn.setEnabled(false);
@@ -171,7 +172,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
                 String lastSource = orderedAnimalList_IDs.get(index - 1);
                 List<IdentifiedWeightedEdge> prevPath = DirectionHelper.findPathBetween(current, lastSource);
                 double prevDistance = DirectionHelper.totalDistance(prevPath);
-                String prevText = (lastSource + "  " + prevDistance + " ft");
+                String lastSourceName = orderedAnimalList_Names.get(index - 1);
+                String prevText = (lastSourceName + "  " + prevDistance + " ft");
                 prev.setText(prevText);
             }
         }
