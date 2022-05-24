@@ -263,5 +263,9 @@ import javax.xml.transform.TransformerFactory;
             NoSuchAnimal.setVisibility(View.INVISIBLE);
         }
     }
-}
+
+        public void onClearClick(View view) {
+            Utilities.clearSavedAnimalItem(this);
+        }
+    }
 

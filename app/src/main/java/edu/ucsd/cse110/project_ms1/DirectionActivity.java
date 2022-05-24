@@ -156,7 +156,14 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             prevBtn.setEnabled(false);
             prev.setText("Begin of tour");
 
-        } else {
+        }
+
+        else if (index == 1 ){
+            prevBtn.setEnabled(false);
+            prev.setText("No more previous exhibit");
+        }
+
+        else {
             prevBtn.setEnabled(true);
             String current = orderedAnimalList_IDs.get(index);
             String lastSource = orderedAnimalList_IDs.get(index-1);
