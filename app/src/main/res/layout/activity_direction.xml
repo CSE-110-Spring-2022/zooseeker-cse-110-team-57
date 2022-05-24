@@ -31,7 +31,7 @@
         android:layout_height="430dp"
         app:layout_constraintBottom_toTopOf="@+id/previous_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/goal_exhibit_name" />
 
@@ -39,11 +39,10 @@
         android:id="@+id/detailed_path"
         android:layout_width="0dp"
         android:layout_height="430dp"
-        app:layout_constraintBottom_toTopOf="@+id/previous_text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/goal_exhibit_name" />
+        app:layout_constraintBottom_toBottomOf="@+id/brief_path"
+        app:layout_constraintEnd_toEndOf="@+id/brief_path"
+        app:layout_constraintStart_toStartOf="@+id/brief_path"
+        app:layout_constraintTop_toTopOf="@+id/brief_path" />
 
     <TextView
         android:id="@+id/start_exhibit_name"
@@ -102,6 +101,7 @@
         android:layout_marginBottom="5dp"
         android:text="DETAIL"
         android:textSize="20sp"
+        android:onClick="OnSettingDisplayClick"
         app:layout_constraintBottom_toTopOf="@+id/previous_text"
         app:layout_constraintEnd_toStartOf="@id/skip_button"
         app:layout_constraintStart_toStartOf="parent" />

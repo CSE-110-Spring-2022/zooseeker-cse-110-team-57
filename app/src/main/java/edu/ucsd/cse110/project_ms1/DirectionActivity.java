@@ -21,6 +21,10 @@ import java.util.List;
 
 public class DirectionActivity extends AppCompatActivity implements OnLocationChangeListener {
     int order;
+    // direction display status
+    boolean displayStatus;
+    Button detailBtn;
+
     String currentLocation; //current exhibit or closest exhibit
     HashMap<Integer, DirectionData> zooRoute;
     boolean isNext;
@@ -89,8 +93,10 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         List<String> retainedInfo = DirectionHelper.loadDirectionsInformation(this);
         order = Integer.valueOf(retainedInfo.get(0));
         isNext = Boolean.valueOf(retainedInfo.get(1));
-        display(order, isNext);
 
+        // display status
+        loadDisplayStatus();
+        display(order, isNext);
 
     } //Initial End
 
@@ -102,25 +108,24 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         TextView distance = findViewById(R.id.path_total_distance);
         Button prevBtn = findViewById(R.id.previous_button);
         Button nextBtn = findViewById(R.id.next_button);
-        Button detailBtn = findViewById(R.id.detail_button);
-        detailBtn.setText("Brief");
+        detailBtn = findViewById(R.id.detail_button);
+        setDirectionDisplay();
 
-
-         String sourceExhibit;
-         String goalExhibit;
-         List<IdentifiedWeightedEdge> path;
-         if (isNext){
-             sourceExhibit = orderedAnimalList_IDs.get(index);
-             goalExhibit = orderedAnimalList_IDs.get(index+1);
-             path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
-             DirectionHelper.saveDirectionsInformation(this, order, true);
-         }
-         else{
-             sourceExhibit = orderedAnimalList_IDs.get(index);
-             goalExhibit = orderedAnimalList_IDs.get(index-1);
-             path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
-             DirectionHelper.saveDirectionsInformation(this, order, false);
-         }
+        String sourceExhibit;
+        String goalExhibit;
+        List<IdentifiedWeightedEdge> path;
+        if (isNext){
+            sourceExhibit = orderedAnimalList_IDs.get(index);
+            goalExhibit = orderedAnimalList_IDs.get(index+1);
+            path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
+            DirectionHelper.saveDirectionsInformation(this, order, true);
+        }
+        else{
+            sourceExhibit = orderedAnimalList_IDs.get(index);
+            goalExhibit = orderedAnimalList_IDs.get(index-1);
+            path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
+            DirectionHelper.saveDirectionsInformation(this, order, false);
+        }
 
 
 
@@ -245,7 +250,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
     @Override
     public void OnLocationChange(LatLng current) {
-        ZooData.VertexInfo closestlandmark = AnimalUtilities.getClosestLandmark(current);
+        //ZooData.VertexInfo closestlandmark = AnimalUtilities.getClosestLandmark(current);
         if (AnimalUtilities.check_off_route(order,planned_route,current)){
             boolean user_want_update = true;
             if (user_want_update) {
@@ -291,5 +296,33 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         Utilities.clearSavedAnimalItem(this);
         intent = new Intent(this, SearchAnimalActivity.class);
         startActivity(intent);
+    }
+
+    // Direction Display
+    public void OnSettingDisplayClick(View view) {
+        saveDisplayStatus();
+        setDirectionDisplay();
+    }
+
+    public void setDirectionDisplay() {
+        if (displayStatus) {
+            detailBtn.setText("DETAIL");
+
+        }
+        else {
+            detailBtn.setText("BRIEF");
+        }
+    }
+
+    public void loadDisplayStatus() {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        displayStatus = preferences.getBoolean("DISPLAYSTATUS", true);
+    }
+    public void saveDisplayStatus() {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("DISPLAYSTATUS", !displayStatus);
+        displayStatus = !displayStatus;
+        editor.apply();
     }
 }
