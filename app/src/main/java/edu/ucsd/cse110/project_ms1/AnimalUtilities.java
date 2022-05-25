@@ -54,9 +54,9 @@ public class AnimalUtilities {
         return 0;
     }
 
-//    public static  double get_distance(LatLng ll, AnimalItem animal){
-//
-//    }
+    public static  double get_distance(LatLng ll, AnimalItem animal){
+        return animal.getDistanceToInFeet(new Coord(ll));
+    }
 
     public static boolean check_off_route (int visiting_order, List<route_node> route, LatLng curr_position){
         // all visited, going to the gate
@@ -64,11 +64,13 @@ public class AnimalUtilities {
             return false;
 
 
-//        double distance_to_the_next =get_distance(curr_position,planned_next_animal);
-        for (int i=visiting_order+2; i<route.size(); i++){
+
+        AnimalItem planned_next_animal = route.get(visiting_order+1).exhibit;
+        double distance_to_the_next =get_distance(curr_position,planned_next_animal);
+        for (int i=visiting_order+1; i<route.size(); i++){
             AnimalItem animal = route.get(i+1).exhibit;
-            if (animal.isClosestTo(new Coord(curr_position)) == false )
-                return true;
+            double dis = get_distance(curr_position,animal);
+            if (dis<distance_to_the_next) return true;
         }
         return  false;
     }
