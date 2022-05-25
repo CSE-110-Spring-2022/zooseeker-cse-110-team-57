@@ -17,6 +17,11 @@ public class Coord {
         this.lng = lng;
     }
 
+    public Coord(LatLng ll){
+        this.lat = ll.latitude;
+        this.lng = ll.longitude;
+    }
+
     public static Coord of(Double lat, Double lng) {
         return new Coord(lat, lng);
     }

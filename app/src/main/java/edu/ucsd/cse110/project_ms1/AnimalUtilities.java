@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import edu.ucsd.cse110.project_ms1.location.Coord;
+
 public class AnimalUtilities {
     public static AnimalItem getClosestAnimalItem(List<AnimalItem> animal_items, String start, double min_distance, AnimalItem closest_animal) {
         String goal;
@@ -53,7 +55,7 @@ public class AnimalUtilities {
     }
 
     public static  double get_distance(LatLng ll, AnimalItem animal){
-        return 0;
+
     }
 
     public static boolean check_off_route (int visiting_order, List<route_node> route, LatLng curr_position){
@@ -61,14 +63,20 @@ public class AnimalUtilities {
         if (visiting_order == route.size())
             return false;
 
-        AnimalItem planned_next_animal = route.get(visiting_order+1).exhibit;
-        double distance_to_the_next =get_distance(curr_position,planned_next_animal);
-        for (int i=visiting_order+1; i<route.size(); i++){
-            AnimalItem animal = route.get(i+1).exhibit;
-            double dis = get_distance(curr_position,animal);
-            if (dis<distance_to_the_next) return true;
-        }
-        return  false;
+
+
+        AnimalItem goal_animal = route.get(visiting_order+1).exhibit;
+        if (goal_animal.isClosestTo(new Coord(curr_position)) == false )
+            return true;
+        return false;
+
+//        double distance_to_the_next =get_distance(curr_position,planned_next_animal);
+//        for (int i=visiting_order+1; i<route.size(); i++){
+//            AnimalItem animal = route.get(i+1).exhibit;
+//            double dis = get_distance(curr_position,animal);
+//            if (dis<distance_to_the_next) return true;
+//        }
+//        return  false;
     }
 
     public static List<route_node> reroute (int visiting_order, List<route_node> route, LatLng curr_position){
