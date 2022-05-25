@@ -69,7 +69,6 @@ public class USTest {
 
         scenario.onActivity(activity -> {
             List<AnimalItem> animalItem = AnimalItem.search_by_tag("lions");
-
             for(AnimalItem item : animalItem){
                 assertTrue(item.tags.contains("lions"));
             }
