@@ -12,6 +12,8 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +39,7 @@ public class AnimalItem {
     public static Map<String, ZooData.VertexInfo> vInfo;
     public static Map<String, ZooData.EdgeInfo> eInfo;
     public static Graph<String, IdentifiedWeightedEdge> gInfo;
+    public static Map<String, String> Latlng_ids_Map;
     public static AnimalItem gate;
 
     //not sure if i will change this constructor
@@ -66,8 +69,16 @@ public class AnimalItem {
         input = context.getAssets().open(g_path);
         gInfo = ZooData.loadZooGraphJSON(input);
 
+        Latlng_ids_Map = new HashMap<String, String>();
         for (Map.Entry<String, ZooData.VertexInfo> set : vInfo.entrySet()){
             ZooData.VertexInfo currentVertex = set.getValue();
+
+            // populate the latlng id map
+            String id_latlng = currentVertex.parent_id;
+            if(id_latlng==null)
+                id_latlng = currentVertex.id;
+            Latlng_ids_Map.put(currentVertex.id, id_latlng);
+            // look for gate
             if(currentVertex.kind.name().equals("GATE")){
                 gate = new AnimalItem(
                         set.getValue().id,
@@ -132,13 +143,14 @@ public class AnimalItem {
 
             closest_animal = AnimalUtilities.getClosestAnimalItem(animal_items, start, min_distance, closest_animal);
 
-            GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(gInfo, start, closest_animal.id);
+
+            GraphPath<String, IdentifiedWeightedEdge> path = adapted_find_shortest_path(gInfo, start, closest_animal.id);
             int pathSize = path.getEdgeList().size();
             IdentifiedWeightedEdge myEdge = path.getEdgeList().get(pathSize - 1);
             address_id = myEdge.getId();
 
             String address = eInfo.get(address_id).street;
-            distance = route_length(DijkstraShortestPath.findPathBetween(gInfo, "entrance_exit_gate",closest_animal.id ));
+            distance = route_length(adapted_find_shortest_path(gInfo, "entrance_exit_gate",closest_animal.id));
             start = closest_animal.id;
             animal_items.remove(closest_animal);
             route_node myRouteNode = new route_node(closest_animal, address, distance);
@@ -157,7 +169,11 @@ public class AnimalItem {
         return retVal;
     }
 
-
+    public static GraphPath<String, IdentifiedWeightedEdge> adapted_find_shortest_path (Graph<String, IdentifiedWeightedEdge> gInfo, String source, String sink){
+        source = Latlng_ids_Map.get(source);
+        sink = Latlng_ids_Map.get(sink);
+        return DijkstraShortestPath.findPathBetween(gInfo, source, sink);
+    }
 }
 
 

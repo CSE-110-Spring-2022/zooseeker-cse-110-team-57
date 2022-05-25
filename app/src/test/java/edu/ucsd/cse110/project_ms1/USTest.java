@@ -230,7 +230,7 @@ public class USTest {
         for (int i =0; i<nodes.size(); i++){
 
            double curr = AnimalItem.route_length
-                   (DijkstraShortestPath.findPathBetween(AnimalItem.gInfo, start, goal));
+                   (AnimalItem.adapted_find_shortest_path(AnimalItem.gInfo, start, goal));
 
            if (i<nodes.size()-1){
                start = goal;

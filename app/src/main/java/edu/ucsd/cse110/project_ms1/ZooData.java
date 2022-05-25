@@ -28,18 +28,20 @@ public class ZooData {
             @SerializedName("exhibit_group") EXHIBIT_GROUP
         }
 
-        VertexInfo(String id, Kind kind, String name, List<String> tags, Double lat, Double lng) {
+        VertexInfo(String id, Kind kind, String name, List<String> tags, Double lat, Double lng, String parent_id) {
             this.id = id;
             this.kind = kind;
             this.name = name;
             this.tags = tags;
             this.lat = lat;
             this.lng = lng;
+            this.parent_id = parent_id;
         }
 
         public String id;
         public Kind kind;
         public String name;
+        public String parent_id;
         public List<String> tags;
         public Double lat, lng;
     }

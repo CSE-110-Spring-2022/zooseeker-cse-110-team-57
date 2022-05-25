@@ -18,7 +18,7 @@ public class AnimalUtilities {
         for (AnimalItem item : animal_items) {
             goal = item.id;
             Graph<String, IdentifiedWeightedEdge>  graph = AnimalItem.gInfo;
-            GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(graph, start, goal);
+            GraphPath<String, IdentifiedWeightedEdge> path = AnimalItem.adapted_find_shortest_path(graph, start, goal);
             double curr_dis = AnimalItem.route_length(path);
             if (curr_dis < min_distance) {
                 min_distance = curr_dis;
@@ -100,4 +100,5 @@ public class AnimalUtilities {
         }
         return  false;
     }
+
 }

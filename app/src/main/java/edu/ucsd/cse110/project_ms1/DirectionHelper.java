@@ -50,7 +50,7 @@ public class DirectionHelper {
             String source = planned_route.get(i).animal.name;
             String sink = planned_route.get(i+1).animal.name;
 
-            GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(AnimalItem.gInfo, source, sink);
+            GraphPath<String, IdentifiedWeightedEdge> path = AnimalItem.adapted_find_shortest_path(AnimalItem.gInfo, source, sink);
             //list of street in this walk.
             List<IdentifiedWeightedEdge> streets = path.getEdgeList();
 
@@ -62,7 +62,7 @@ public class DirectionHelper {
 
     public static List<IdentifiedWeightedEdge> findPathBetween(String source,String goal){
 
-            GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(AnimalItem.gInfo, source, goal);
+            GraphPath<String, IdentifiedWeightedEdge> path = AnimalItem.adapted_find_shortest_path(AnimalItem.gInfo, source, goal);
             //list of street in this walk.
             List<IdentifiedWeightedEdge> streets = path.getEdgeList();
 
