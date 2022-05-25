@@ -245,7 +245,6 @@ public class AnimalItem {
         Double d_ft = Math.sqrt(Math.pow(dLat, 2) + Math.pow(dLng, 2));
         return BASE * Math.ceil(d_ft/ BASE);
     }
-
 }
 
 
