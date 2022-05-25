@@ -27,7 +27,12 @@ public class ZooData {
             @SerializedName("intersection") INTERSECTION,
             @SerializedName("exhibit_group") EXHIBIT_GROUP
         }
-
+        public String id;
+        public Kind kind;
+        public String name;
+        public String group_id;
+        public List<String> tags;
+        public Double lat, lng;
         VertexInfo(String id, Kind kind, String name, List<String> tags, Double lat, Double lng, String group_id) {
             this.id = id;
             this.kind = kind;
@@ -37,13 +42,6 @@ public class ZooData {
             this.lng = lng;
             this.group_id = group_id;
         }
-
-        public String id;
-        public Kind kind;
-        public String name;
-        public String group_id;
-        public List<String> tags;
-        public Double lat, lng;
     }
 
     public static class EdgeInfo {
