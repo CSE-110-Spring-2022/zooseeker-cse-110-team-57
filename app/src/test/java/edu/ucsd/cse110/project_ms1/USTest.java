@@ -30,35 +30,35 @@ public class USTest {
     @Rule
     public ActivityScenarioRule<SearchAnimalActivity> scenarioRule = new ActivityScenarioRule<>(SearchAnimalActivity.class);
 
-    @Test
-    public void LoadTest() {
-        //User Story 0
-        ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
-
-        scenario.moveToState(Lifecycle.State.CREATED);
-
-        scenario.onActivity(activity -> {
-            List<AnimalItem> toBeShown = null;
-            Context context = ApplicationProvider.getApplicationContext();
-            try {
-                AnimalItem.loadInfo(context, "sample_node_info.json", "sample_edge_info.json", "sample_zoo_graph.json");
-                toBeShown = AnimalItem.search_by_tag(null);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            ArrayList<String> allAnimals = new ArrayList<>();
-
-            for(AnimalItem a : toBeShown){
-                allAnimals.add(a.name);
-            }
-
-            assertTrue(allAnimals.contains("Lions"));
-
-
-        });
-
-    }
+//    @Test
+//    public void LoadTest() {
+//        //User Story 0
+//        ActivityScenario<SearchAnimalActivity> scenario = scenarioRule.getScenario();
+//
+//        scenario.moveToState(Lifecycle.State.CREATED);
+//
+//        scenario.onActivity(activity -> {
+//            List<AnimalItem> toBeShown = null;
+//            Context context = ApplicationProvider.getApplicationContext();
+//            try {
+//                AnimalItem.loadInfo(context, "sample_node_info.json", "sample_edge_info.json", "sample_zoo_graph.json");
+//                toBeShown = AnimalItem.search_by_tag(null);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//            ArrayList<String> allAnimals = new ArrayList<>();
+//
+//            for(AnimalItem a : toBeShown){
+//                allAnimals.add(a.name);
+//            }
+//
+//            assertTrue(allAnimals.contains("Lions"));
+//
+//
+//        });
+//
+//    }
 
     @Test
     public void SearchByTagTest() {
@@ -165,56 +165,56 @@ public class USTest {
     }
 
 
-    @Test
-    public void RouteTest(){
-        //US11  without gorilla
-        List<AnimalItem> items = AnimalItem.search_by_tag(null);
-        List<route_node> nodes ;
-        double total_dis;
+//    @Test
+//    public void RouteTest(){
+//        //US11  without gorilla
+//        List<AnimalItem> items = AnimalItem.search_by_tag(null);
+//        List<route_node> nodes ;
+//        double total_dis;
+//
+//        items.remove(4);
+//        nodes = AnimalItem.plan_route(items);
+//
+//        //checking the order is right
+//        assertEquals("gators", nodes.get(0).animal.id );
+//        assertEquals("lions", nodes.get(1).animal.id );
+//        assertEquals("elephant_odyssey", nodes.get(2).animal.id );
+//        assertEquals("arctic_foxes", nodes.get(3).animal.id );
+//        assertEquals("entrance_exit_gate", nodes.get(4).animal.id );
+////        assertEquals(110.0, nodes.get(1).distance, 0.01);
+//
+//        //checking the total distance is right
+//        total_dis = total_length(nodes);
+//        assertEquals(1620.0, total_dis ,0.01);
+//    }
+//
+//    @Test
+//    public void RouteTest2(){
+//        //US11  only mammals
+//        List<AnimalItem> items = AnimalItem.search_by_tag("mammal");
+//        assertEquals(4,items.size());
+//
+//        List<route_node> nodes = AnimalItem.plan_route(items);
+//        double total_dis;
+//
+//        //checking the total distance is right
+//        total_dis = total_length(nodes);
+//        assertEquals(1720.0, total_dis ,0.01);
+//    }
 
-        items.remove(4);
-        nodes = AnimalItem.plan_route(items);
-
-        //checking the order is right
-        assertEquals("gators", nodes.get(0).animal.id );
-        assertEquals("lions", nodes.get(1).animal.id );
-        assertEquals("elephant_odyssey", nodes.get(2).animal.id );
-        assertEquals("arctic_foxes", nodes.get(3).animal.id );
-        assertEquals("entrance_exit_gate", nodes.get(4).animal.id );
-//        assertEquals(110.0, nodes.get(1).distance, 0.01);
-
-        //checking the total distance is right
-        total_dis = total_length(nodes);
-        assertEquals(1620.0, total_dis ,0.01);
-    }
-
-    @Test
-    public void RouteTest2(){
-        //US11  only mammals
-        List<AnimalItem> items = AnimalItem.search_by_tag("mammal");
-        assertEquals(4,items.size());
-
-        List<route_node> nodes = AnimalItem.plan_route(items);
-        double total_dis;
-
-        //checking the total distance is right
-        total_dis = total_length(nodes);
-        assertEquals(1720.0, total_dis ,0.01);
-    }
-
-    @Test
-    public void RouteTest3(){
-        //US11  only lions
-        List<AnimalItem> items = AnimalItem.search_by_tag("lions");
-
-        List<route_node> nodes = AnimalItem.plan_route(items);
-        assertEquals(2,nodes.size());
-        double total_dis;
-
-        //checking the total distance is right
-        total_dis = total_length(nodes);
-        assertEquals(620, total_dis ,0.01);
-    }
+//    @Test
+//    public void RouteTest3(){
+//        //US11  only lions
+//        List<AnimalItem> items = AnimalItem.search_by_tag("lions");
+//
+//        List<route_node> nodes = AnimalItem.plan_route(items);
+//        assertEquals(2,nodes.size());
+//        double total_dis;
+//
+//        //checking the total distance is right
+//        total_dis = total_length(nodes);
+//        assertEquals(620, total_dis ,0.01);
+//    }
 
 
 
@@ -244,39 +244,39 @@ public class USTest {
         return  dis;
     }
 
-    @Test
-    public void planActivity(){
-        List<route_node> routeNodeList;
-
-        List<String> selectedAnimalNameStringList = new ArrayList<>();
-        selectedAnimalNameStringList.add("Alligators");
-        selectedAnimalNameStringList.add("Lions");
-        selectedAnimalNameStringList.add("Gorillas");
-        StringAndAnimalItem stringAndAnimalItem = new StringAndAnimalItem();
-
-        List<String> selectedAnimalAddress = new ArrayList<>();
-        selectedAnimalAddress.add("Reptile Road");
-        selectedAnimalAddress.add("Sharp Teeth Shortcut");
-        selectedAnimalAddress.add("Africa Rocks Street");
-
-        List<Double> selectedAnimalDistance = new ArrayList<>();
-        selectedAnimalDistance.add(110.0);
-        selectedAnimalDistance.add(310.0);
-        selectedAnimalDistance.add(210.0);
-
-        List<AnimalItem> selectedAnimalItemList = AnimalItem.search_by_tag(null);
-        selectedAnimalItemList.remove(0);
-        selectedAnimalItemList.remove(2);
-        routeNodeList = AnimalItem.plan_route(selectedAnimalItemList);
-
-
-        for (int i = 0; i < routeNodeList.size() - 1; i++){
-            assertEquals(routeNodeList.get(i).animal.name, selectedAnimalNameStringList.get(i));
-            assertEquals(routeNodeList.get(i).address, selectedAnimalAddress.get(i));
-            assertEquals(Double.toString(routeNodeList.get(i).distance), Double.toString(selectedAnimalDistance.get(i)));
-        }
-
-    }
+//    @Test
+//    public void planActivity(){
+//        List<route_node> routeNodeList;
+//
+//        List<String> selectedAnimalNameStringList = new ArrayList<>();
+//        selectedAnimalNameStringList.add("Alligators");
+//        selectedAnimalNameStringList.add("Lions");
+//        selectedAnimalNameStringList.add("Gorillas");
+//        StringAndAnimalItem stringAndAnimalItem = new StringAndAnimalItem();
+//
+//        List<String> selectedAnimalAddress = new ArrayList<>();
+//        selectedAnimalAddress.add("Reptile Road");
+//        selectedAnimalAddress.add("Sharp Teeth Shortcut");
+//        selectedAnimalAddress.add("Africa Rocks Street");
+//
+//        List<Double> selectedAnimalDistance = new ArrayList<>();
+//        selectedAnimalDistance.add(110.0);
+//        selectedAnimalDistance.add(310.0);
+//        selectedAnimalDistance.add(210.0);
+//
+//        List<AnimalItem> selectedAnimalItemList = AnimalItem.search_by_tag(null);
+//        selectedAnimalItemList.remove(0);
+//        selectedAnimalItemList.remove(2);
+//        routeNodeList = AnimalItem.plan_route(selectedAnimalItemList);
+//
+//
+//        for (int i = 0; i < routeNodeList.size() - 1; i++){
+//            assertEquals(routeNodeList.get(i).animal.name, selectedAnimalNameStringList.get(i));
+//            assertEquals(routeNodeList.get(i).address, selectedAnimalAddress.get(i));
+//            assertEquals(Double.toString(routeNodeList.get(i).distance), Double.toString(selectedAnimalDistance.get(i)));
+//        }
+//
+//    }
 
 
 }
