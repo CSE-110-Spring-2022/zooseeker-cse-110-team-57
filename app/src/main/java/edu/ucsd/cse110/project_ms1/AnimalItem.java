@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.project_ms1;
 
 import android.content.Context;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.jgrapht.Graph;
@@ -50,8 +52,6 @@ public class AnimalItem {
         this.searched = false;
         this.visited = false;
         this.position = position;
-
-        //this.exhibit = exhibit;
     }
 
 
@@ -173,6 +173,18 @@ public class AnimalItem {
         source = Latlng_ids_Map.get(source);
         sink = Latlng_ids_Map.get(sink);
         return DijkstraShortestPath.findPathBetween(gInfo, source, sink);
+    }
+
+    public String getCoordString() {
+        var coords = getCoords();
+        return String.format(Locale.getDefault(), "%3.6f, %3.6f", coords.first, coords.second);
+    }
+    public Pair<Double, Double> getCoords(AnimalItem landmark) {
+        if (landmark != null) {
+            return Pair.create(landmark.position.latitude, landmark.position.longitude);
+        } else {
+            return Pair.create(exhibit.lat, exhibit.lng);
+        }
     }
 }
 
