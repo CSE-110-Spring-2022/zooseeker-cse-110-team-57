@@ -9,15 +9,15 @@ import com.google.common.base.Objects;
 
 
 public class Coord {
-    public Coord(double lat, double lng) {
+    public final Double lat;
+    public final Double lng;
+
+    public Coord(Double lat, Double lng) {
         this.lat = lat;
         this.lng = lng;
     }
 
-    public final double lat;
-    public final double lng;
-
-    public static Coord of(double lat, double lng) {
+    public static Coord of(Double lat, Double lng) {
         return new Coord(lat, lng);
     }
 

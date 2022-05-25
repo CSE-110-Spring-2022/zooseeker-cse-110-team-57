@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.project_ms1;
 
 import android.content.Context;
-import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
@@ -22,6 +21,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
+import edu.ucsd.cse110.project_ms1.location.Coord;
 
 
 @Entity(tableName = "animal_items")
@@ -218,28 +218,28 @@ public class AnimalItem {
 
     public String getCoordString(){
         var coords = getCoords();
-        return String.format(Locale.getDefault(), "%3.6f, %3.6f", coords.first, coords.second);
+        return String.format(Locale.getDefault(), "%3.6f, %3.6f", coords.lat, coords.lng);
     }
 
-    public Pair<Double, Double> getCoords() {
+    public Coord getCoords() {
         AnimalItem landmark = search_by_tag(Latlng_ids_Map.get(id)).get(0);
-        return Pair.create(landmark.position.latitude, landmark.position.longitude);
+        return new Coord(landmark.position.latitude, landmark.position.longitude);
     }
 
-    public boolean isCloseTo(Pair<Double, Double> otherCoords) {
+    public boolean isCloseTo(Coord otherCoords) {
         return isCloseTo(otherCoords, 0.001);
     }
 
-    public boolean isCloseTo(Pair<Double, Double> otherCoords, double delta) {
-        Pair<Double, Double> coords = getCoords();
-        if (coords == null
+    public boolean isCloseTo(Coord otherCoords, double delta) {
+        Coord coord = getCoords();
+        if (coord == null
                 || otherCoords == null
-                || coords.first == null || coords.second == null
-                || otherCoords.first == null || otherCoords.second == null){
+                || coord.lat == null || coord.lng == null
+                || otherCoords.lat == null || otherCoords.lng == null){
             return false;
         }
-        Double dLat = coords.first - otherCoords.first;
-        Double dLng = coords.second - otherCoords.second;
+        Double dLat = coord.lat - otherCoords.lat;
+        Double dLng = coord.lng - otherCoords.lng;
         return Math.sqrt(Math.pow(dLat, 2) + Math.pow(dLng, 2)) < delta;
     }
 
