@@ -40,6 +40,7 @@ public class AnimalItem {
 
     public static final Double DEG_LAT_IN_FT = 363843.57;
     public static final Double DEG_LNG_IN_FT = 307515.50;
+    public static final Double BASE = 100.00;
 
     public static Map<String, ZooData.VertexInfo> vInfo;
     public static Map<String, ZooData.EdgeInfo> eInfo;
@@ -239,11 +240,10 @@ public class AnimalItem {
 //                || otherCoords.lat == null || otherCoords.lng == null){
 //            return -1.0;
 //        }
-        Pair<Double, Double> FirstCoord = coord.CoordToFeet();
-        Pair<Double, Double> SecondCoord = otherCoords.CoordToFeet();
-        Double dLat = FirstCoord.first - SecondCoord.first;
-        Double dLng = FirstCoord.second - SecondCoord.second;
-        return Math.sqrt(Math.pow(dLat, 2) + Math.pow(dLng, 2));
+        Double dLat = (coord.lat - otherCoords.lat)* DEG_LAT_IN_FT;
+        Double dLng = (coord.lng - otherCoords.lng) * DEG_LNG_IN_FT;
+        Double d_ft = Math.sqrt(Math.pow(dLat, 2) + Math.pow(dLng, 2));
+        return BASE * Math.ceil(d_ft/ BASE);
     }
 
 }
