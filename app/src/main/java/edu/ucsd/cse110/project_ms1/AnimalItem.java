@@ -209,17 +209,14 @@ public class AnimalItem {
         return DijkstraShortestPath.findPathBetween(gInfo, source, sink);
     }
 
-//    public String getCoordString() {
-//        var coords = getCoords();
-//        return String.format(Locale.getDefault(), "%3.6f, %3.6f", coords.first, coords.second);
-//    }
-//    public Pair<Double, Double> getCoords(AnimalItem landmark) {
-//        if (landmark != null) {
-//            return Pair.create(landmark.position.latitude, landmark.position.longitude);
-//        } else {
-//            return Pair.create(exhibit.lat, exhibit.lng);
-//        }
-//    }
+    public String getCoordString(){
+        var coords = getCoords();
+        return String.format(Locale.getDefault(), "%3.6f, %3.6f", coords.first, coords.second);
+    }
+    public Pair<Double, Double> getCoords() {
+        AnimalItem landmark = search_by_tag(Latlng_ids_Map.get(id)).get(0);
+        return Pair.create(landmark.position.latitude, landmark.position.longitude);
+    }
 }
 
 
