@@ -110,7 +110,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         Button prevBtn = findViewById(R.id.previous_button);
         Button nextBtn = findViewById(R.id.next_button);
         detailBtn = findViewById(R.id.detail_button);
-        setDirectionDisplay();
+        setDirectionTextDisplay();
 
         String sourceExhibit;
         String goalExhibit;
@@ -129,14 +129,16 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
             DirectionHelper.saveDirectionsInformation(this, order, false);
         }
+        setDisplay(sourceExhibit, goalExhibit, path);
+
         String startText = "From: " + DirectionHelper.getNodeName(sourceExhibit);
         String endText = "To: " + DirectionHelper.getNodeName(goalExhibit);
         start.setText(startText);
         end.setText(endText);
         distance.setText(Double.toString(DirectionHelper.totalDistance(path)) + " ft");
 
-        List<String> pathDisplay = new ArrayList<>(DirectionHelper.briefPath(path,goalExhibit));;
-        direction_adapter.setDirectionsStringList(pathDisplay);
+//        List<String> pathDisplay = new ArrayList<>(DirectionHelper.briefPath(path,goalExhibit));;
+//        direction_adapter.setDirectionsStringList(pathDisplay);
 
 
         //setting next button and next direction distance
@@ -200,18 +202,6 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
                 prev.setText(prevText);
             }
         }
-    }
-
-    public void displayDetail(String source,String goal){
-        List<IdentifiedWeightedEdge> path = DirectionHelper.findPathBetween(source,goal);
-        List<String> pathDisplay = DirectionHelper.detailPath(path,source);
-        direction_adapter.setDirectionsStringList(pathDisplay);
-    }
-
-    public void displayBrief(String source,String goal){
-        List<IdentifiedWeightedEdge> path = DirectionHelper.findPathBetween(source,goal);
-        List<String> pathDisplay = DirectionHelper.briefPath(path,source);
-        direction_adapter.setDirectionsStringList(pathDisplay);
     }
 
     public void onNextButtonClick(View view) {
@@ -306,16 +296,35 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     // Direction Display
     public void OnSettingDisplayClick(View view) {
         saveDisplayStatus();
-        setDirectionDisplay();
+        setDirectionTextDisplay();
+        display(order, isNext);
     }
 
-    public void setDirectionDisplay() {
+    public void setDirectionTextDisplay() {
         if (displayStatus) {
             detailBtn.setText("DETAIL");
         }
         else {
             detailBtn.setText("BRIEF");
         }
+    }
+
+    public void setDisplay(String source, String goal, List<IdentifiedWeightedEdge> path) {
+        if (displayStatus) {
+            displayBrief(source, goal, path);
+        } else {
+            displayDetail(source, goal, path);
+        }
+    }
+
+    public void displayDetail(String source, String goal, List<IdentifiedWeightedEdge> path){
+        List<String> pathDisplay = DirectionHelper.detailPath(path,source);
+        direction_adapter.setDirectionsStringList(pathDisplay);
+    }
+
+    public void displayBrief(String source, String goal, List<IdentifiedWeightedEdge> path){
+        List<String> pathDisplay = DirectionHelper.briefPath(path,source);
+        direction_adapter.setDirectionsStringList(pathDisplay);
     }
 
     public void loadDisplayStatus() {
