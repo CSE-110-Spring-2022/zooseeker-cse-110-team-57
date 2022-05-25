@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.project_ms1.location;
 
+import android.util.Pair;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -8,6 +10,10 @@ import java.util.stream.Stream;
 public class Coords {
     public static final Coord UCSD = Coord.of(32.8801, -117.2340);
     public static final Coord ZOO = Coord.of(32.7353, -117.1490);
+
+    public static final Double DEG_LAT_IN_FT = 363843.57;
+    public static final Double DEG_LNG_IN_FT = 307515.50;
+    public static final Double BASE = 100.00;
 
     /**
      * @param p1 first coordinate
@@ -36,5 +42,9 @@ public class Coords {
                 p1.lat + (p2.lat - p1.lat) * t,
                 p1.lng + (p2.lng - p1.lng) * t
             ));
+    }
+
+    public Pair<Double, Double> CoordsToFeet(Coord coord){
+        return Pair.create(coord.lat * DEG_LAT_IN_FT, coord.lng * DEG_LNG_IN_FT);
     }
 }

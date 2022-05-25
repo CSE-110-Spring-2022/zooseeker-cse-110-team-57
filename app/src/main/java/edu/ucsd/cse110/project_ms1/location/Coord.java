@@ -51,4 +51,6 @@ public class Coord {
     public String toString() {
         return String.format("Coord{lat=%s, lng=%s}", lat, lng);
     }
+
+
 }

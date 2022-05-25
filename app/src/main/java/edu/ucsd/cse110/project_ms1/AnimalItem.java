@@ -37,11 +37,16 @@ public class AnimalItem {
     public boolean visited;
     public LatLng position;
 
+    public static final Double DEG_LAT_IN_FT = 363843.57;
+    public static final Double DEG_LNG_IN_FT = 307515.50;
+
     public static Map<String, ZooData.VertexInfo> vInfo;
     public static Map<String, ZooData.EdgeInfo> eInfo;
     public static Graph<String, IdentifiedWeightedEdge> gInfo;
     public static Map<String, String> Latlng_ids_Map;
     public static AnimalItem gate;
+
+
 
     //not sure if i will change this constructor
     public AnimalItem(@NonNull String id, ArrayList<String> tags, String name, LatLng position){
@@ -210,10 +215,29 @@ public class AnimalItem {
         var coords = getCoords();
         return String.format(Locale.getDefault(), "%3.6f, %3.6f", coords.first, coords.second);
     }
+
     public Pair<Double, Double> getCoords() {
         AnimalItem landmark = search_by_tag(Latlng_ids_Map.get(id)).get(0);
         return Pair.create(landmark.position.latitude, landmark.position.longitude);
     }
+
+    public boolean isCloseTo(Pair<Double, Double> otherCoords) {
+        return isCloseTo(otherCoords, 0.001);
+    }
+
+    public boolean isCloseTo(Pair<Double, Double> otherCoords, double delta) {
+        Pair<Double, Double> coords = getCoords();
+        if (coords == null
+                || otherCoords == null
+                || coords.first == null || coords.second == null
+                || otherCoords.first == null || otherCoords.second == null){
+            return false;
+        }
+        Double dLat = coords.first - otherCoords.first;
+        Double dLng = coords.second - otherCoords.second;
+        return Math.sqrt(Math.pow(dLat, 2) + Math.pow(dLng, 2)) < delta;
+    }
+
 }
 
 

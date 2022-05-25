@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Project_MS1</string>
+    <string name="VERTEX_JSON">"exhibit_info.json"</string>
+    <string name="EDGE_JSON">"trail_info.json"</string>
+    <string name="GRAPH_JSON">"zoo_graph.json"</string>
+    <Double name="DEG_LAT_IN_FT">363843.57</Double>
+    <Double name="DEG_LNG_IN_FT">307515.50</Double>
 </resources>
