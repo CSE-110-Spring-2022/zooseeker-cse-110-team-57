@@ -3,6 +3,7 @@ package edu.ucsd.cse110.project_ms1;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.SystemClock;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,9 +14,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import edu.ucsd.cse110.project_ms1.location.Coord;
+
 public class LatLngs {
-    public static final LatLng UCSD_LATLNG = new LatLng(32.8801, -117.2340);
-    public static final LatLng ZOO_LATLNG = new LatLng(32.7353, -117.1490);
+//    public static final LatLng UCSD_LATLNG = new LatLng(32.8801, -117.2340);
+//    public static final LatLng ZOO_LATLNG = new LatLng(32.7353, -117.1490);
+    public static final Coord UCSD = Coord.of(32.8801, -117.2340);
+    public static final Coord ZOO = Coord.of(32.7353, -117.1490);
+
+    public static final Double DEG_LAT_IN_FT = 363843.57;
+    public static final Double DEG_LNG_IN_FT = 307515.50;
+    public static final Double BASE = 100.00;
 
     public static LatLng currentLocationLatLng;
 
@@ -57,6 +66,9 @@ public class LatLngs {
                     );
                 })
                 .collect(Collectors.toList());
+    }
+    public Pair<Double, Double> CoordsToFeet(LatLng latLng){
+        return Pair.create(latLng.latitude * DEG_LAT_IN_FT, latLng.longitude * DEG_LNG_IN_FT);
     }
 }
 
