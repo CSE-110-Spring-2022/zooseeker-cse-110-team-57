@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.project_ms1.location;
 
 import android.location.Location;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
@@ -11,6 +12,9 @@ import com.google.common.base.Objects;
 public class Coord {
     public final Double lat;
     public final Double lng;
+    public static final Double DEG_LAT_IN_FT = 363843.57;
+    public static final Double DEG_LNG_IN_FT = 307515.50;
+    public static final Double BASE = 100.00;
 
     public Coord(Double lat, Double lng) {
         this.lat = lat;
@@ -57,5 +61,8 @@ public class Coord {
         return String.format("Coord{lat=%s, lng=%s}", lat, lng);
     }
 
+    public Pair<Double, Double> CoordToFeet(){
+        return Pair.create(this.lat * DEG_LAT_IN_FT, this.lng * DEG_LNG_IN_FT);
+    }
 
 }

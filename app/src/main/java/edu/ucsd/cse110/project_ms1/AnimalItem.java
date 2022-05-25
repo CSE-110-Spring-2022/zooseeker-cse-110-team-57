@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.project_ms1;
 
 import android.content.Context;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
@@ -226,21 +227,23 @@ public class AnimalItem {
         return new Coord(landmark.position.latitude, landmark.position.longitude);
     }
 
-    public boolean isClosestTo(Coord otherCoords) {
-        return isCloseTo(otherCoords, 0.001);
-    }
+//    public boolean isClosestTo(Coord otherCoords) {
+//        return isCloseTo(otherCoords, 0.001);
+//    }
 
-    public boolean isCloseTo(Coord otherCoords, double delta) {
+    public Double getDistanceToInFeet(Coord otherCoords) {
         Coord coord = getCoords();
-        if (coord == null
-                || otherCoords == null
-                || coord.lat == null || coord.lng == null
-                || otherCoords.lat == null || otherCoords.lng == null){
-            return false;
-        }
-        Double dLat = coord.lat - otherCoords.lat;
-        Double dLng = coord.lng - otherCoords.lng;
-        return Math.sqrt(Math.pow(dLat, 2) + Math.pow(dLng, 2)) < delta;
+//        if (coord == null
+//                || otherCoords == null
+//                || coord.lat == null || coord.lng == null
+//                || otherCoords.lat == null || otherCoords.lng == null){
+//            return -1.0;
+//        }
+        Pair<Double, Double> FirstCoord = coord.CoordToFeet();
+        Pair<Double, Double> SecondCoord = otherCoords.CoordToFeet();
+        Double dLat = FirstCoord.first - SecondCoord.first;
+        Double dLng = FirstCoord.second - SecondCoord.second;
+        return Math.sqrt(Math.pow(dLat, 2) + Math.pow(dLng, 2));
     }
 
 }

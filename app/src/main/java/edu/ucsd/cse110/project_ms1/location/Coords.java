@@ -44,7 +44,5 @@ public class Coords {
             ));
     }
 
-    public Pair<Double, Double> CoordsToFeet(Coord coord){
-        return Pair.create(coord.lat * DEG_LAT_IN_FT, coord.lng * DEG_LNG_IN_FT);
-    }
+
 }
