@@ -3,7 +3,6 @@ package edu.ucsd.cse110.project_ms1;
 
 
 
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -176,11 +175,11 @@ public class USTest {
         nodes = AnimalItem.plan_route(items);
 
         //checking the order is right
-        assertEquals("gators", nodes.get(0).animal.id );
-        assertEquals("lions", nodes.get(1).animal.id );
-        assertEquals("elephant_odyssey", nodes.get(2).animal.id );
-        assertEquals("arctic_foxes", nodes.get(3).animal.id );
-        assertEquals("entrance_exit_gate", nodes.get(4).animal.id );
+        assertEquals("gators", nodes.get(0).exhibit.id );
+        assertEquals("lions", nodes.get(1).exhibit.id );
+        assertEquals("elephant_odyssey", nodes.get(2).exhibit.id );
+        assertEquals("arctic_foxes", nodes.get(3).exhibit.id );
+        assertEquals("entrance_exit_gate", nodes.get(4).exhibit.id );
 //        assertEquals(110.0, nodes.get(1).distance, 0.01);
 
         //checking the total distance is right
@@ -224,7 +223,7 @@ public class USTest {
     private double total_length(List<route_node> nodes) {
         //System.out.println(nodes.size());
         double dis=0;
-        String goal = nodes.get(0).animal.id;
+        String goal = nodes.get(0).exhibit.id;
         String start = "entrance_exit_gate";
         for (int i =0; i<nodes.size(); i++){
 
@@ -233,7 +232,7 @@ public class USTest {
 
            if (i<nodes.size()-1){
                start = goal;
-               goal = nodes.get(i+1).animal.id;
+               goal = nodes.get(i+1).exhibit.id;
            }
 
            dis+=curr;
@@ -271,7 +270,7 @@ public class USTest {
 
 
         for (int i = 0; i < routeNodeList.size() - 1; i++){
-            assertEquals(routeNodeList.get(i).animal.name, selectedAnimalNameStringList.get(i));
+            assertEquals(routeNodeList.get(i).exhibit.name, selectedAnimalNameStringList.get(i));
             assertEquals(routeNodeList.get(i).address, selectedAnimalAddress.get(i));
             assertEquals(Double.toString(routeNodeList.get(i).distance), Double.toString(selectedAnimalDistance.get(i)));
         }

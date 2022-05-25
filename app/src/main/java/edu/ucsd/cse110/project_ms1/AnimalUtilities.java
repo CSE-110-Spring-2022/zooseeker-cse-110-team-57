@@ -4,7 +4,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,10 +61,10 @@ public class AnimalUtilities {
         if (visiting_order == route.size())
             return false;
 
-        AnimalItem planned_next_animal = route.get(visiting_order+1).animal;
+        AnimalItem planned_next_animal = route.get(visiting_order+1).exhibit;
         double distance_to_the_next =get_distance(curr_position,planned_next_animal);
         for (int i=visiting_order+1; i<route.size(); i++){
-            AnimalItem animal = route.get(i+1).animal;
+            AnimalItem animal = route.get(i+1).exhibit;
             double dis = get_distance(curr_position,animal);
             if (dis<distance_to_the_next) return true;
         }
@@ -77,7 +76,7 @@ public class AnimalUtilities {
 
         while(visiting_order!=route.size()){
 
-            left_animal_items.add(route.get(visiting_order+1).animal);
+            left_animal_items.add(route.get(visiting_order+1).exhibit);
             route.remove(visiting_order+1);
         }
         List<route_node> rest_route = AnimalItem.plan_route(left_animal_items);
@@ -89,7 +88,7 @@ public class AnimalUtilities {
 
         List<String> newNames = new ArrayList<>();
         for (route_node r : newRoute){
-            newNames.add(r.animal.name);
+            newNames.add(r.exhibit.name);
         }
         return  newRoute;
     }

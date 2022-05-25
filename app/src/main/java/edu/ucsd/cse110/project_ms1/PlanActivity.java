@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -79,7 +78,7 @@ public class PlanActivity extends AppCompatActivity{
         plan_adapter.setRouted_animal_items(routeNodeListWithoutExitGate);
 
         for (route_node myRoute_node: routeNodeList){
-            String myAnimal = myRoute_node.animal.name;
+            String myAnimal = myRoute_node.exhibit.name;
             routedAnimalNameStrings.add(myAnimal);
         }
 

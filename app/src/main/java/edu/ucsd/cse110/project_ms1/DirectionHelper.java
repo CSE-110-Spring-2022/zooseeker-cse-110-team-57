@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import org.jgrapht.GraphPath;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,8 +46,8 @@ public class DirectionHelper {
         HashMap<Integer,List<IdentifiedWeightedEdge>> route = new HashMap<>();
 
         for(int i = 0;i < planned_route.size() - 1 ;i++){
-            String source = planned_route.get(i).animal.name;
-            String sink = planned_route.get(i+1).animal.name;
+            String source = planned_route.get(i).exhibit.name;
+            String sink = planned_route.get(i+1).exhibit.name;
 
             GraphPath<String, IdentifiedWeightedEdge> path = AnimalItem.adapted_find_shortest_path(AnimalItem.gInfo, source, sink);
             //list of street in this walk.

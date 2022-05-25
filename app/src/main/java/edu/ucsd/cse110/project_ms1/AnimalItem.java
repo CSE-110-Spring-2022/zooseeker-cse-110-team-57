@@ -12,7 +12,6 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -130,6 +129,7 @@ public class AnimalItem {
         String goal;
         ArrayList<route_node> planned_route = new ArrayList<>();
         int num_iter=animal_items.size();
+        route_node myRouteNode = null;
         for (int i=0; i < num_iter+1; i++){
             //plus 1 because we need the begin and end of the route
             double min_distance=99999999.9;
@@ -141,19 +141,50 @@ public class AnimalItem {
                 animal_items.add(gate);
             }
 
+            //find next closest exhibit
             closest_animal = AnimalUtilities.getClosestAnimalItem(animal_items, start, min_distance, closest_animal);
+            animal_items.remove(closest_animal);
+            // find the potential group name, may be null
+            String potential_parent_id = vInfo.get( closest_animal.id).parent_id;
+            // itself is a parent/group exhibit
+            if (vInfo.get( closest_animal.id).kind.name() == "exhibit_group")
+                potential_parent_id = closest_animal.id;
 
+            if (potential_parent_id!=null &&
+                    myRouteNode != null &&
+                    potential_parent_id .equals( myRouteNode.exhibit.id)){
 
+                myRouteNode.names.add(closest_animal.name);
+                continue;
+            }
+
+            //find the address of the goal
             GraphPath<String, IdentifiedWeightedEdge> path = adapted_find_shortest_path(gInfo, start, closest_animal.id);
             int pathSize = path.getEdgeList().size();
             IdentifiedWeightedEdge myEdge = path.getEdgeList().get(pathSize - 1);
             address_id = myEdge.getId();
+            String address= eInfo.get(address_id).street;
 
-            String address = eInfo.get(address_id).street;
+            //construct parent item for the node
+            if (potential_parent_id!=null && potential_parent_id != closest_animal.id){
+                for (Map.Entry<String, ZooData.VertexInfo> set : vInfo.entrySet()){
+                    ZooData.VertexInfo currentVertex = set.getValue();
+                    if (currentVertex.id .equals( potential_parent_id)){
+                        closest_animal = new AnimalItem(
+                                currentVertex.id,
+                                (ArrayList<String>) set.getValue().tags,
+                                set.getValue().name,
+                                currentVertex.lat ==null ? null : new LatLng(currentVertex.lat,currentVertex.lng)
+                        );
+                        break;
+                    }
+                }
+
+            }
             distance = route_length(adapted_find_shortest_path(gInfo, "entrance_exit_gate",closest_animal.id));
             start = closest_animal.id;
-            animal_items.remove(closest_animal);
-            route_node myRouteNode = new route_node(closest_animal, address, distance);
+            //closest_animal = vInfo.get(potential_parent_id)
+            myRouteNode = new route_node(closest_animal, address, distance);
             planned_route.add(myRouteNode);
         }
         return  planned_route;
@@ -179,13 +210,16 @@ public class AnimalItem {
 
 class route_node
 {
-    public route_node(AnimalItem animal, String address, double distance) {
-        this.animal = animal;
+    public route_node(AnimalItem exhibit, String address, double distance) {
+        this.exhibit = exhibit;
         this.address = address;
         this.distance = distance;
+        names= new ArrayList<>();
+        names.add(this.exhibit.name);
     }
 
-    public AnimalItem animal;
+    public AnimalItem exhibit;
     public String address;
     public double  distance;
+    public List<String> names;
 };
