@@ -69,8 +69,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         orderedAnimalList_IDs = new ArrayList<>();
 
         for(route_node node : planned_route){
-            orderedAnimalList_Names.add(node.animal.name);
-            orderedAnimalList_IDs.add(node.animal.id);
+            orderedAnimalList_Names.add(node.exhibit.name);
+            orderedAnimalList_IDs.add(node.exhibit.id);
         }
 
         //we need add the front gate into orderedAnimalList, so that route begin at gate
@@ -255,7 +255,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
                 //save to SharedPreferences
                 List<String> animal_strings = new ArrayList<>();
                 for (route_node myRoute_node : planned_route) {
-                    String myAnimal = myRoute_node.animal.name;
+                    String myAnimal = myRoute_node.exhibit.name;
                     animal_strings.add(myAnimal);
                 }
                 SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);

@@ -3,7 +3,6 @@ package edu.ucsd.cse110.project_ms1;
 
 
 
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -224,7 +223,7 @@ public class USTest {
     private double total_length(List<route_node> nodes) {
         //System.out.println(nodes.size());
         double dis=0;
-        String goal = nodes.get(0).animal.id;
+        String goal = nodes.get(0).exhibit.id;
         String start = "entrance_exit_gate";
         for (int i =0; i<nodes.size(); i++){
 
@@ -233,7 +232,7 @@ public class USTest {
 
            if (i<nodes.size()-1){
                start = goal;
-               goal = nodes.get(i+1).animal.id;
+               goal = nodes.get(i+1).exhibit.id;
            }
 
            dis+=curr;
