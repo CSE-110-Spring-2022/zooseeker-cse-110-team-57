@@ -29,7 +29,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     HashMap<Integer, DirectionData> zooRoute;
     boolean isNext;
     Intent intent;
-    ArrayList<String> orderedAnimal;
+    public static ArrayList<String> orderedAnimal;
     DirectionAdapter direction_adapter;
     RecyclerView direction_recyclerView;
     List<String> orderedAnimalList_Names;
@@ -286,11 +286,15 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         zooRoute.put(0, walk);
         display(0,true);
          */
-        orderedAnimal.clear();
+        clearRoute();
         Utilities.clearSavedAnimalItem(this);
         intent = new Intent(this, SearchAnimalActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         finish();
+    }
+
+    public static void clearRoute(){
+        orderedAnimal.clear();
     }
 
     // Direction Display
@@ -338,4 +342,5 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         displayStatus = !displayStatus;
         editor.apply();
     }
+
 }

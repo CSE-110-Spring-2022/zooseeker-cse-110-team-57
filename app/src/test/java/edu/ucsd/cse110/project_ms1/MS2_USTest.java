@@ -30,54 +30,36 @@ import java.util.List;
 public class MS2_USTest {
 
     @Rule
-    public ActivityScenarioRule<SearchAnimalActivity> scenarioRule = new ActivityScenarioRule<>(SearchAnimalActivity.class);
-
-    @Before
-    public void add_animal(){
-        ActivityScenario search = scenarioRule.getScenario();
-        search.moveToState(Lifecycle.State.CREATED);
-
-        search.onActivity(activity -> {
-            Button add = activity.findViewById(R.id.add_to_button);
-            add.performClick();
-            Button plan = activity.findViewById(R.id.plan_button);
-            plan.performClick();
-        });
-    }
+    public ActivityScenarioRule<SearchAnimalActivity> searchScenarioRule = new ActivityScenarioRule<>(SearchAnimalActivity.class);
+    public ActivityScenarioRule<SearchAnimalActivity> DirectionScenarioRule = new ActivityScenarioRule<>(SearchAnimalActivity.class);
+//    @Before
+//    public void add_animal(){
+//        ActivityScenario search = scenarioRule.getScenario();
+//        search.moveToState(Lifecycle.State.CREATED);
+//
+//        search.onActivity(activity -> {
+//            imalItem newSelectedAnimalItem = search_adapter.searched_animal_items.get(position);
+//            saveAddToList(newSelectedAnimalItem);
+//            Button plan = activity.findViewById(R.id.plan_button);
+//            plan.performClick();
+//        });
+//    }
 
 
     @Test
     public void Mocking_of_Location(){
-        return;
+        assert(true);
     }
 
-    @Test
-    public void dir_clear(){
-        ActivityScenario search = scenarioRule.getScenario();
-        search.moveToState(Lifecycle.State.CREATED);
 
-        search.onActivity(activity -> {
-            Button add = activity.findViewById(R.id.add_to_button);
-            add.performClick();
-            Button plan = activity.findViewById(R.id.plan_button);
-            plan.performClick();
-        });
-
-
-
-//        activityScenario.onActivity(activity -> {
-//            SharedPreferences sharedPreferences = activity.getSharedPreferences("team57",0);
-//
-//            //find and performclick
-//            Button clear = activity.findViewById(R.id.clear_button);
-//            clear.performClick();
-//
-//            //check whether route has been clear or not
-//            String route = sharedPreferences.getString("route",null);
-//            assertNull(route);
+//    @Test
+//    public void dir_clear(){
+//        ActivityScenario directionScenarioRuleScenario = DirectionScenarioRule.getScenario();
+//        directionScenarioRuleScenario.onActivity(activity -> {
+//            activity.clearRoute
 //        });
 
 
-    }
-
 }
+
+
