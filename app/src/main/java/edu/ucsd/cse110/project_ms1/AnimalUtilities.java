@@ -54,9 +54,9 @@ public class AnimalUtilities {
         return 0;
     }
 
-    public static  double get_distance(LatLng ll, AnimalItem animal){
-
-    }
+//    public static  double get_distance(LatLng ll, AnimalItem animal){
+//
+//    }
 
     public static boolean check_off_route (int visiting_order, List<route_node> route, LatLng curr_position){
         // all visited, going to the gate
@@ -64,19 +64,13 @@ public class AnimalUtilities {
             return false;
 
 
-
-        AnimalItem goal_animal = route.get(visiting_order+1).exhibit;
-        if (goal_animal.isClosestTo(new Coord(curr_position)) == false )
-            return true;
-        return false;
-
 //        double distance_to_the_next =get_distance(curr_position,planned_next_animal);
-//        for (int i=visiting_order+1; i<route.size(); i++){
-//            AnimalItem animal = route.get(i+1).exhibit;
-//            double dis = get_distance(curr_position,animal);
-//            if (dis<distance_to_the_next) return true;
-//        }
-//        return  false;
+        for (int i=visiting_order+2; i<route.size(); i++){
+            AnimalItem animal = route.get(i+1).exhibit;
+            if (animal.isClosestTo(new Coord(curr_position)) == false )
+                return true;
+        }
+        return  false;
     }
 
     public static List<route_node> reroute (int visiting_order, List<route_node> route, LatLng curr_position){
