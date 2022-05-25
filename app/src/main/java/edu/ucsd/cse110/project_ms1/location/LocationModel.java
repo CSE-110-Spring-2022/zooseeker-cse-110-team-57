@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 public class LocationModel extends AndroidViewModel {
     private final String TAG = "FOOBAR";
+
     //A MediatorLiveData that merges events from both of the other two LiveData.
     private final MediatorLiveData<Coord> lastKnownCoords;
     //A MutableLiveData that is updated whenever a location update comes in from the Location Service.

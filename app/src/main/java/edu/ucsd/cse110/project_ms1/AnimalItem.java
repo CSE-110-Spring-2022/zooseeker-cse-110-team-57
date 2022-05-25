@@ -226,7 +226,8 @@ public class AnimalItem {
         return new Coord(landmark.position.latitude, landmark.position.longitude);
     }
 
-    public boolean isCloseTo(Coord otherCoords) {
+    public boolean isCloseTo(AnimalItem otherAnimalItem) {
+        Coord otherCoords = new Coord(otherAnimalItem.position.latitude, otherAnimalItem.position.longitude);
         return isCloseTo(otherCoords, 0.001);
     }
 
