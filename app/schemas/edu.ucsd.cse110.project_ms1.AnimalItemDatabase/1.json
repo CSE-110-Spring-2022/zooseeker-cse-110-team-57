@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "336a6550429ae512c04e90c7606ac0b4",
+    "identityHash": "33e175aa3a58cc1adf9fb461ea18a181",
     "entities": [
       {
         "tableName": "animal_items",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`unique_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `id` TEXT NOT NULL, `tags` TEXT, `name` TEXT, `searched` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`unique_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `id` TEXT NOT NULL, `tags` TEXT, `name` TEXT, `searched` INTEGER NOT NULL, `visited` INTEGER NOT NULL, `position` TEXT)",
         "fields": [
           {
             "fieldPath": "unique_id",
@@ -37,6 +37,18 @@
             "columnName": "searched",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "visited",
+            "columnName": "visited",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "position",
+            "columnName": "position",
+            "affinity": "TEXT",
+            "notNull": false
           }
         ],
         "primaryKey": {
@@ -52,7 +64,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '336a6550429ae512c04e90c7606ac0b4')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '33e175aa3a58cc1adf9fb461ea18a181')"
     ]
   }
 }

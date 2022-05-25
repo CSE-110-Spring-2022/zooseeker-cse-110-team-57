@@ -1,232 +1,346 @@
 package edu.ucsd.cse110.project_ms1;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
-public class DirectionActivity extends AppCompatActivity {
-    public DirectionAdapter direction_adapter;
-    public RecyclerView direction_recyclerView;
-    public TextView goalExhibitTitle, startExhibitTitle, nextText, previousText, pathTotalDistance;
-    public StringAndAnimalItem stringAndAnimalItem;
-    private ArrayList<String> orderedAnimalNameString, orderedAnimalIdStringList, directionStringList;
-    private List<AnimalItem> orderedAnimalItemList;
-    private List<Double> pathDistances;
-    List<GraphPath<String, IdentifiedWeightedEdge>> pathList;
-    public String start_id, start_name, goal_id, goal_name, next_name, next_distance,
-            previous_name, previous_distance;
-    public String entrance_id, entrance_name;
-    public int directionItemOrder, numberOfPaths;
+import com.google.android.gms.maps.model.LatLng;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
+public class DirectionActivity extends AppCompatActivity implements OnLocationChangeListener {
+    int order;
+    // direction display status
+    boolean displayStatus;
+    Button detailBtn;
+
+    String currentLocation; //current exhibit or closest exhibit
+    HashMap<Integer, DirectionData> zooRoute;
+    boolean isNext;
+    Intent intent;
+    public static ArrayList<String> orderedAnimal;
+    DirectionAdapter direction_adapter;
+    RecyclerView direction_recyclerView;
+    List<String> orderedAnimalList_Names;
+    List<String> orderedAnimalList_IDs;
+    List<AnimalItem> animalItems;
+    List<route_node> planned_route;
+    boolean going_forward;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_direction);
-        //initiate field
-        orderedAnimalIdStringList = new ArrayList<String>();
-        orderedAnimalItemList = new ArrayList<AnimalItem>();
-        stringAndAnimalItem = new StringAndAnimalItem();
-        directionItemOrder = 0;
-        entrance_id = "entrance_exit_gate";
-        entrance_name = "Entrance and Exit Gate";
+
+        Utilities.changeCurrentActivity(this, "DirectionActivity");
+        going_forward = true;
+
+        //grab ordered list of animal id, begin from first item in the route.
+        Intent intent = getIntent();
+        orderedAnimal = intent.getStringArrayListExtra("routedAnimalNameList");
+        if (orderedAnimal == null){
+            SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
+            String concated_animal_names = sharedPreferences.getString("route",
+                    "No found such animal in sharedPreference");
+            orderedAnimal = new ArrayList<>(Arrays.asList(concated_animal_names.split("\\s*,\\s*"))) ;
+            DirectionHelper.restoreCurrentOrderAndIsNext(this);
+        }
+
+        //remove the Entrance and Exit Gate
+        orderedAnimal.remove(orderedAnimal.size() - 1);
+        animalItems = DirectionHelper.loadAnimalItem(this, orderedAnimal);
+
+        //find the shortest Path by given ordered route.
+        //(order -order of animal in the route , paths -list of edges in the path)
+        planned_route = AnimalItem.plan_route(animalItems);
+
+        orderedAnimalList_Names = new ArrayList<>();
+        orderedAnimalList_IDs = new ArrayList<>();
+
+        for(route_node node : planned_route){
+            orderedAnimalList_Names.add(node.exhibit.name);
+            orderedAnimalList_IDs.add(node.exhibit.id);
+        }
+
+        //we need add the front gate into orderedAnimalList, so that route begin at gate
+        orderedAnimalList_Names.add(0, "Entrance and Exit Gate");
+        orderedAnimalList_IDs.add(0, "entrance_exit_gate");
+
+//        orderedAnimalList.add("entrance_exit_gate");
+        //<order -the index of exhibit in the route, edges -the edges between exhibits
+        //HashMap<Integer, List<IdentifiedWeightedEdge>> route = DirectionHelper.findRoute(planned_route);
+
 
         //adapter
         direction_adapter = new DirectionAdapter();
         direction_adapter.setHasStableIds(true);
-        direction_recyclerView = this.findViewById(R.id.all_direction_items);
+
+        direction_recyclerView = this.findViewById(R.id.brief_path);
         direction_recyclerView.setLayoutManager(new LinearLayoutManager(this));
         direction_recyclerView.setAdapter(direction_adapter);
-        startExhibitTitle = findViewById(R.id.start_exhibit_name);
-        goalExhibitTitle = findViewById(R.id.goal_exhibit_name);
-        nextText = findViewById(R.id.next_text);
-        previousText = findViewById(R.id.previous_text);
-        pathTotalDistance = findViewById(R.id.path_total_distance);
 
-        //get the ordered AnimalItem string
-        Intent intent = getIntent();
-        orderedAnimalNameString = intent.getStringArrayListExtra("routedAnimalNameList");
-        numberOfPaths = orderedAnimalNameString.size() - 1;
-        pathList = new ArrayList<>(numberOfPaths);
-        pathDistances = new ArrayList<Double>(numberOfPaths);
-        //set animal item list
-        List<String> orderedAnimalNameStringWithoutExitGate = new ArrayList<>(orderedAnimalNameString);
-        String exit_gate = orderedAnimalNameStringWithoutExitGate.remove(orderedAnimalNameStringWithoutExitGate.size() - 1);
-        orderedAnimalItemList = loadOrderedAnimals(orderedAnimalNameStringWithoutExitGate);
-        //set graph path list for each path
-        setGraphPathList();
-        //set the first Exhibit
-        displayDirection(directionItemOrder);
-        displayNextAndPrevious(directionItemOrder);
-    }
+        //Get the order and isNext
+        List<String> retainedInfo = DirectionHelper.loadDirectionsInformation(this);
+        order = Integer.valueOf(retainedInfo.get(0));
+        isNext = Boolean.valueOf(retainedInfo.get(1));
 
-    public List<AnimalItem> loadOrderedAnimals(List<String> orderedAnimalNameString){
-        List<AnimalItem> orderedAnimalItemList = new ArrayList<AnimalItem>();
-        SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
-        for (String animalName: orderedAnimalNameString){
-            //find the string containing all related information of a selected animal
-            String animalItemInfoString = sharedPreferences.getString(animalName,
-                    "No found such animal in sharedPreference");
-            //get the animalItem
-            AnimalItem animalItem = stringAndAnimalItem.StringToAnimalItem(animalItemInfoString);
-            //add animalItem to the AnimalItem list
-            orderedAnimalItemList.add(animalItem);
-            orderedAnimalIdStringList.add(animalItem.id);
-        }
-        orderedAnimalIdStringList.add("entrance_exit_gate");
-        return orderedAnimalItemList;
-    }
+        // display status
+        loadDisplayStatus();
+        display(order, isNext);
 
-    public void setGraphPathList(){
-        GraphPath<String, IdentifiedWeightedEdge> path;
-        String startId, goalId;
-        double currentPathLength;
-        //start from the gate
-        startId = "entrance_exit_gate";
-        goalId = orderedAnimalIdStringList.get(0);
-        path = DijkstraShortestPath.findPathBetween(AnimalItem.gInfo, startId, goalId);
-        //save path
-        pathList.add(path);
-        //save path total distance
-        currentPathLength = AnimalItem.route_length(path);
-        pathDistances.add(Double.valueOf(currentPathLength));
-        //for each order animal
-        for (int i = 0; i < numberOfPaths; i++){
-            startId = orderedAnimalIdStringList.get(i);
-            goalId = orderedAnimalIdStringList.get(i + 1);
-            path = DijkstraShortestPath.findPathBetween(AnimalItem.gInfo, startId, goalId);
-            //save path
-            pathList.add(path);
-            //save path total distance
-            currentPathLength = AnimalItem.route_length(path);
-            pathDistances.add(Double.valueOf(currentPathLength));
-        }
-    }
+    } //Initial End
 
-    public List<String> setDirectionList(int order){
-        GraphPath<String, IdentifiedWeightedEdge> myPath = pathList.get(order);
-        List<String> myStringList = new ArrayList<String>();
-        List<String> edgeStringList = new ArrayList<String>();
-        List<String> edgeWeightList = new ArrayList<String>();
-        List<String> start_endpoints = new ArrayList<String>();
-        List<String> end_endpoints = new ArrayList<String>();
-        for (IdentifiedWeightedEdge edge: myPath.getEdgeList()){
-            //save each edge
-            ZooData.EdgeInfo edgeInfo = AnimalItem.eInfo.get(edge.getId());
-            edgeStringList.add(edgeInfo.street);
-            //save 2 endpoints of each edge
-            Graph<String, IdentifiedWeightedEdge> myGraph = AnimalItem.gInfo;
-            String start_endpoint_id = myGraph.getEdgeSource(edge);
-            String end_endpoint_id = myGraph.getEdgeTarget(edge);
-            String startName = AnimalItem.vInfo.get(start_endpoint_id).name;
-            String endName = AnimalItem.vInfo.get(end_endpoint_id).name;
-            start_endpoints.add(startName);
-            end_endpoints.add(endName);
-            //save edge weight
-            Double myWeight = myGraph.getEdgeWeight(edge);
-            edgeWeightList.add(Double.toString(myWeight));
-        }
-        //set each direction item string
-        for (int i = 0; i < edgeStringList.size(); i++){
-            String displayInfo = "Walk "+edgeWeightList.get(i)+"ft along \""+edgeStringList.get(i)
-                    +"\" from \""+start_endpoints.get(i)+"\" to \""+end_endpoints.get(i)+"\".";
-            myStringList.add(displayInfo);
-        }
-        return myStringList;
-    }
+    public void display(int index, boolean isNext) {
+        TextView start = findViewById(R.id.start_exhibit_name);
+        TextView end = findViewById(R.id.goal_exhibit_name);
+        TextView next = findViewById(R.id.next_text);
+        TextView prev = findViewById(R.id.previous_text);
+        TextView distance = findViewById(R.id.path_total_distance);
+        Button prevBtn = findViewById(R.id.previous_button);
+        Button nextBtn = findViewById(R.id.next_button);
+        detailBtn = findViewById(R.id.detail_button);
+        setDirectionTextDisplay();
 
-    public void displayDirection(int order){
-        //set the start and goal
-        if (order != 0){
-            start_id = goal_id;
-            start_name = goal_name;
-            goal_id = orderedAnimalIdStringList.get(order);
-            goal_name = orderedAnimalNameString.get(order);
+        String sourceExhibit;
+        String goalExhibit;
+        List<IdentifiedWeightedEdge> path;
+
+        //Set the "From" and "To"
+        if (isNext){
+            sourceExhibit = orderedAnimalList_IDs.get(index);
+            goalExhibit = orderedAnimalList_IDs.get(index+1);
+            path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
+            DirectionHelper.saveDirectionsInformation(this, order, true);
         }
         else{
-            start_id = entrance_id;
-            start_name = entrance_name;
-            goal_id = orderedAnimalIdStringList.get(order);
-            goal_name = orderedAnimalNameString.get(order);
+            sourceExhibit = orderedAnimalList_IDs.get(index);
+            goalExhibit = orderedAnimalList_IDs.get(index-1);
+            path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
+            DirectionHelper.saveDirectionsInformation(this, order, false);
         }
-        //display directions
-        String startExhibit = "  From: "+start_name;
-        String goalExhibit = "  To: "+goal_name;
-        String distance = "("+pathDistances.get(order).toString()+"ft)";
-        startExhibitTitle.setText(startExhibit);
-        goalExhibitTitle.setText(goalExhibit);
-        pathTotalDistance.setText(distance);
-        //set direction items
-        directionStringList = new ArrayList<String>(setDirectionList(order));
-        //set direction items in adapter
-        direction_adapter.setDirectionsStringList(directionStringList);
-    }
+        setDisplay(sourceExhibit, goalExhibit, path);
 
-    public void displayNextAndPrevious(int order){
-        if ((order > 0) & (order < numberOfPaths)){
-            next_name = orderedAnimalNameString.get(order + 1);
-            next_distance = pathDistances.get(order + 1).toString();
-            previous_name = orderedAnimalNameString.get(order - 1);
-            previous_distance = pathDistances.get(order - 1).toString();
-        }
-        else if(order == 0){
-            next_name = orderedAnimalNameString.get(order + 1);
-            next_distance = pathDistances.get(order + 1).toString();
-            previous_name = "Entrance and Exit Gate";
-            previous_distance = "0.0";
+        String startText = "From: " + DirectionHelper.getNodeName(sourceExhibit);
+        String endText = "To: " + DirectionHelper.getNodeName(goalExhibit);
+        start.setText(startText);
+        end.setText(endText);
+        distance.setText(Double.toString(DirectionHelper.totalDistance(path)) + " ft");
+
+//        List<String> pathDisplay = new ArrayList<>(DirectionHelper.briefPath(path,goalExhibit));;
+//        direction_adapter.setDirectionsStringList(pathDisplay);
+
+
+        //setting next button and next direction distance
+        //disable the prev btn at the first page and next btn at last page.
+        if (going_forward) {
+            // next button
+            if (index < orderedAnimalList_Names.size() - 2) {
+                nextBtn.setEnabled(true);
+                String nextSource = orderedAnimalList_IDs.get(index + 1);
+                String nextGoal = orderedAnimalList_IDs.get(index + 2);
+                List<IdentifiedWeightedEdge> nextPath = DirectionHelper.findPathBetween(nextSource, nextGoal);
+                double nextDistance = DirectionHelper.totalDistance(nextPath);
+                String nextGoalName = orderedAnimalList_Names.get(index + 2);
+                String nextText = (nextGoalName + "  " + nextDistance + " ft");
+                next.setText(nextText);
+            }
+            else {
+                nextBtn.setEnabled(false);
+                next.setText("End of tour");
+            }
+            //setting previous button and previous direction distance
+            if (index == 0) {
+                prevBtn.setEnabled(false);
+                prev.setText("Beginning of tour");
+            }
+            else {
+                prevBtn.setEnabled(true);
+                String current = orderedAnimalList_IDs.get(index);
+                String lastSource = orderedAnimalList_IDs.get(index - 1);
+                List<IdentifiedWeightedEdge> prevPath = DirectionHelper.findPathBetween(current, lastSource);
+                double prevDistance = DirectionHelper.totalDistance(prevPath);
+                String lastSourceName = orderedAnimalList_Names.get(index - 1);
+                String prevText = (lastSourceName + "  " + prevDistance + " ft");
+                prev.setText(prevText);
+            }
         }
         else{
-            next_name = "None";
-            next_distance = "0.0";
-            previous_name = orderedAnimalNameString.get(order - 1);
-            previous_distance = pathDistances.get(order - 1).toString();
+            //next button
+            nextBtn.setEnabled(true);
+            String nextSource = orderedAnimalList_IDs.get(index - 1);
+            String nextGoal = orderedAnimalList_IDs.get(index);
+            List<IdentifiedWeightedEdge> nextPath = DirectionHelper.findPathBetween(nextSource, nextGoal);
+            double nextDistance = DirectionHelper.totalDistance(nextPath);
+            String nextGoalName = orderedAnimalList_Names.get(index);
+            String nextText = (nextGoalName + "  " + nextDistance + " ft");
+            next.setText(nextText);
+
+            // previous button
+            if (index == 1) {
+                prevBtn.setEnabled(false);
+                prev.setText("Beginning of tour");
+            }
+            else {
+                prevBtn.setEnabled(true);
+                String current = orderedAnimalList_IDs.get(index-1);
+                String lastSource = orderedAnimalList_IDs.get(index - 2);
+                List<IdentifiedWeightedEdge> prevPath = DirectionHelper.findPathBetween(current, lastSource);
+                double prevDistance = DirectionHelper.totalDistance(prevPath);
+                String lastSourceName = orderedAnimalList_Names.get(index - 2);
+                String prevText = (lastSourceName + "  " + prevDistance + " ft");
+                prev.setText(prevText);
+            }
         }
-        //set next & previous labels
-        String nextT = "\""+next_name+"\" ("+next_distance+"ft)";
-        String prevT = "\""+previous_name+"\" ("+previous_distance+"ft)";
-        nextText.setText(nextT);
-        previousText.setText(prevT);
     }
 
     public void onNextButtonClick(View view) {
-        if (directionItemOrder == orderedAnimalIdStringList.size() - 1){
-            Utilities.showAlert(this, "Reach the end of tour.");
-            return;
+        order++;
+        if (!going_forward){
+            order-=2;
         }
-        else{
-            directionItemOrder++;
-            displayDirection(directionItemOrder);
-            displayNextAndPrevious(directionItemOrder);
+        going_forward = true;
+        if (order < planned_route.size()+1) {
+            display(order, true);
+        } else {
+            order = planned_route.size() ;
+            display(order, true);
+            Utilities.showAlert(this, "invalid Action");
         }
+        int a =1;
     }
 
     public void onBackButtonClick(View view) {
-        if (directionItemOrder == 0){
-            Utilities.showAlert(this, "Reach the beginning of tour.");
-            return;
+        order--;
+        if (going_forward){
+            order+=2;
         }
-        else{
-            directionItemOrder--;
-            displayDirection(directionItemOrder);
-            displayNextAndPrevious(directionItemOrder);
+        going_forward = false;
+        if (order >= 0) {
+            if (order >= orderedAnimalList_IDs.size()){
+                order = orderedAnimalList_IDs.size()-1;
+            }
+            display(order, false);
+        } else {
+            order = 0;
+            display(order, false);
+            Utilities.showAlert(this, "invalid Action");
+        }
+        int a =1;
+    }
+
+
+
+
+    @Override
+    public void OnLocationChange(LatLng current) {
+        //ZooData.VertexInfo closestlandmark = AnimalUtilities.getClosestLandmark(current);
+        if (AnimalUtilities.check_off_route(order,planned_route,current)){
+            boolean user_want_update = true;
+            if (user_want_update) {
+                planned_route = AnimalUtilities.reroute(order, planned_route, current);
+
+                //pop out a notification window
+
+                //save to SharedPreferences
+                List<String> animal_strings = new ArrayList<>();
+                for (route_node myRoute_node : planned_route) {
+                    String myAnimal = myRoute_node.exhibit.name;
+                    animal_strings.add(myAnimal);
+                }
+                SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                String joined = String.join(",", animal_strings);
+                editor.putString("route", joined);
+                editor.commit();
+                editor.apply();
+
+                //apply changes to display?
+            }
+        }
+
+
+    }
+
+    public void onClearButtonClick(View view) {
+        /*
+        zooRoute.clear();
+        String startExhibit = DirectionHelper.getNodeName(currentLocation);
+        String goalExhibit = DirectionHelper.getNodeName("entrance_exit_gate");
+        List<IdentifiedWeightedEdge> path = DirectionHelper.findPathBetween(startExhibit,goalExhibit);
+        List<String> paths = DirectionHelper.detailPath(path, startExhibit);
+        List<String> briefPaths = DirectionHelper.briefPath(path, startExhibit);
+        Double distance = DirectionHelper.totalDistance(path);
+        //temp
+        DirectionData walk = new DirectionData(startExhibit, goalExhibit, distance, paths, paths, briefPaths, briefPaths);
+        zooRoute.put(0, walk);
+        display(0,true);
+         */
+        clearRoute();
+        Utilities.clearSavedAnimalItem(this);
+        intent = new Intent(this, SearchAnimalActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
+    }
+
+    public static void clearRoute(){
+        orderedAnimal.clear();
+    }
+
+    // Direction Display
+    public void OnSettingDisplayClick(View view) {
+        saveDisplayStatus();
+        setDirectionTextDisplay();
+        display(order, isNext);
+    }
+
+    public void setDirectionTextDisplay() {
+        if (displayStatus) {
+            detailBtn.setText("DETAIL");
+        }
+        else {
+            detailBtn.setText("BRIEF");
         }
     }
+
+    public void setDisplay(String source, String goal, List<IdentifiedWeightedEdge> path) {
+        if (displayStatus) {
+            displayBrief(source, goal, path);
+        } else {
+            displayDetail(source, goal, path);
+        }
+    }
+
+    public void displayDetail(String source, String goal, List<IdentifiedWeightedEdge> path){
+        List<String> pathDisplay = DirectionHelper.detailPath(path,source);
+        direction_adapter.setDirectionsStringList(pathDisplay);
+    }
+
+    public void displayBrief(String source, String goal, List<IdentifiedWeightedEdge> path){
+        List<String> pathDisplay = DirectionHelper.briefPath(path,source);
+        direction_adapter.setDirectionsStringList(pathDisplay);
+    }
+
+    public void loadDisplayStatus() {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        displayStatus = preferences.getBoolean("DISPLAYSTATUS", true);
+    }
+    public void saveDisplayStatus() {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("DISPLAYSTATUS", !displayStatus);
+        displayStatus = !displayStatus;
+        editor.apply();
+    }
+
 }

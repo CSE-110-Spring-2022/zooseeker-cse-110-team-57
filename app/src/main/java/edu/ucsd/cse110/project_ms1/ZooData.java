@@ -24,20 +24,24 @@ public class ZooData {
             // from the strings in our JSON to this Enum.
             @SerializedName("gate") GATE,
             @SerializedName("exhibit") EXHIBIT,
-            @SerializedName("intersection") INTERSECTION
+            @SerializedName("intersection") INTERSECTION,
+            @SerializedName("exhibit_group") EXHIBIT_GROUP
         }
-
-        VertexInfo(String id, Kind kind, String name, List<String> tags) {
+        public String id;
+        public Kind kind;
+        public String name;
+        public String group_id;
+        public List<String> tags;
+        public Double lat, lng;
+        VertexInfo(String id, Kind kind, String name, List<String> tags, Double lat, Double lng, String group_id) {
             this.id = id;
             this.kind = kind;
             this.name = name;
             this.tags = tags;
+            this.lat = lat;
+            this.lng = lng;
+            this.group_id = group_id;
         }
-
-        public String id;
-        public Kind kind;
-        public String name;
-        public List<String> tags;
     }
 
     public static class EdgeInfo {

@@ -1,28 +1,15 @@
 package edu.ucsd.cse110.project_ms1;
-import static android.content.Context.MODE_PRIVATE;
 
-import android.content.SharedPreferences;
 import android.view.LayoutInflater;
-import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.TextView;
-import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
-
-import java.sql.Array;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
     private List<route_node> routedNodeList = Collections.emptyList();
@@ -74,8 +61,8 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
         }
 
         public void setAnimalItem(route_node animal_node) {
-            this.routedAnimalItem = animal_node.animal;
-            this.routedExhibitName.setText(animal_node.animal.name);
+            this.routedAnimalItem = animal_node.exhibit;
+            this.routedExhibitName.setText(animal_node.exhibit.name);
             this.routedExhibitDirections.setText(" "+animal_node.address);
             this.routedExhibitDistance.setText("("+Double.toString(animal_node.distance)+" ft)");
         }

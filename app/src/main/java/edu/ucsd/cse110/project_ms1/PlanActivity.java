@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.project_ms1;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,22 +15,24 @@ import java.util.Set;
 
 public class PlanActivity extends AppCompatActivity{
 
+    private static final int ACTIVITY_CONSTANT = 0;
     public RecyclerView plan_recyclerView;
     StringAndAnimalItem stringAndAnimalItem;
     PlanAdapter plan_adapter;
 
     List<String> selectedAnimalNameStringList;
     List<route_node> routeNodeList;
-    List<String> routedAnimalNameString;
+    List<String> routedAnimalNameStrings;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan);
+        Utilities.changeCurrentActivity(this, "PlanActivity");
 
         stringAndAnimalItem = new StringAndAnimalItem();
-        routedAnimalNameString = new ArrayList<String>();
+        routedAnimalNameStrings = new ArrayList<String>();
 
         plan_adapter = new PlanAdapter();
         plan_adapter.setHasStableIds(true);
@@ -46,9 +47,19 @@ public class PlanActivity extends AppCompatActivity{
         Intent intent = getIntent();
         selectedAnimalNameStringList =
                 intent.getStringArrayListExtra("nameStringList");
-
         SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
         List<AnimalItem> selectedAnimalItemList = new ArrayList<AnimalItem>();
+
+        if (selectedAnimalNameStringList == null){
+            Set<String> selectedAnimalNameStringSet = sharedPreferences.getAll().keySet();
+            selectedAnimalNameStringSet.remove("currentActivity");
+            selectedAnimalNameStringSet.remove("currentOrder");
+            selectedAnimalNameStringSet.remove("currentIsNext");
+            selectedAnimalNameStringSet.remove("route");
+            selectedAnimalNameStringList = new ArrayList<String>(selectedAnimalNameStringSet);
+        }
+
+
 
         for (String animalName: selectedAnimalNameStringList){
             //find the string containing all related information of a selected animal
@@ -67,16 +78,44 @@ public class PlanActivity extends AppCompatActivity{
         plan_adapter.setRouted_animal_items(routeNodeListWithoutExitGate);
 
         for (route_node myRoute_node: routeNodeList){
-            String myAnimal = myRoute_node.animal.name;
-            routedAnimalNameString.add(myAnimal);
+            String myAnimal = myRoute_node.exhibit.name;
+            routedAnimalNameStrings.add(myAnimal);
         }
 
     }
 
     public void onDirectionsClick(View view) {
+        saveToSharedPreference(routedAnimalNameStrings);
+
+        //start the direction page
         Intent intent = new Intent(this, DirectionActivity.class);
-        ArrayList<String> routedAnimalList = new ArrayList<String>(routedAnimalNameString);
+        ArrayList<String> routedAnimalList = new ArrayList<String>(routedAnimalNameStrings);
         intent.putStringArrayListExtra("routedAnimalNameList", routedAnimalList);
-        startActivity(intent);
+        startActivityForResult(intent, ACTIVITY_CONSTANT);
+    }
+
+    public void saveToSharedPreference(List<String> animal_names) {
+        //save routedAnimalNameString to sharedPreference
+        //link the animalItem name with the string form of animalItem
+        SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        //convert AnimalItem into a string containing all related information of a selected animal
+        String joined = String.join(",", animal_names );
+
+        //Map(animal name, animal information)
+        editor.putString("route", joined);
+        editor.commit();
+        editor.apply();
+    }
+
+    //https://stackoverflow.com/questions/9664108/how-to-finish-parent-activity-from-child-activity
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == ACTIVITY_CONSTANT)
+        {
+            finish();
+        }
     }
 }
