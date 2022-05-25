@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.project_ms1;
 
 import android.content.Context;
-import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
@@ -15,7 +14,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.jgrapht.Graph;
@@ -147,14 +145,18 @@ public class AnimalItem {
             // find the potential group name, may be null
             String potential_parent_id = vInfo.get( closest_animal.id).group_id;
             // itself is a parent/group exhibit
-            if (vInfo.get( closest_animal.id).kind.name() == "exhibit_group")
+            boolean self_is_group=false;
+            if (vInfo.get( closest_animal.id).kind.name() == "exhibit_group") {
                 potential_parent_id = closest_animal.id;
-
+                self_is_group=true;
+            }
+            // if the group is already in the list
             if (potential_parent_id!=null &&
                     myRouteNode != null &&
-                    potential_parent_id .equals( myRouteNode.exhibit.id)){
+                    potential_parent_id .equals( myRouteNode.parent_item.id)){
 
-                myRouteNode.names.add(closest_animal.name);
+                if (!self_is_group)
+                    myRouteNode.names.add(closest_animal.name);
                 continue;
             }
 
@@ -165,12 +167,13 @@ public class AnimalItem {
             address_id = myEdge.getId();
             String address= eInfo.get(address_id).street;
 
-            //construct parent item for the node
+            //construct parent item for the node if current is a sub_animal
+            AnimalItem parent = new AnimalItem(null,null,null,null);
             if (potential_parent_id!=null && potential_parent_id != closest_animal.id){
                 for (Map.Entry<String, ZooData.VertexInfo> set : vInfo.entrySet()){
                     ZooData.VertexInfo currentVertex = set.getValue();
                     if (currentVertex.id .equals( potential_parent_id)){
-                        closest_animal = new AnimalItem(
+                        parent = new AnimalItem(
                                 currentVertex.id,
                                 (ArrayList<String>) set.getValue().tags,
                                 set.getValue().name,
@@ -184,7 +187,7 @@ public class AnimalItem {
             distance = route_length(adapted_find_shortest_path(gInfo, "entrance_exit_gate",closest_animal.id));
             start = closest_animal.id;
             //closest_animal = vInfo.get(potential_parent_id)
-            myRouteNode = new route_node(closest_animal, address, distance);
+            myRouteNode = new route_node(closest_animal, address, distance, parent);
             planned_route.add(myRouteNode);
         }
         return  planned_route;
@@ -222,16 +225,18 @@ public class AnimalItem {
 
 class route_node
 {
-    public route_node(AnimalItem exhibit, String address, double distance) {
+    public route_node(AnimalItem exhibit, String address, double distance, AnimalItem parent_item) {
         this.exhibit = exhibit;
         this.address = address;
         this.distance = distance;
         names= new ArrayList<>();
         names.add(this.exhibit.name);
+        this.parent_item = parent_item;
     }
 
     public AnimalItem exhibit;
     public String address;
     public double  distance;
     public List<String> names;
+    public AnimalItem parent_item;
 };
