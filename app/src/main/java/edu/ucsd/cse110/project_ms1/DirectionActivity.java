@@ -3,6 +3,7 @@ package edu.ucsd.cse110.project_ms1;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -26,7 +27,6 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     Button detailBtn;
 
     String currentLocation; //current exhibit or closest exhibit
-    HashMap<Integer, DirectionData> zooRoute;
     boolean isNext;
     Intent intent;
     public static ArrayList<String> orderedAnimal;
@@ -34,6 +34,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     RecyclerView direction_recyclerView;
     List<String> orderedAnimalList_Names;
     List<String> orderedAnimalList_IDs;
+    List<List<String>> orderedAnimalList_child;
     List<AnimalItem> animalItems;
     List<route_node> planned_route;
     boolean going_forward;
@@ -64,18 +65,24 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         //find the shortest Path by given ordered route.
         //(order -order of animal in the route , paths -list of edges in the path)
         planned_route = AnimalItem.plan_route(animalItems);
+        //List<DirectionData> orderedAnimalList = DirectionHelper.routeNode_to_DirectionData(planned_route);
 
         orderedAnimalList_Names = new ArrayList<>();
         orderedAnimalList_IDs = new ArrayList<>();
-
+        orderedAnimalList_child = new ArrayList<>();
         for(route_node node : planned_route){
             orderedAnimalList_Names.add(node.exhibit.name);
             orderedAnimalList_IDs.add(node.exhibit.id);
+            orderedAnimalList_child.add(node.names);
+
         }
 
         //we need add the front gate into orderedAnimalList, so that route begin at gate
         orderedAnimalList_Names.add(0, "Entrance and Exit Gate");
         orderedAnimalList_IDs.add(0, "entrance_exit_gate");
+        orderedAnimalList_child.add(0, Arrays.asList("Entrance and Exit Gate"));
+        Log.d("orderedAnimalList_Names",orderedAnimalList_Names.toString());
+
 
 //        orderedAnimalList.add("entrance_exit_gate");
         //<order -the index of exhibit in the route, edges -the edges between exhibits
@@ -115,24 +122,34 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         String sourceExhibit;
         String goalExhibit;
         List<IdentifiedWeightedEdge> path;
+        Log.d("indexDisplay", " "+index+" ");
+        Log.d("sizeDisplay", " "+orderedAnimalList_IDs.size()+" ");
 
         //Set the "From" and "To"
+        String endText = "To: ";
         if (isNext){
             sourceExhibit = orderedAnimalList_IDs.get(index);
             goalExhibit = orderedAnimalList_IDs.get(index+1);
+            for(String child : orderedAnimalList_child.get(index+1)){
+                endText += child;
+            }
+
             path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
             DirectionHelper.saveDirectionsInformation(this, order, true);
         }
         else{
             sourceExhibit = orderedAnimalList_IDs.get(index);
             goalExhibit = orderedAnimalList_IDs.get(index-1);
+            for(String child : orderedAnimalList_child.get(index-1)){
+                endText += child;
+            }
             path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
             DirectionHelper.saveDirectionsInformation(this, order, false);
         }
         setDisplay(sourceExhibit, goalExhibit, path);
 
         String startText = "From: " + DirectionHelper.getNodeName(sourceExhibit);
-        String endText = "To: " + DirectionHelper.getNodeName(goalExhibit);
+        Log.d("endText3",endText);
         start.setText(startText);
         end.setText(endText);
         distance.setText(Double.toString(DirectionHelper.totalDistance(path)) + " ft");
