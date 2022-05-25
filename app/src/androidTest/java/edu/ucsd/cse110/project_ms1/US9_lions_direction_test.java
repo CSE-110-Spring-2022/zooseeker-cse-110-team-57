@@ -137,19 +137,19 @@ public class US9_lions_direction_test {
 
         ViewInteraction textView9 = onView(
                 allOf(withId(R.id.a_direction_item), withText("Walk 10.0ft along \"Entrance Way\" from \"Entrance and Exit Gate\" to \"Entrance Plaza\"."),
-                        withParent(withParent(withId(R.id.all_direction_items))),
+                        withParent(withParent(withId(R.id.brief_path))),
                         isDisplayed()));
         textView9.check(matches(withText("Walk 10.0ft along \"Entrance Way\" from \"Entrance and Exit Gate\" to \"Entrance Plaza\".")));
 
         ViewInteraction textView10 = onView(
                 allOf(withId(R.id.a_direction_item), withText("Walk 100.0ft along \"Reptile Road\" from \"Entrance Plaza\" to \"Alligators\"."),
-                        withParent(withParent(withId(R.id.all_direction_items))),
+                        withParent(withParent(withId(R.id.brief_path))),
                         isDisplayed()));
         textView10.check(matches(withText("Walk 100.0ft along \"Reptile Road\" from \"Entrance Plaza\" to \"Alligators\".")));
 
         ViewInteraction textView11 = onView(
                 allOf(withId(R.id.a_direction_item), withText("Walk 200.0ft along \"Sharp Teeth Shortcut\" from \"Alligators\" to \"Lions\"."),
-                        withParent(withParent(withId(R.id.all_direction_items))),
+                        withParent(withParent(withId(R.id.brief_path))),
                         isDisplayed()));
         textView11.check(matches(withText("Walk 200.0ft along \"Sharp Teeth Shortcut\" from \"Alligators\" to \"Lions\".")));
 
