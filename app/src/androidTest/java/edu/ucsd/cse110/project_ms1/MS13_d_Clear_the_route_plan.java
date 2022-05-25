@@ -29,7 +29,7 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class ClearBtn {
+public class MS13_d_Clear_the_route_plan {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
