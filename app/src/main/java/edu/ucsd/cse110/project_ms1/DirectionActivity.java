@@ -53,7 +53,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
             String concated_animal_names = sharedPreferences.getString("route",
                     "No found such animal in sharedPreference");
-            orderedAnimal = (ArrayList<String>) Arrays.asList(concated_animal_names.split("\\s*,\\s*"));
+            orderedAnimal = new ArrayList<>(Arrays.asList(concated_animal_names.split("\\s*,\\s*"))) ;
             DirectionHelper.restoreCurrentOrderAndIsNext(this);
         }
 
