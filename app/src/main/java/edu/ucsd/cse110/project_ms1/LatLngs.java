@@ -17,8 +17,8 @@ import java.util.stream.IntStream;
 import edu.ucsd.cse110.project_ms1.location.Coord;
 
 public class LatLngs {
-//    public static final LatLng UCSD_LATLNG = new LatLng(32.8801, -117.2340);
-//    public static final LatLng ZOO_LATLNG = new LatLng(32.7353, -117.1490);
+    public static final LatLng UCSD_LATLNG = new LatLng(32.8801, -117.2340);
+    public static final LatLng ZOO_LATLNG = new LatLng(32.7353, -117.1490);
     public static final Coord UCSD = Coord.of(32.8801, -117.2340);
     public static final Coord ZOO = Coord.of(32.7353, -117.1490);
 
