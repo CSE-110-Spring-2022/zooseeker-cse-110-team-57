@@ -73,7 +73,7 @@ public class AnimalItem {
             ZooData.VertexInfo currentVertex = set.getValue();
 
             // populate the latlng id map
-            String id_latlng = currentVertex.parent_id;
+            String id_latlng = currentVertex.group_id;
             if(id_latlng==null)
                 id_latlng = currentVertex.id;
             Latlng_ids_Map.put(currentVertex.id, id_latlng);
@@ -145,7 +145,7 @@ public class AnimalItem {
             closest_animal = AnimalUtilities.getClosestAnimalItem(animal_items, start, min_distance, closest_animal);
             animal_items.remove(closest_animal);
             // find the potential group name, may be null
-            String potential_parent_id = vInfo.get( closest_animal.id).parent_id;
+            String potential_parent_id = vInfo.get( closest_animal.id).group_id;
             // itself is a parent/group exhibit
             if (vInfo.get( closest_animal.id).kind.name() == "exhibit_group")
                 potential_parent_id = closest_animal.id;
@@ -206,17 +206,17 @@ public class AnimalItem {
         return DijkstraShortestPath.findPathBetween(gInfo, source, sink);
     }
 
-    public String getCoordString() {
-        var coords = getCoords();
-        return String.format(Locale.getDefault(), "%3.6f, %3.6f", coords.first, coords.second);
-    }
-    public Pair<Double, Double> getCoords(AnimalItem landmark) {
-        if (landmark != null) {
-            return Pair.create(landmark.position.latitude, landmark.position.longitude);
-        } else {
-            return Pair.create(exhibit.lat, exhibit.lng);
-        }
-    }
+//    public String getCoordString() {
+//        var coords = getCoords();
+//        return String.format(Locale.getDefault(), "%3.6f, %3.6f", coords.first, coords.second);
+//    }
+//    public Pair<Double, Double> getCoords(AnimalItem landmark) {
+//        if (landmark != null) {
+//            return Pair.create(landmark.position.latitude, landmark.position.longitude);
+//        } else {
+//            return Pair.create(exhibit.lat, exhibit.lng);
+//        }
+//    }
 }
 
 
