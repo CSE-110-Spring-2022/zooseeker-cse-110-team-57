@@ -51,8 +51,11 @@ import javax.xml.transform.TransformerFactory;
         List<String> selectedAnimalNameStringList;
         TextView NoSuchAnimal;
         TextView animalNumbers;
-
         StringAndAnimalItem stringAndAnimalItem;
+        String vPath = "exhibit_info.json";
+        String ePath = "trail_info.json";
+        String gPath = "zoo_graph.json";
+
 
 
         @Override
@@ -60,8 +63,7 @@ import javax.xml.transform.TransformerFactory;
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_search_animal);
             try {
-                AnimalItem.loadInfo(this, "sample_node_info.json",
-                        "sample_edge_info.json", "sample_zoo_graph.json");
+                AnimalItem.loadInfo(this, vPath, ePath, gPath);
             } catch (IOException e) {
                 e.printStackTrace();
             }

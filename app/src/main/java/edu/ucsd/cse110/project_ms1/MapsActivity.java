@@ -24,16 +24,32 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.Arrays;
+import edu.ucsd.cse110.project_ms1.databinding.ActivityMapsBinding;
 
-import edu.ucsd.cse110.project_ms1.databinding.ActivityDirectionBinding;
-//import androidx.databinding.DataBindingUtil;
+import androidx.annotation.VisibleForTesting;
+import androidx.lifecycle.ViewModelProvider;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
+import edu.ucsd.cse110.project_ms1.databinding.ActivityMapsBinding;
+import edu.ucsd.cse110.project_ms1.location.Coord;
+import edu.ucsd.cse110.project_ms1.location.Coords;
+import edu.ucsd.cse110.project_ms1.location.LocationModel;
+import edu.ucsd.cse110.project_ms1.location.LocationPermissionChecker;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback{
-
+    private static final String TAG = "FOOBAR";
+    public static final String EXTRA_USE_LOCATION_SERVICE = "use_location_updated";
+    private boolean useLocationService;
     private GoogleMap map;
-    private ActivityDirectionBinding binding;
+    private ActivityMapsBinding binding;
+    private LocationModel model;
+
     private Location lastVisitedLocation;
     OnLocationChangeListener onLocationChangeListener;
 
@@ -48,15 +64,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //If the EXTRA_USE_LOCATION_SERVICE extra is set to false, then only mocked location
+        // updates will be shown, and location permissions will not be requested. This is
+        // appropriate for testing purposes.
+        useLocationService = getIntent().getBooleanExtra(EXTRA_USE_LOCATION_SERVICE, false);
 
-        binding = ActivityDirectionBinding.inflate(getLayoutInflater());
+        binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        Objects.requireNonNull(mapFragment).getMapAsync(this);
+/*
         var mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
+        }
+
+ */
+        // If GPS is enabled, then update the model from the Location service.
+        if (useLocationService) {
+            var permissionChecker = new LocationPermissionChecker(this);
+            permissionChecker.ensurePermissions();
+
+            var locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+            var provider = LocationManager.GPS_PROVIDER;
+            model.addLocationProviderSource(locationManager, provider);
         }
     }
 
@@ -72,6 +106,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+
+        initializeMap(map);
 
         //Map Setup
         {
@@ -139,12 +175,64 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             locationManager.requestLocationUpdates(provider, 0, 0f, locationListener);
         }
 
+        {
+            // Observe the model and place a blue pin whenever the location is updated.
+            model.getLastKnownCoords().observe(this, (coord) -> {
+                Log.i(TAG, String.format("Observing location model update to %s", coord));
+                var marker = new MarkerOptions()
+                        .position(coord.toLatLng())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                        .title("Last Known Location");
+                map.addMarker(marker);
+            });
+
+            // Test the above by mocking movement...
+            var route = Coords
+                    .interpolate(Coords.UCSD, Coords.ZOO, 12)
+                    .collect(Collectors.toList());
+
+            if (!useLocationService) {
+                model.mockRoute(route, 500, TimeUnit.MILLISECONDS);
+            }
+        }
     }
-/*
-    @Override
-    public void OnLocationChange(LatLng current) {
-        onLocationChangeListener.OnLocationChange(LatLngs.currentLocationLatLng);
+    private void initializeMap(GoogleMap map) {
+        // Enable zoom controls.
+        var uiSettings = map.getUiSettings();
+        uiSettings.setZoomControlsEnabled(true);
+
+        var start = Coords.UCSD;
+        var end = Coords.ZOO;
+
+        // Compute the midpoint between UCSD and the zoo.
+        var cameraPosition = Coords
+                .midpoint(start, end)
+                .toLatLng();
+
+        // Place a marker at the start.
+        map.addMarker(new MarkerOptions()
+                .position(start.toLatLng())
+                .title("Start")
+        );
+
+        // Place a marker at the end.
+        map.addMarker(new MarkerOptions()
+                .position(end.toLatLng())
+                .title("End")
+        );
+
+        // Move the camera and zoom to the right level.
+        map.moveCamera(CameraUpdateFactory.newLatLng(cameraPosition));
+        map.moveCamera(CameraUpdateFactory.zoomTo(11.5f));
+    }
+    @VisibleForTesting
+    public void mockLocation(Coord coords) {
+        model.mockLocation(coords);
     }
 
- */
+    @VisibleForTesting
+    public Future<?> mockRoute(List<Coord> route, long delay, TimeUnit unit) {
+        return model.mockRoute(route, delay, unit);
+    }
+
 }
