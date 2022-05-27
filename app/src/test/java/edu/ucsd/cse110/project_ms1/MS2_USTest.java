@@ -27,6 +27,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import edu.ucsd.cse110.project_ms1.location.Coord;
+import edu.ucsd.cse110.project_ms1.location.Coords;
+
 @RunWith(AndroidJUnit4.class)
 public class MS2_USTest {
 
@@ -65,6 +70,10 @@ public class MS2_USTest {
     @Test
     public void Mocking_of_Location(){
         assert(true);
+        //get ten points in line of Siamangs and Orangutans
+        List<Coord> route = Coords.getTenPointsInLine("Siamangs", "Orangutans");
+        Coord point_near_start = route.get(2);
+        Coord point_near_goal = route.get(7);
     }
 
     public void testFindPathBetween(){

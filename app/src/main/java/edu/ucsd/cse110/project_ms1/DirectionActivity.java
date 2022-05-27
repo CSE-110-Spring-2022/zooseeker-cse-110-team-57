@@ -141,7 +141,13 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         TextView distance = findViewById(R.id.path_total_distance);
         Button prevBtn = findViewById(R.id.previous_button);
         Button nextBtn = findViewById(R.id.next_button);
+        Button mockBtn = findViewById(R.id.mock_button);
         detailBtn = findViewById(R.id.detail_button);
+
+        //---------------comment this line if you enable the mock button---------------------------
+        //mockBtn.setEnabled(false);
+        //-----------------------------------------------------------------------------------
+
         setDirectionTextDisplay();
 
         String sourceExhibit;
@@ -400,19 +406,6 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         });
     }
 
-    public void onMockButtonClick(View view) throws IOException {
-        //use mocking location
-        //this.useLocationService = getIntent().getBooleanExtra(EXTRA_USE_LOCATION_SERVICE, false);
-        useLocationService = false;
-        InputStream input = this.getAssets().open(MOCKING_FILE_NAME);
-        List<Coord> Coords = ZooData.loadMockingJSON(input);
-        if (Coords.size() == 1){
-            mockASinglePoint(Coords.get(0));
-        }
-        else{
-            mockAListOfPoints(Coords);
-        }
-    }
 
     public void mockASinglePoint(Coord singlePoint){
         viewModel.mockLocation(singlePoint);
@@ -431,15 +424,37 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     }
 
     public void mockAListOfPoints(List<Coord> route){
-        /*
-        //let the route be all points in line of UCSD and ZOO
-        List<Coord> route = Coords
-                .interpolate(Coords.UCSD, Coords.ZOO, 12)
-                .collect(Collectors.toList());
-        */
         viewModel.mockRoute(route, 500, TimeUnit.MILLISECONDS);
         viewModel.getLastKnownCoords().observe(this, (coord) -> {
             Log.i(TAG, String.format("Observing location model update to %s", coord));
         });
+    }
+
+    public void onMockButtonClick(View view) throws IOException {
+        //use mocking location
+        //this.useLocationService = getIntent().getBooleanExtra(EXTRA_USE_LOCATION_SERVICE, false);
+
+        //---------------mocking for test--------------------------------------------------
+        List<Coord> TenPoints = Coords.getTenPointsInLine("Siamangs", "Orangutans");
+        Coord point_near_start = TenPoints.get(2);
+        Coord point_near_goal = TenPoints.get(7);
+
+        mockASinglePoint(point_near_start);
+
+        mockASinglePoint(point_near_goal);
+
+        //-------------------uncomment these lines when demo----------------------------------
+        /*
+        useLocationService = false;
+        InputStream input = this.getAssets().open(MOCKING_FILE_NAME);
+        List<Coord> Coords = ZooData.loadMockingJSON(input);
+        if (route.size() == 1){
+            mockASinglePoint(route.get(0));
+        }
+        else{
+            mockAListOfPoints(route);
+        }
+         */
+        //------------------------------------------------------------------------------
     }
 }

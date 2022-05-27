@@ -2,10 +2,14 @@ package edu.ucsd.cse110.project_ms1.location;
 
 import android.util.Pair;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import edu.ucsd.cse110.project_ms1.AnimalItem;
 
 public class Coords {
     public static final Coord UCSD = Coord.of(32.8801, -117.2340);
@@ -44,5 +48,15 @@ public class Coords {
             ));
     }
 
+    public static List<Coord> getTenPointsInLine(String start, String goal){
+        AnimalItem start_landmark = AnimalItem.search_by_tag(start).get(0);
+        AnimalItem goal_landmark = AnimalItem.search_by_tag(goal).get(0);
+        Coord start_coord = Coord.fromLatLng(start_landmark.position);
+        Coord goal_coord = Coord.fromLatLng(goal_landmark.position);
+        List<Coord> route = Coords
+                .interpolate(start_coord, goal_coord, 10)
+                .collect(Collectors.toList());
+        return route;
+    }
 
 }
