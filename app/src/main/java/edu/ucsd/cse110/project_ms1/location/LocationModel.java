@@ -66,12 +66,12 @@ public class LocationModel extends AndroidViewModel {
         var locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
-                var coord = Coord.fromLocation(location);
+                Coord coord = Coord.fromLocation(location);
                 Log.i(TAG, String.format("Model received GPS location update: %s", coord));
                 providerSource.postValue(coord);
                 LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
                 LatLngs.currentLocationLatLng = currentLatLng;
-                Coords.currentCoord = Coord.fromLocation(location);
+                Coords.currentCoord = coord;
                 onLocationChangeListener.OnLocationChange(currentLatLng);
             }
         };

@@ -7,13 +7,16 @@ import android.util.Log;
 
 import org.jgrapht.GraphPath;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class DirectionHelper {
+import edu.ucsd.cse110.project_ms1.location.Coord;
 
+public class DirectionHelper {
 
     public static List<String> animalInRoute(List<AnimalItem> orderedAnimalList){
         List<String> route = new ArrayList<>();
@@ -223,5 +226,6 @@ public class DirectionHelper {
 
         return orderedAnimalList;
     }
+
 
 }

@@ -1,9 +1,13 @@
 package edu.ucsd.cse110.project_ms1;
 
+import android.content.Context;
+
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -16,6 +20,8 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
 import org.jgrapht.nio.json.JSONImporter;
+
+import edu.ucsd.cse110.project_ms1.location.Coord;
 
 public class ZooData {
     public static class VertexInfo {
@@ -108,5 +114,19 @@ public class ZooData {
         importer.importGraph(g, reader);
 
         return g;
+    }
+
+    public static List<Coord> loadMockingJSON(InputStream inputStream){
+        Reader reader = new InputStreamReader(inputStream);
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<Coord>>(){}.getType();
+        List<Coord> Coords = gson.fromJson(reader, type);
+        /*
+        List<Coord> Coords = zooData
+                .stream()
+                .collect(Collectors.toMap(v -> v.id, datum -> datum));
+
+         */
+        return Coords;
     }
 }

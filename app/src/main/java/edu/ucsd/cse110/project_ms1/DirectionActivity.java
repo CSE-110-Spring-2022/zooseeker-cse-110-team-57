@@ -1,7 +1,9 @@
 package edu.ucsd.cse110.project_ms1;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,26 +11,40 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
+import edu.ucsd.cse110.project_ms1.location.Coord;
+import edu.ucsd.cse110.project_ms1.location.Coords;
+import edu.ucsd.cse110.project_ms1.location.LocationModel;
+import edu.ucsd.cse110.project_ms1.location.LocationPermissionChecker;
 
 public class DirectionActivity extends AppCompatActivity implements OnLocationChangeListener {
     int order;
+    private boolean useLocationService;
     // direction display status
     boolean displayStatus;
-    Button detailBtn;
-
-    String currentLocation; //current exhibit or closest exhibit
     boolean isNext;
+    Button detailBtn;
     Intent intent;
+    LocationModel viewModel;
+
     public static ArrayList<String> orderedAnimal;
     DirectionAdapter direction_adapter;
     RecyclerView direction_recyclerView;
@@ -38,12 +54,19 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     List<AnimalItem> animalItems;
     List<route_node> planned_route;
     boolean going_forward;
+    private static final String TAG = "Location6666666";
+    public static final String MOCKING_FILE_NAME = "mocking.json";
+    public static final String EXTRA_USE_LOCATION_SERVICE = "use_location_updated";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_direction);
 
+        //use physical real location
+        useLocationService = true;
+
+        //retain the DirectionActivity
         Utilities.changeCurrentActivity(this, "DirectionActivity");
         going_forward = true;
 
@@ -92,10 +115,12 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         //adapter
         direction_adapter = new DirectionAdapter();
         direction_adapter.setHasStableIds(true);
-
         direction_recyclerView = this.findViewById(R.id.brief_path);
         direction_recyclerView.setLayoutManager(new LinearLayoutManager(this));
         direction_recyclerView.setAdapter(direction_adapter);
+
+        //connect LocationModel class
+        viewModel = new ViewModelProvider(this).get(LocationModel.class);
 
         //Get the order and isNext
         List<String> retainedInfo = DirectionHelper.loadDirectionsInformation(this);
@@ -360,4 +385,61 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         editor.apply();
     }
 
+
+    public void GPSButtonClick(View view){
+        // If GPS is enabled, then update the model from the Location service.
+        useLocationService = true;
+        var permissionChecker = new LocationPermissionChecker(this);
+        permissionChecker.ensurePermissions();
+
+        var locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        var provider = LocationManager.GPS_PROVIDER;
+        viewModel.addLocationProviderSource(locationManager, provider);
+        viewModel.getLastKnownCoords().observe(this, (coord) -> {
+            Log.i(TAG, String.format("Observing location model update to %s", coord));
+        });
+    }
+
+    public void onMockButtonClick(View view) throws IOException {
+        //use mocking location
+        //this.useLocationService = getIntent().getBooleanExtra(EXTRA_USE_LOCATION_SERVICE, false);
+        useLocationService = false;
+        InputStream input = this.getAssets().open(MOCKING_FILE_NAME);
+        List<Coord> Coords = ZooData.loadMockingJSON(input);
+        if (Coords.size() == 1){
+            mockASinglePoint(Coords.get(0));
+        }
+        else{
+            mockAListOfPoints(Coords);
+        }
+    }
+
+    public void mockASinglePoint(Coord singlePoint){
+        viewModel.mockLocation(singlePoint);
+        viewModel.getLastKnownCoords().observe(this, (coord) -> {
+            Log.i(TAG, String.format("Observing location model update to %s", coord));
+        });
+/*
+        viewModel.getLastKnownCoords().observe(this, new Observer<Coord>() {
+            @Override
+            public void onChanged(Coord coord) {
+                Log.i(TAG, String.format("Observing location model update to %s", coord));
+            }
+        });
+
+ */
+    }
+
+    public void mockAListOfPoints(List<Coord> route){
+        /*
+        //let the route be all points in line of UCSD and ZOO
+        List<Coord> route = Coords
+                .interpolate(Coords.UCSD, Coords.ZOO, 12)
+                .collect(Collectors.toList());
+        */
+        viewModel.mockRoute(route, 500, TimeUnit.MILLISECONDS);
+        viewModel.getLastKnownCoords().observe(this, (coord) -> {
+            Log.i(TAG, String.format("Observing location model update to %s", coord));
+        });
+    }
 }
