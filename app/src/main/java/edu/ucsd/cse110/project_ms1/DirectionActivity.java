@@ -473,7 +473,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         /*
         useLocationService = false;
         InputStream input = this.getAssets().open(MOCKING_FILE_NAME);
-        List<Coord> Coords = ZooData.loadMockingJSON(input);
+        List<Coord> route = ZooData.loadMockingJSON(input);
         if (route.size() == 1){
             mockASinglePoint(route.get(0));
         }
