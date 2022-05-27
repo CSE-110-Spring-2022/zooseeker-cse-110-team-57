@@ -39,7 +39,7 @@ public class MS2_USTest {
 
         search.onActivity(activity -> {
             Button add = activity.findViewById(R.id.add_to_button);
-            add.performClick();
+             add.performClick();
             Button plan = activity.findViewById(R.id.plan_button);
             plan.performClick();
         });
