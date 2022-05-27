@@ -71,6 +71,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -83,6 +84,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
  */
+        // Set up the model.
+        model = new ViewModelProvider(this).get(LocationModel.class);
+
         // If GPS is enabled, then update the model from the Location service.
         if (useLocationService) {
             var permissionChecker = new LocationPermissionChecker(this);
@@ -106,74 +110,50 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-
+        //set up map
         initializeMap(map);
 
-        //Map Setup
-        {
-            //Enable zoom controls
-            var uiSettings = map.getUiSettings();
-            uiSettings.setZoomControlsEnabled(true);
+//        //permissions Setup
+//        {
+//            var requiredPermissions = new String[]{
+//                    Manifest.permission.ACCESS_FINE_LOCATION,
+//                    Manifest.permission.ACCESS_COARSE_LOCATION
+//
+//            };
+//
+//            var hasNoLocationPerms = Arrays.stream(requiredPermissions)
+//                    .map(perm -> ContextCompat.checkSelfPermission(this, perm))
+//                    .allMatch(status -> status == PackageManager.PERMISSION_DENIED);
+//
+//            if (hasNoLocationPerms) {
+//                requestPermissionLauncher.launch(requiredPermissions);
+//                //the activity will be restarted when permission change
+//                //this entire method will be re-run, but we won't get stuck here
+//                return;
+//            }
+//        }
 
-            //Add a marker between UCSD and the zoo and move the camera
-            var ucsdPosition = LatLngs.UCSD_LATLNG;
-            var zooPosition = LatLngs.ZOO_LATLNG;
-
-            //compute the midpoint between UCSD and the zoo
-            var cameraPosition = LatLngs.midpoint(ucsdPosition, zooPosition);
-
-            //Place a pin on UCSD
-            map.addMarker(new MarkerOptions().position(ucsdPosition).title("UCSD"));
-
-            //Move the camera and zoom to the right level
-            map.moveCamera(CameraUpdateFactory.newLatLng(cameraPosition));
-            map.moveCamera(CameraUpdateFactory.zoomTo(11.5f));
-        }
-
-
-
-        //permissions Setup
-        {
-            var requiredPermissions = new String[]{
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-
-            };
-
-            var hasNoLocationPerms = Arrays.stream(requiredPermissions)
-                    .map(perm -> ContextCompat.checkSelfPermission(this, perm))
-                    .allMatch(status -> status == PackageManager.PERMISSION_DENIED);
-
-            if (hasNoLocationPerms) {
-                requestPermissionLauncher.launch(requiredPermissions);
-                //the activity will be restarted when permission change
-                //this entire method will be re-run, but we won't get stuck here
-                return;
-            }
-        }
-
-
-        //listen for location updates
-        {
-            var provider = LocationManager.GPS_PROVIDER;
-            var locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-            var locationListener = new LocationListener(){
-                @Override
-                public void onLocationChanged(@NonNull Location location){
-                    Log.d("LAB7", String.format("Location changed: %s", location));
-
-                    LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
-                    var marker = new MarkerOptions().
-                            position(current).title("Navigation Step");
-                    map.addMarker(marker);
-                    //update current location latitude & longtitude
-
-                    LatLngs.currentLocationLatLng = current;
-                    onLocationChangeListener.OnLocationChange(current);
-                }
-            };
-            locationManager.requestLocationUpdates(provider, 0, 0f, locationListener);
-        }
+//        //listen for location updates
+//        {
+//            var provider = LocationManager.GPS_PROVIDER;
+//            var locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+//            var locationListener = new LocationListener(){
+//                @Override
+//                public void onLocationChanged(@NonNull Location location){
+//                    Log.d("LAB7", String.format("Location changed: %s", location));
+//
+//                    LatLng current = new LatLng(location.getLatitude(), location.getLongitude());
+//                    var marker = new MarkerOptions().
+//                            position(current).title("Navigation Step");
+//                    map.addMarker(marker);
+//                    //update current location latitude & longtitude
+//
+//                    LatLngs.currentLocationLatLng = current;
+//                    onLocationChangeListener.OnLocationChange(current);
+//                }
+//            };
+//            locationManager.requestLocationUpdates(provider, 0, 0f, locationListener);
+//        }
 
         {
             // Observe the model and place a blue pin whenever the location is updated.
@@ -225,6 +205,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         map.moveCamera(CameraUpdateFactory.newLatLng(cameraPosition));
         map.moveCamera(CameraUpdateFactory.zoomTo(11.5f));
     }
+    
     @VisibleForTesting
     public void mockLocation(Coord coords) {
         model.mockLocation(coords);

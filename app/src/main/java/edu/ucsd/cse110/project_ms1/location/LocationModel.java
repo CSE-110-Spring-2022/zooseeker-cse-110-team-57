@@ -14,12 +14,18 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import edu.ucsd.cse110.project_ms1.LatLngs;
+import edu.ucsd.cse110.project_ms1.OnLocationChangeListener;
+
 public class LocationModel extends AndroidViewModel {
+    OnLocationChangeListener onLocationChangeListener;
     private final String TAG = "FOOBAR";
 
     //A MediatorLiveData that merges events from both of the other two LiveData.
@@ -60,9 +66,13 @@ public class LocationModel extends AndroidViewModel {
         var locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
-                var coord = Coord.fromLocation(location);
+                Coord coord = Coord.fromLocation(location);
                 Log.i(TAG, String.format("Model received GPS location update: %s", coord));
                 providerSource.postValue(coord);
+                LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                LatLngs.currentLocationLatLng = currentLatLng;
+                Coords.currentCoord = coord;
+                onLocationChangeListener.OnLocationChange(currentLatLng);
             }
         };
         // Register for updates.

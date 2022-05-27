@@ -46,7 +46,7 @@
 
     <TextView
         android:id="@+id/start_exhibit_name"
-        android:layout_width="0dp"
+        android:layout_width="400dp"
         android:layout_height="30dp"
         android:background="@color/main_theme_pink"
         android:gravity="left"
@@ -54,7 +54,6 @@
         android:textColor="@color/white"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -196,6 +195,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/goal_exhibit_name"
         app:layout_constraintTop_toBottomOf="@+id/start_exhibit_name"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/mock_button"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:onClick="onMockButtonClick"
+        android:text="Mock"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/brief_path"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/brief_path" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

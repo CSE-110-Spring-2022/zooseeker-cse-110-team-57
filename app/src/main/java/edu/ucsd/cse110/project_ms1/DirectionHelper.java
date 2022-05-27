@@ -7,12 +7,16 @@ import android.util.Log;
 
 import org.jgrapht.GraphPath;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class DirectionHelper {
+import edu.ucsd.cse110.project_ms1.location.Coord;
 
+public class DirectionHelper {
 
     public static List<String> animalInRoute(List<AnimalItem> orderedAnimalList){
         List<String> route = new ArrayList<>();
@@ -107,7 +111,7 @@ public class DirectionHelper {
 
     public static List<String> briefPath(List<IdentifiedWeightedEdge> path, String startNode){
         List<String> display = new ArrayList<>();
-        String street = path.get(0).getId();
+        String street = AnimalItem.eInfo.get(path.get(0).getId()).street;
         String source = startNode;
         String target;
         String edgeInfo;
@@ -133,13 +137,15 @@ public class DirectionHelper {
             //If we continues on the same street.
             String nextStreet = AnimalItem.eInfo.get(edge.getId()).street;
 
-            if(street.equals(nextStreet)){
+            if(street.equals(nextStreet) && path.size()>1){
                 totalDistance += distance;
                 continue;
-            }else{
-                edgeInfo = "Proceed on " + street + " " + totalDistance + " ft towards " + target;
-                street = nextStreet;
             }
+
+            totalDistance += distance;
+            edgeInfo = "Proceed on " + street + " " + totalDistance + " ft towards " + target;
+            totalDistance = 0.0;
+            street = nextStreet;
 
             display.add(edgeInfo);
         }
@@ -200,5 +206,26 @@ public class DirectionHelper {
     }
 
  */
+
+    public static List<DirectionData> routeNode_to_DirectionData(List<route_node> planned_route) {
+
+        List<DirectionData> orderedAnimalList = new ArrayList<>();
+
+        planned_route.stream().forEach(node -> {
+            DirectionData nodeData = new DirectionData(node.exhibit.name,
+                    node.exhibit.id,
+                    node.names);
+            orderedAnimalList.add(nodeData);
+        });
+
+        //add gate at begin of route
+        DirectionData gate = new DirectionData("Entrance and Exit Gate",
+                "entrance_exit_gate",
+                new ArrayList<>(Arrays.asList("")));
+        orderedAnimalList.add(0, gate);
+
+        return orderedAnimalList;
+    }
+
 
 }

@@ -1,48 +1,76 @@
 package edu.ucsd.cse110.project_ms1;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
+import edu.ucsd.cse110.project_ms1.location.Coord;
+import edu.ucsd.cse110.project_ms1.location.Coords;
+import edu.ucsd.cse110.project_ms1.location.LocationModel;
+import edu.ucsd.cse110.project_ms1.location.LocationPermissionChecker;
 
 public class DirectionActivity extends AppCompatActivity implements OnLocationChangeListener {
+    private static Context mContext;
     int order;
-    // direction display status
+    private boolean useLocationService;
     boolean displayStatus;
-    Button detailBtn;
-
-    String currentLocation; //current exhibit or closest exhibit
-    HashMap<Integer, DirectionData> zooRoute;
     boolean isNext;
+    boolean going_forward;
+    Button detailBtn;
     Intent intent;
-    ArrayList<String> orderedAnimal;
+    LocationModel viewModel;
+
+    public static ArrayList<String> orderedAnimal;
     DirectionAdapter direction_adapter;
     RecyclerView direction_recyclerView;
     List<String> orderedAnimalList_Names;
     List<String> orderedAnimalList_IDs;
+    List<List<String>> orderedAnimalList_child;
     List<AnimalItem> animalItems;
     List<route_node> planned_route;
-    boolean going_forward;
+
+    private static final String TAG = "Location6666666";
+    public static final String MOCKING_FILE_NAME = "mocking.json";
+    public static final String EXTRA_USE_LOCATION_SERVICE = "use_location_updated";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_direction);
+        //mContext = getApplicationContext();
 
+        //use physical real location
+        useLocationService = true;
+
+        //retain the DirectionActivity
         Utilities.changeCurrentActivity(this, "DirectionActivity");
         going_forward = true;
 
@@ -64,18 +92,24 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         //find the shortest Path by given ordered route.
         //(order -order of animal in the route , paths -list of edges in the path)
         planned_route = AnimalItem.plan_route(animalItems);
+        //List<DirectionData> orderedAnimalList = DirectionHelper.routeNode_to_DirectionData(planned_route);
 
         orderedAnimalList_Names = new ArrayList<>();
         orderedAnimalList_IDs = new ArrayList<>();
-
+        orderedAnimalList_child = new ArrayList<>();
         for(route_node node : planned_route){
             orderedAnimalList_Names.add(node.exhibit.name);
             orderedAnimalList_IDs.add(node.exhibit.id);
+            orderedAnimalList_child.add(node.names);
+
         }
 
         //we need add the front gate into orderedAnimalList, so that route begin at gate
         orderedAnimalList_Names.add(0, "Entrance and Exit Gate");
         orderedAnimalList_IDs.add(0, "entrance_exit_gate");
+        orderedAnimalList_child.add(0, Arrays.asList("Entrance and Exit Gate"));
+        Log.d("orderedAnimalList_Names",orderedAnimalList_Names.toString());
+
 
 //        orderedAnimalList.add("entrance_exit_gate");
         //<order -the index of exhibit in the route, edges -the edges between exhibits
@@ -85,10 +119,12 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         //adapter
         direction_adapter = new DirectionAdapter();
         direction_adapter.setHasStableIds(true);
-
         direction_recyclerView = this.findViewById(R.id.brief_path);
         direction_recyclerView.setLayoutManager(new LinearLayoutManager(this));
         direction_recyclerView.setAdapter(direction_adapter);
+
+        //connect LocationModel class
+        viewModel = new ViewModelProvider(this).get(LocationModel.class);
 
         //Get the order and isNext
         List<String> retainedInfo = DirectionHelper.loadDirectionsInformation(this);
@@ -109,30 +145,46 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         TextView distance = findViewById(R.id.path_total_distance);
         Button prevBtn = findViewById(R.id.previous_button);
         Button nextBtn = findViewById(R.id.next_button);
+        Button mockBtn = findViewById(R.id.mock_button);
         detailBtn = findViewById(R.id.detail_button);
+
+        //---------------comment this line if you enable the mock button---------------------------
+        //mockBtn.setEnabled(false);
+        //-----------------------------------------------------------------------------------
+
         setDirectionTextDisplay();
 
         String sourceExhibit;
         String goalExhibit;
         List<IdentifiedWeightedEdge> path;
+        Log.d("indexDisplay", " "+index+" ");
+        Log.d("sizeDisplay", " "+orderedAnimalList_IDs.size()+" ");
 
         //Set the "From" and "To"
+        String endText = "To: ";
         if (isNext){
             sourceExhibit = orderedAnimalList_IDs.get(index);
             goalExhibit = orderedAnimalList_IDs.get(index+1);
+            for(String child : orderedAnimalList_child.get(index+1)){
+                endText += child;
+            }
+
             path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
             DirectionHelper.saveDirectionsInformation(this, order, true);
         }
         else{
             sourceExhibit = orderedAnimalList_IDs.get(index);
             goalExhibit = orderedAnimalList_IDs.get(index-1);
+            for(String child : orderedAnimalList_child.get(index-1)){
+                endText += child;
+            }
             path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
             DirectionHelper.saveDirectionsInformation(this, order, false);
         }
         setDisplay(sourceExhibit, goalExhibit, path);
 
         String startText = "From: " + DirectionHelper.getNodeName(sourceExhibit);
-        String endText = "To: " + DirectionHelper.getNodeName(goalExhibit);
+        Log.d("endText3",endText);
         start.setText(startText);
         end.setText(endText);
         distance.setText(Double.toString(DirectionHelper.totalDistance(path)) + " ft");
@@ -286,11 +338,15 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         zooRoute.put(0, walk);
         display(0,true);
          */
-        orderedAnimal.clear();
+        clearRoute();
         Utilities.clearSavedAnimalItem(this);
         intent = new Intent(this, SearchAnimalActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         finish();
+    }
+
+    public static void clearRoute(){
+        orderedAnimal.clear();
     }
 
     // Direction Display
@@ -337,5 +393,94 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         editor.putBoolean("DISPLAYSTATUS", !displayStatus);
         displayStatus = !displayStatus;
         editor.apply();
+    }
+
+    public static Context getContext() {
+        return mContext;
+    }
+
+
+
+    public void GPSButtonClick(View view){
+        // If GPS is enabled, then update the model from the Location service.
+        useLocationService = true;
+        var permissionChecker = new LocationPermissionChecker(this);
+        permissionChecker.ensurePermissions();
+
+        var locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        var provider = LocationManager.GPS_PROVIDER;
+        viewModel.addLocationProviderSource(locationManager, provider);
+        viewModel.getLastKnownCoords().observe(this, (coord) -> {
+            Log.i(TAG, String.format("Observing location model update to %s", coord));
+        });
+    }
+
+
+    public void mockASinglePoint(Coord singlePoint){
+        viewModel.mockLocation(singlePoint);
+        viewModel.getLastKnownCoords().observe(this, (coord) -> {
+            Log.i(TAG, String.format("Observing location model update to %s", coord));
+        });
+/*
+        viewModel.getLastKnownCoords().observe(this, new Observer<Coord>() {
+            @Override
+            public void onChanged(Coord coord) {
+                Log.i(TAG, String.format("Observing location model update to %s", coord));
+            }
+        });
+
+ */
+    }
+
+    public Future<?> mockAListOfPoints(List<Coord> route){
+        Future<?> myfuture = viewModel.mockRoute(route, 500, TimeUnit.MILLISECONDS);
+        viewModel.getLastKnownCoords().observe(this, (coord) -> {
+            Log.i(TAG, String.format("Observing location model update to %s", coord));
+        });
+        return myfuture;
+    }
+
+    public void onMockButtonClick(View view) throws IOException {
+        //use mocking location
+        //this.useLocationService = getIntent().getBooleanExtra(EXTRA_USE_LOCATION_SERVICE, false);
+
+        //---------------mocking for test--------------------------------------------------
+        //Step 1: Create a mocking point
+        // create your own Coord manually
+        Coord koi_fish_coord = new Coord(32.72109826903826, -117.15952052282296);
+        //Another way to create a Coord automatically
+        //get 10 points in the line between "start" and "goal" (must be the Name of AnimalItem)
+        List<Coord> TenPoints = Coords.getTenPointsInLine("Siamangs", "Orangutans");
+        //change the indexes as you wish
+        Coord point_near_start = TenPoints.get(2);
+        Coord point_near_goal = TenPoints.get(7);
+
+
+        //Step 2.1: call mockASinglePoint function
+        mockASinglePoint(koi_fish_coord);
+        //mockASinglePoint(point_near_start);
+        //mockASinglePoint(point_near_goal);
+
+        //Step 2.2: call mockAListOfPoints function
+        //mockAListOfPoints(TenPoints);
+
+        //Step 3: check if Coords.currentCoord updates
+        if (Coords.currentCoord.equals(koi_fish_coord)){
+            Log.d("koi_fish_coord", "Yes");
+        }
+
+        //-------------------uncomment these lines when demo----------------------------------
+        /*
+        useLocationService = false;
+        InputStream input = this.getAssets().open(MOCKING_FILE_NAME);
+        List<Coord> route = ZooData.loadMockingJSON(input);
+        if (route.size() == 1){
+            mockASinglePoint(route.get(0));
+        }
+        else{
+            mockAListOfPoints(route);
+        }
+         */
+        //------------------------------------------------------------------------------
     }
 }

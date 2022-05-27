@@ -243,9 +243,8 @@ public class AnimalItem {
         Double dLat = (coord.lat - otherCoords.lat)* DEG_LAT_IN_FT;
         Double dLng = (coord.lng - otherCoords.lng) * DEG_LNG_IN_FT;
         Double d_ft = Math.sqrt(Math.pow(dLat, 2) + Math.pow(dLng, 2));
-        return BASE * Math.ceil(d_ft/ BASE);
+        return Math.ceil(d_ft);
     }
-
 }
 
 
