@@ -445,20 +445,29 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         //this.useLocationService = getIntent().getBooleanExtra(EXTRA_USE_LOCATION_SERVICE, false);
 
         //---------------mocking for test--------------------------------------------------
+        //Step 1: Create a mocking point
+        // create your own Coord manually
         Coord koi_fish_coord = new Coord(32.72109826903826, -117.15952052282296);
-        mockASinglePoint(koi_fish_coord);
-        if (Coords.currentCoord.equals(koi_fish_coord)){
-            Log.d("koi_fish_coord", "Yes");
-        }
-
+        //Another way to create a Coord automatically
+        //get 10 points in the line between "start" and "goal" (must be the Name of AnimalItem)
         List<Coord> TenPoints = Coords.getTenPointsInLine("Siamangs", "Orangutans");
+        //change the indexes as you wish
         Coord point_near_start = TenPoints.get(2);
         Coord point_near_goal = TenPoints.get(7);
 
-        //mockASinglePoint(point_near_start);
 
+        //Step 2.1: call mockASinglePoint function
+        mockASinglePoint(koi_fish_coord);
+        //mockASinglePoint(point_near_start);
         //mockASinglePoint(point_near_goal);
 
+        //Step 2.2: call mockAListOfPoints function
+        //mockAListOfPoints(TenPoints);
+
+        //Step 3: check if Coords.currentCoord updates
+        if (Coords.currentCoord.equals(koi_fish_coord)){
+            Log.d("koi_fish_coord", "Yes");
+        }
 
         //-------------------uncomment these lines when demo----------------------------------
         /*
