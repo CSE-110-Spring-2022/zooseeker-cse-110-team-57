@@ -1,4 +1,5 @@
 package edu.ucsd.cse110.project_ms1;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -18,12 +19,14 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,13 +34,16 @@ import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.project_ms1.location.Coord;
 import edu.ucsd.cse110.project_ms1.location.Coords;
+import edu.ucsd.cse110.project_ms1.location.LocationModel;
+
 
 @RunWith(AndroidJUnit4.class)
 public class MS2_USTest {
 
     @Rule
     public ActivityScenarioRule<SearchAnimalActivity> searchScenarioRule = new ActivityScenarioRule<>(SearchAnimalActivity.class);
-    public ActivityScenarioRule<SearchAnimalActivity> DirectionScenarioRule = new ActivityScenarioRule<>(SearchAnimalActivity.class);
+    public ActivityScenarioRule<DirectionActivity> DirectionScenarioRule = new ActivityScenarioRule<>(DirectionActivity.class);
+
 //    @Before
 //    public void add_animal(){
 //        ActivityScenario search = scenarioRule.getScenario();
@@ -68,13 +74,36 @@ public class MS2_USTest {
     }
 
     @Test
-    public void Mocking_of_Location(){
+    public void Mocking_of_Location_Test(){
         assert(true);
         //get ten points in line of Siamangs and Orangutans
         List<Coord> route = Coords.getTenPointsInLine("Siamangs", "Orangutans");
         Coord point_near_start = route.get(2);
         Coord point_near_goal = route.get(7);
+        //LocationModel viewModel = new ViewModelProvider().get(LocationModel.class);
     }
+
+//    @Test
+//    public void read_mocking_file_test() throws IOException {
+//        ActivityScenario<DirectionActivity> scenario = DirectionScenarioRule.getScenario();
+//        scenario.moveToState(Lifecycle.State.CREATED);
+//        scenario.onActivity(activity -> {
+//            Context context = ApplicationProvider.getApplicationContext();
+//            try {
+//                InputStream input = context.getAssets().open(DirectionActivity.MOCKING_FILE_NAME);
+//                List<Coord> points = ZooData.loadMockingJSON(input);
+//                List<Coord> correctPoints = new ArrayList<Coord>();
+//                correctPoints.add(new Coord(32.73459618734685, -117.14936));
+//                correctPoints.add(new Coord(32.73453269952234, -117.1526194979576));
+//                int i = 0;
+//                for (Coord point : points) {
+//                    assertEquals(point, correctPoints.get(i));
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        });
+//    }
 
     public void testFindPathBetween(){
 

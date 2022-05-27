@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -36,11 +37,12 @@ import edu.ucsd.cse110.project_ms1.location.LocationModel;
 import edu.ucsd.cse110.project_ms1.location.LocationPermissionChecker;
 
 public class DirectionActivity extends AppCompatActivity implements OnLocationChangeListener {
+    private static Context mContext;
     int order;
     private boolean useLocationService;
-    // direction display status
     boolean displayStatus;
     boolean isNext;
+    boolean going_forward;
     Button detailBtn;
     Intent intent;
     LocationModel viewModel;
@@ -53,15 +55,17 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     List<List<String>> orderedAnimalList_child;
     List<AnimalItem> animalItems;
     List<route_node> planned_route;
-    boolean going_forward;
+
     private static final String TAG = "Location6666666";
     public static final String MOCKING_FILE_NAME = "mocking.json";
     public static final String EXTRA_USE_LOCATION_SERVICE = "use_location_updated";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_direction);
+        //mContext = getApplicationContext();
 
         //use physical real location
         useLocationService = true;
@@ -391,6 +395,11 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         editor.apply();
     }
 
+    public static Context getContext() {
+        return mContext;
+    }
+
+
 
     public void GPSButtonClick(View view){
         // If GPS is enabled, then update the model from the Location service.
@@ -423,11 +432,12 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
  */
     }
 
-    public void mockAListOfPoints(List<Coord> route){
-        viewModel.mockRoute(route, 500, TimeUnit.MILLISECONDS);
+    public Future<?> mockAListOfPoints(List<Coord> route){
+        Future<?> myfuture = viewModel.mockRoute(route, 500, TimeUnit.MILLISECONDS);
         viewModel.getLastKnownCoords().observe(this, (coord) -> {
             Log.i(TAG, String.format("Observing location model update to %s", coord));
         });
+        return myfuture;
     }
 
     public void onMockButtonClick(View view) throws IOException {
@@ -435,13 +445,20 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         //this.useLocationService = getIntent().getBooleanExtra(EXTRA_USE_LOCATION_SERVICE, false);
 
         //---------------mocking for test--------------------------------------------------
+        Coord koi_fish_coord = new Coord(32.72109826903826, -117.15952052282296);
+        mockASinglePoint(koi_fish_coord);
+        if (Coords.currentCoord.equals(koi_fish_coord)){
+            Log.d("koi_fish_coord", "Yes");
+        }
+
         List<Coord> TenPoints = Coords.getTenPointsInLine("Siamangs", "Orangutans");
         Coord point_near_start = TenPoints.get(2);
         Coord point_near_goal = TenPoints.get(7);
 
-        mockASinglePoint(point_near_start);
+        //mockASinglePoint(point_near_start);
 
-        mockASinglePoint(point_near_goal);
+        //mockASinglePoint(point_near_goal);
+
 
         //-------------------uncomment these lines when demo----------------------------------
         /*
