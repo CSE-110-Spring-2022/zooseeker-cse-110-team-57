@@ -424,13 +424,15 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     public void onMockButtonClick(View view) throws IOException {
         //use mocking location
         //this.useLocationService = getIntent().getBooleanExtra(EXTRA_USE_LOCATION_SERVICE, false);
-
+        useLocationService = false;
         //---------------mocking for test--------------------------------------------------
         //Step 1: Create a mocking point
         // create your own Coord manually
         Coord koi_fish_coord = new Coord(32.72109826903826, -117.15952052282296);
+        
         //Another way to create a Coord automatically
-        //get 10 points in the line between "start" and "goal" (must be the Name of AnimalItem)
+        //get 10 evenly spaced points in the line between "start" and "goal" (include "start" and "goal")
+        // "start" and "goal" must be the Name of landmark
         List<Coord> TenPoints = Coords.getTenPointsInLine("Siamangs", "Orangutans");
         //change the indexes as you wish
         Coord point_near_start = TenPoints.get(2);
