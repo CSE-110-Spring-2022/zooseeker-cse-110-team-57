@@ -245,6 +245,11 @@ public class AnimalItem {
         Double d_ft = Math.sqrt(Math.pow(dLat, 2) + Math.pow(dLng, 2));
         return Math.ceil(d_ft);
     }
+
+    public static Coord getExtranceGateCoord(){
+        Coord EntranceGate_Coord = new Coord(vInfo.get("entrance_exit_gate").lat, vInfo.get("entrance_exit_gate").lng);
+        return EntranceGate_Coord;
+    }
 }
 
 

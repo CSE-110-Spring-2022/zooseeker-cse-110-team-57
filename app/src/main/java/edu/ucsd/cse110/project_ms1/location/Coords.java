@@ -2,6 +2,8 @@ package edu.ucsd.cse110.project_ms1.location;
 
 import android.util.Pair;
 
+import androidx.lifecycle.LiveData;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
@@ -14,10 +16,11 @@ import edu.ucsd.cse110.project_ms1.AnimalItem;
 public class Coords {
     public static final Coord UCSD = Coord.of(32.8801, -117.2340);
     public static final Coord ZOO = Coord.of(32.7353, -117.1490);
-    public static Coord currentCoord;
     public static final Double DEG_LAT_IN_FT = 363843.57;
     public static final Double DEG_LNG_IN_FT = 307515.50;
     public static final Double BASE = 100.00;
+
+    public static Coord currentLocationCoord;
 
     /**
      * @param p1 first coordinate

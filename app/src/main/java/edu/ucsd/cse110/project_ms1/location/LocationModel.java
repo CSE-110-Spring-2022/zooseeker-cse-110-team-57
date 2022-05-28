@@ -13,6 +13,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -21,6 +22,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import edu.ucsd.cse110.project_ms1.AnimalItem;
+import edu.ucsd.cse110.project_ms1.DirectionActivity;
 import edu.ucsd.cse110.project_ms1.LatLngs;
 import edu.ucsd.cse110.project_ms1.OnLocationChangeListener;
 
@@ -39,14 +42,33 @@ public class LocationModel extends AndroidViewModel {
         super(application);
         lastKnownCoords = new MediatorLiveData<>();
 
+
         // Create and add the mock source.
         mockSource = new MutableLiveData<>();
-        lastKnownCoords.addSource(mockSource, lastKnownCoords::setValue);
+        //set entrance & exit gate coord
+        mockSource.postValue(AnimalItem.getExtranceGateCoord());
+
+        //lastKnownCoords.addSource(mockSource, lastKnownCoords::setValue);
+        lastKnownCoords.addSource(mockSource, new Observer<Coord>() {
+            @Override
+            public void onChanged(Coord coord) {
+                lastKnownCoords.setValue(coord);
+                Coords.currentLocationCoord = coord;
+                LatLngs.currentLocationLatLng = coord.toLatLng();
+                //onLocationChangeListener.OnLocationChange(coord);
+            }
+        });
     }
 
     public LiveData<Coord> getLastKnownCoords() {
         return lastKnownCoords;
     }
+
+    public Coord getCurrentCoord(){
+        return lastKnownCoords.getValue();
+    }
+
+
 
     /**
      * @param locationManager the location manager to request updates from.
@@ -60,7 +82,6 @@ public class LocationModel extends AndroidViewModel {
         if (locationProviderSource != null) {
             removeLocationProviderSource();
         }
-
         // Create a new GPS source.
         var providerSource = new MutableLiveData<Coord>();
         var locationListener = new LocationListener() {
@@ -71,8 +92,8 @@ public class LocationModel extends AndroidViewModel {
                 providerSource.postValue(coord);
                 LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
                 LatLngs.currentLocationLatLng = currentLatLng;
-                Coords.currentCoord = coord;
-                onLocationChangeListener.OnLocationChange(currentLatLng);
+                Coords.currentLocationCoord = Coord.fromLocation(location);
+                onLocationChangeListener.OnLocationChange(coord);
             }
         };
         // Register for updates.

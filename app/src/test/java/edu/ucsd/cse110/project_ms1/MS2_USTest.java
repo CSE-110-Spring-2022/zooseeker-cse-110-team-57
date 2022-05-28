@@ -131,6 +131,11 @@ public class MS2_USTest {
         assertTrue(goalTrue);
 
     }
+    @Test
+    public void getEntranceGateCoord_test(){
+        Coord coord = AnimalItem.getExtranceGateCoord();
+        assertEquals(new Coord(32.73461, -117.14936), coord);
+    }
 }
 
 

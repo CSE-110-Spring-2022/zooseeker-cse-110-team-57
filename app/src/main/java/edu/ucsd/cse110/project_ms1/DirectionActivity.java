@@ -11,25 +11,17 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.project_ms1.location.Coord;
 import edu.ucsd.cse110.project_ms1.location.Coords;
@@ -65,10 +57,6 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_direction);
-        //mContext = getApplicationContext();
-
-        //use physical real location
-        useLocationService = true;
 
         //retain the DirectionActivity
         Utilities.changeCurrentActivity(this, "DirectionActivity");
@@ -125,8 +113,11 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         //connect LocationModel class
         viewModel = new ViewModelProvider(this).get(LocationModel.class);
+        //use physical real location
+        useLocationService = true;
+        Coords.currentLocationCoord = viewModel.getCurrentCoord();
 
-        //Get the order and isNext
+                //Get the order and isNext
         List<String> retainedInfo = DirectionHelper.loadDirectionsInformation(this);
         order = Integer.valueOf(retainedInfo.get(0));
         isNext = Boolean.valueOf(retainedInfo.get(1));
@@ -295,12 +286,12 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
 
     @Override
-    public void OnLocationChange(LatLng current) {
+    public void OnLocationChange(Coord current) {
         //ZooData.VertexInfo closestlandmark = AnimalUtilities.getClosestLandmark(current);
-        if (AnimalUtilities.check_off_route(order,planned_route,current)){
+        if (AnimalUtilities.check_off_route(order,planned_route,current.toLatLng())){
             boolean user_want_update = true;
             if (user_want_update) {
-                planned_route = AnimalUtilities.reroute(order, planned_route, current);
+                planned_route = AnimalUtilities.reroute(order, planned_route, current.toLatLng());
 
                 //pop out a notification window
 
@@ -465,7 +456,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         //mockAListOfPoints(TenPoints);
 
         //Step 3: check if Coords.currentCoord updates
-        if (Coords.currentCoord.equals(koi_fish_coord)){
+        if (Coords.currentLocationCoord.equals(koi_fish_coord)){
             Log.d("koi_fish_coord", "Yes");
         }
 
