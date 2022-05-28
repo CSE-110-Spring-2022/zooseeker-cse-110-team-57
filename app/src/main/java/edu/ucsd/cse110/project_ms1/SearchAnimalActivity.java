@@ -52,9 +52,7 @@ import javax.xml.transform.TransformerFactory;
         TextView NoSuchAnimal;
         TextView animalNumbers;
         StringAndAnimalItem stringAndAnimalItem;
-        String vPath = "exhibit_info.json";
-        String ePath = "trail_info.json";
-        String gPath = "zoo_graph.json";
+
 
 
 
@@ -62,11 +60,7 @@ import javax.xml.transform.TransformerFactory;
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_search_animal);
-            try {
-                AnimalItem.loadInfo(this, vPath, ePath, gPath);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            AnimalUtilities.loadZooInfo(this);
             Utilities.changeCurrentActivity(this, "SearchAnimalActivity");
 
             //--------------Comment this line if you don't want to select animals again-------------

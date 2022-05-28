@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -30,6 +31,7 @@ public class PlanActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan);
         Utilities.changeCurrentActivity(this, "PlanActivity");
+        AnimalUtilities.loadZooInfo(this);
 
         stringAndAnimalItem = new StringAndAnimalItem();
         routedAnimalNameStrings = new ArrayList<String>();

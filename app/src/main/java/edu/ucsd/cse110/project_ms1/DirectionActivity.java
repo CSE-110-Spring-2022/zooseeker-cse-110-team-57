@@ -62,6 +62,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         //retain the DirectionActivity
         Utilities.changeCurrentActivity(this, "DirectionActivity");
+        AnimalUtilities.loadZooInfo(this);
         going_forward = true;
 
         //grab ordered list of animal id, begin from first item in the route.
@@ -289,8 +290,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
     @Override
     public void OnLocationChange(Coord current) {
-        //ZooData.VertexInfo closestlandmark = AnimalUtilities.getClosestLandmark(current);
-        if (AnimalUtilities.check_off_route(order,planned_route,current.toLatLng())){
+        boolean isOffRoute = AnimalUtilities.check_off_route(order,planned_route,current.toLatLng());
+        if (isOffRoute){
             boolean user_want_update = true;
             if (user_want_update) {
                 planned_route = AnimalUtilities.reroute(order, planned_route, current.toLatLng());

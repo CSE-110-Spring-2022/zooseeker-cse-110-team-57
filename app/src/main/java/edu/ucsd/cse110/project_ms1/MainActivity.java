@@ -17,9 +17,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //--------Comment these lines if you want to direct to the page before the app is killed----------------
-        goToSearchAnimalActivity();
+        //goToSearchAnimalActivity();
         //goToPlanActivity();
-        //goToDirectionActivity();
+        goToDirectionActivity();
         //-----------------------------------------------------------------------------------------
 
         SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);

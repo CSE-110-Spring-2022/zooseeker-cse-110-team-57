@@ -1,10 +1,13 @@
 package edu.ucsd.cse110.project_ms1;
 
+import android.content.Context;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,6 +16,17 @@ import java.util.stream.Stream;
 import edu.ucsd.cse110.project_ms1.location.Coord;
 
 public class AnimalUtilities {
+    public static void loadZooInfo(Context context){
+        String vPath = "exhibit_info.json";
+        String ePath = "trail_info.json";
+        String gPath = "zoo_graph.json";
+        try {
+            AnimalItem.loadInfo(context, vPath, ePath, gPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static AnimalItem getClosestAnimalItem(List<AnimalItem> animal_items, String start, double min_distance, AnimalItem closest_animal) {
         String goal;
         //use for loop to find next closet exhibit
@@ -28,26 +42,6 @@ public class AnimalUtilities {
 
         }
         return closest_animal;
-    }
-
-
-
-
-    //get the closest landmark of current location
-    public static ZooData.VertexInfo getClosestLandmark(LatLng current){
-        return null;
-//        Double min;
-//        ZooData.VertexInfo closest;
-//        for (ZooData.VertexInfo landmark: "wait for stater code // all vertex with latlng"){
-//            LatLng landmarkPosistion = new LatLng(landmark.lat, landmark.lng);
-//            // Or maybe a vertex and a latlng and then find a path ...? most likely. wait for start code
-//            Double distance = ;
-//            if (distance < min){
-//                min = distance;
-//                closest = landmark;
-//            }
-//        }
-//        return closest;
     }
 
     public static  double get_distance(LatLng l1, LatLng l2){

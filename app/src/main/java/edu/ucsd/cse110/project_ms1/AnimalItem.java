@@ -224,8 +224,9 @@ public class AnimalItem {
     }
 
     public Coord getCoords() {
-        AnimalItem landmark = search_by_tag(Latlng_ids_Map.get(id)).get(0);
-        return new Coord(landmark.position.latitude, landmark.position.longitude);
+        ZooData.VertexInfo landmark = vInfo.get(this.id);
+        Coord mycoord = new Coord(landmark.lat, landmark.lng);
+        return mycoord;
     }
 
 //    public boolean isClosestTo(Coord otherCoords) {
