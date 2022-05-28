@@ -14,6 +14,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -38,10 +39,10 @@ public class LocationModel extends AndroidViewModel {
     //A MutableLiveData that is updated whenever mockLocation is called.
     private MutableLiveData<Coord> mockSource = null;
 
-    public LocationModel(@NonNull Application application) {
+    public LocationModel(@NonNull Application application, OnLocationChangeListener onLocationChangeListener) {
         super(application);
         lastKnownCoords = new MediatorLiveData<>();
-
+        this.onLocationChangeListener = onLocationChangeListener;
 
         // Create and add the mock source.
         mockSource = new MutableLiveData<>();
@@ -55,7 +56,7 @@ public class LocationModel extends AndroidViewModel {
                 lastKnownCoords.setValue(coord);
                 Coords.currentLocationCoord = coord;
                 LatLngs.currentLocationLatLng = coord.toLatLng();
-                //onLocationChangeListener.OnLocationChange(coord);
+                onLocationChangeListener.OnLocationChange(coord);
             }
         });
     }

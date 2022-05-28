@@ -11,9 +11,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.lifecycle.ViewModelProvider;
 
 
 import java.io.IOException;
@@ -26,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 import edu.ucsd.cse110.project_ms1.location.Coord;
 import edu.ucsd.cse110.project_ms1.location.Coords;
 import edu.ucsd.cse110.project_ms1.location.LocationModel;
+import edu.ucsd.cse110.project_ms1.location.LocationModelFactory;
 import edu.ucsd.cse110.project_ms1.location.LocationPermissionChecker;
 
 public class DirectionActivity extends AppCompatActivity implements OnLocationChangeListener {
@@ -112,7 +114,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         direction_recyclerView.setAdapter(direction_adapter);
 
         //connect LocationModel class
-        viewModel = new ViewModelProvider(this).get(LocationModel.class);
+        viewModel = ViewModelProviders.of(this, new LocationModelFactory(this.getApplication(), this)).get(LocationModel.class);
         //use physical real location
         useLocationService = true;
         Coords.currentLocationCoord = viewModel.getCurrentCoord();
