@@ -111,6 +111,7 @@ public class LocationModel extends AndroidViewModel {
 
     @VisibleForTesting
     public void mockLocation(Coord coords) {
+        mockSource.setValue(coords);
         mockSource.postValue(coords);
     }
 
