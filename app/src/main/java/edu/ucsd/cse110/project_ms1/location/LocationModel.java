@@ -2,6 +2,7 @@ package edu.ucsd.cse110.project_ms1.location;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -10,6 +11,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -30,6 +32,7 @@ import edu.ucsd.cse110.project_ms1.OnLocationChangeListener;
 
 public class LocationModel extends AndroidViewModel {
     OnLocationChangeListener onLocationChangeListener;
+    LifecycleOwner mOwner;
     private final String TAG = "FOOBAR";
 
     //A MediatorLiveData that merges events from both of the other two LiveData.
@@ -39,10 +42,11 @@ public class LocationModel extends AndroidViewModel {
     //A MutableLiveData that is updated whenever mockLocation is called.
     private MutableLiveData<Coord> mockSource = null;
 
-    public LocationModel(@NonNull Application application, OnLocationChangeListener onLocationChangeListener) {
+    public LocationModel(@NonNull Application application, Context context, OnLocationChangeListener onLocationChangeListener) {
         super(application);
         lastKnownCoords = new MediatorLiveData<>();
         this.onLocationChangeListener = onLocationChangeListener;
+        this.mOwner = (LifecycleOwner) context;
 
         // Create and add the mock source.
         mockSource = new MutableLiveData<>();
@@ -113,10 +117,13 @@ public class LocationModel extends AndroidViewModel {
     public void mockLocation(Coord coords) {
         mockSource.setValue(coords);
         mockSource.postValue(coords);
+        getLastKnownCoords().observe(mOwner, (coord) -> {
+            Log.i(TAG, String.format("Observing location model update to %s", coord));
+        });
     }
 
     @VisibleForTesting
-    public Future<?> mockRoute(List<Coord> route, long delay, TimeUnit unit) {
+    public Future<?> mockRoute(Context context, List<Coord> route, long delay, TimeUnit unit) {
         return Executors.newSingleThreadExecutor().submit(() -> {
             int i = 1;
             int n = route.size();

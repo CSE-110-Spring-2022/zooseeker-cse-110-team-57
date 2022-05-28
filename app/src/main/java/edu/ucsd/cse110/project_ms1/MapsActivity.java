@@ -172,7 +172,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .collect(Collectors.toList());
 
             if (!useLocationService) {
-                model.mockRoute(route, 500, TimeUnit.MILLISECONDS);
+                model.mockRoute(this, route, 500, TimeUnit.MILLISECONDS);
             }
         }
     }
@@ -205,15 +205,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         map.moveCamera(CameraUpdateFactory.newLatLng(cameraPosition));
         map.moveCamera(CameraUpdateFactory.zoomTo(11.5f));
     }
-    
-    @VisibleForTesting
-    public void mockLocation(Coord coords) {
-        model.mockLocation(coords);
-    }
 
-    @VisibleForTesting
-    public Future<?> mockRoute(List<Coord> route, long delay, TimeUnit unit) {
-        return model.mockRoute(route, delay, unit);
-    }
 
 }

@@ -115,7 +115,9 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         direction_recyclerView.setAdapter(direction_adapter);
 
         //connect LocationModel class
-        viewModel = ViewModelProviders.of(this, new LocationModelFactory(this.getApplication(), this)).get(LocationModel.class);
+        viewModel = ViewModelProviders.of(this,
+                new LocationModelFactory(this.getApplication(), this,
+                        this)).get(LocationModel.class);
         //use physical real location
         useLocationService = true;
         Coords.currentLocationCoord = viewModel.getCurrentCoord();
@@ -412,25 +414,10 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
     public void mockASinglePoint(Coord singlePoint){
         viewModel.mockLocation(singlePoint);
-        viewModel.getLastKnownCoords().observe(this, (coord) -> {
-            Log.i(TAG, String.format("Observing location model update to %s", coord));
-        });
-/*
-        viewModel.getLastKnownCoords().observe(this, new Observer<Coord>() {
-            @Override
-            public void onChanged(Coord coord) {
-                Log.i(TAG, String.format("Observing location model update to %s", coord));
-            }
-        });
-
- */
     }
 
     public Future<?> mockAListOfPoints(List<Coord> route){
-        Future<?> myfuture = viewModel.mockRoute(route, 500, TimeUnit.MILLISECONDS);
-        viewModel.getLastKnownCoords().observe(this, (coord) -> {
-            Log.i(TAG, String.format("Observing location model update to %s", coord));
-        });
+        Future<?> myfuture = viewModel.mockRoute(this, route, 500, TimeUnit.MILLISECONDS);
         return myfuture;
     }
 
