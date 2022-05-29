@@ -143,7 +143,43 @@ public class MS2_USTest {
         assertTrue(goalTrue);
     }
 
-    @Test skip()
+    @Test
+    public void test_skip_remove(){
+        List<String> a1 = new ArrayList<>(Arrays.asList("a","b","c","d","e"));
+        List<String> a2 = new ArrayList<>(Arrays.asList("1","2","3","4","5"));
+        List<List<String>> a3 = new ArrayList<>();
+        a3.add(List.of("1,2,3"));
+        a3.add(List.of("1,2,3"));
+        a3.add(List.of("1,2,3"));
+        a3.add(List.of("1,2,3"));
+        a3.add(List.of("1,2,3"));
+
+        List<String> a1_copy = new ArrayList<>(a1);
+        List<String> a2_copy = new ArrayList<>(a2);
+        List<List<String>> a3_copy = new ArrayList<>(a3);
+        DirectionActivity.skip(true,1,a1,a2,a3);
+        a1_copy.remove(2);
+        a2_copy.remove(2);
+        a3_copy.remove(2);
+        assertEquals(a1_copy,a1);
+        assertEquals(a2_copy,a2);
+        assertEquals(a3_copy,a3);
+
+        DirectionActivity.skip(false,1,a1,a2,a3);
+        a1_copy.remove(0);
+        a2_copy.remove(0);
+        a3_copy.remove(0);
+        assertEquals(a1_copy,a1);
+        assertEquals(a2_copy,a2);
+        assertEquals(a3_copy,a3);
+//        System.out.println(a1);
+//        System.out.println(a2);
+//        System.out.println(a3);
+//        System.out.println(a1_copy);
+//        System.out.println(a2_copy);
+//        System.out.println(a3_copy);
+
+    }
     @Test
     public void getEntranceGateCoord_test(){
         ActivityScenario<SearchAnimalActivity> scenario = searchScenarioRule.getScenario();
