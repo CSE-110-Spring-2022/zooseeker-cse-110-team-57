@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Pair;
+import android.widget.Button;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -32,6 +33,26 @@ public class Utilities {
         AlertDialog alertDialog = alertBuilder.create();
         alertDialog.show();
     }
+
+    public static void showReplanAlert(Activity activity){
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(activity);
+        String message = "Do you want to replan the route?";
+        alertBuilder.setTitle("Alert!")
+                .setMessage(message)
+                .setPositiveButton("Yes", (dialog, id)->{
+                    Button button = activity.findViewById(R.id.replan_button);
+                    button.performClick();
+                })
+                .setNegativeButton("No",(dialog,id)->{
+                    dialog.cancel();
+                })
+                .setCancelable(true);
+        AlertDialog alertDialog = alertBuilder.create();
+        alertDialog.show();
+    }
+
+
+
 
     public static void clearSavedAnimalItem(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences("Team57", 0);
