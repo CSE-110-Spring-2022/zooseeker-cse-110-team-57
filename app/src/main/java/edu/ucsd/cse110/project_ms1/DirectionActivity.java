@@ -295,28 +295,32 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         if (isOffRoute){
             boolean user_want_update = true;
             if (user_want_update) {
-                planned_route = AnimalUtilities.reroute(order, planned_route, current.toLatLng());
-
-                //pop out a notification window
-
-                //save to SharedPreferences
-                List<String> animal_strings = new ArrayList<>();
-                for (route_node myRoute_node : planned_route) {
-                    String myAnimal = myRoute_node.exhibit.name;
-                    animal_strings.add(myAnimal);
-                }
-                SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                String joined = String.join(",", animal_strings);
-                editor.putString("route", joined);
-                editor.commit();
-                editor.apply();
+                replan_and_save_status(current);
 
                 //apply changes to display?
             }
         }
 
 
+    }
+
+    private void replan_and_save_status(Coord current) {
+        planned_route = AnimalUtilities.reroute(order, planned_route, current.toLatLng());
+
+        //pop out a notification window
+
+        //save to SharedPreferences
+        List<String> animal_strings = new ArrayList<>();
+        for (route_node myRoute_node : planned_route) {
+            String myAnimal = myRoute_node.exhibit.name;
+            animal_strings.add(myAnimal);
+        }
+        SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String joined = String.join(",", animal_strings);
+        editor.putString("route", joined);
+        editor.commit();
+        editor.apply();
     }
 
     public void onClearButtonClick(View view) {
@@ -366,10 +370,13 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         direction_adapter.setDirectionsStringList(pathDisplay);
     }
 
+    //load displaying status brief/detain from shared preference
     public void loadDisplayStatus() {
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         displayStatus = preferences.getBoolean("DISPLAYSTATUS", true);
     }
+
+    //save displaying status brief/detain from shared preference
     public void saveDisplayStatus() {
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -452,5 +459,11 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         }
          */
         //------------------------------------------------------------------------------
+    }
+
+    //directly replan the route
+    public void onReplanButtonClick(View view) {
+        Coord current = null;
+        replan_and_save_status(current);
     }
 }
