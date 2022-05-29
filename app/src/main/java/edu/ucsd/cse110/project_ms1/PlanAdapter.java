@@ -62,7 +62,8 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
 
         public void setAnimalItem(route_node animal_node) {
             this.routedAnimalItem = animal_node.exhibit;
-            this.routedExhibitName.setText(animal_node.exhibit.name);
+            String concat_names= String.join(",", animal_node.names);
+            this.routedExhibitName.setText(concat_names);
             this.routedExhibitDirections.setText(" "+animal_node.address);
             this.routedExhibitDistance.setText("("+Double.toString(animal_node.distance)+" ft)");
         }
