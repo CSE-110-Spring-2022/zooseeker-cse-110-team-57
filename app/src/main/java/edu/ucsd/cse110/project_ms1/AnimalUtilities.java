@@ -44,24 +44,22 @@ public class AnimalUtilities {
         return closest_animal;
     }
 
-    public static  double get_distance(LatLng l1, LatLng l2){
-        return 0;
-    }
+//    public static  double get_distance(LatLng l1, LatLng l2){
+//        return 0;
+//    }
 
     public static  double get_distance(LatLng ll, AnimalItem animal){
         return animal.getDistanceToInFeet(new Coord(ll));
     }
 
     public static boolean check_off_route (int visiting_order, List<route_node> route, LatLng curr_position){
-        // all visited, going to the gate
-        if (visiting_order == route.size())
-            return false;
 
-
+        //if just going to exit gate
+        if (visiting_order+1 == route.size()) return false;
 
         AnimalItem planned_next_animal = route.get(visiting_order+1).exhibit;
         double distance_to_the_next =get_distance(curr_position,planned_next_animal);
-        for (int i=visiting_order+1; i<route.size(); i++){
+        for (int i=visiting_order+1; i<route.size()-1; i++){
             AnimalItem animal = route.get(i+1).exhibit;
             double dis = get_distance(curr_position,animal);
             if (dis<distance_to_the_next) return true;
@@ -72,12 +70,15 @@ public class AnimalUtilities {
     public static List<route_node> reroute (int visiting_order, List<route_node> route, LatLng curr_position){
         List<AnimalItem> left_animal_items = new ArrayList<>();
 
-        while(visiting_order!=route.size()){
+        while(visiting_order<route.size()-1){
 
             left_animal_items.add(route.get(visiting_order+1).exhibit);
             route.remove(visiting_order+1);
         }
-        List<route_node> rest_route = AnimalItem.plan_route(left_animal_items);
+
+        String start = find_starting_point(left_animal_items,curr_position);
+
+        List<route_node> rest_route = AnimalItem.plan_route(left_animal_items, start);
 
         //concat (first half of) original and rest_route
         List<route_node> newRoute = Stream.concat(route.stream(), rest_route.stream())
@@ -89,6 +90,18 @@ public class AnimalUtilities {
             newNames.add(r.exhibit.name);
         }
         return  newRoute;
+    }
+
+    public static String find_starting_point(List<AnimalItem> animals, LatLng curr_position){
+        String retval = null;
+        double min_dis = Double.MAX_VALUE;
+        for (AnimalItem  animal : animals){
+            if (min_dis > get_distance(curr_position, animal)){
+                min_dis = get_distance(curr_position, animal);
+                retval = animal.id;
+            }
+        }
+        return  retval;
     }
 
     public static boolean matchByTag(List<String> stringList, String str){

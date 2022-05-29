@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -72,7 +71,7 @@ public class PlanActivity extends AppCompatActivity{
             //add animalItem to the AnimalItem list
             selectedAnimalItemList.add(animalItem);
         }
-        routeNodeList = AnimalItem.plan_route(selectedAnimalItemList);
+        routeNodeList = AnimalItem.plan_route(selectedAnimalItemList, "entrance_exit_gate");
 
         List<route_node> routeNodeListWithoutExitGate = new ArrayList<>(routeNodeList);
         int exit_gate_index = routeNodeList.size() - 1;

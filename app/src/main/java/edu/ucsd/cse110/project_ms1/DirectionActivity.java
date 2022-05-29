@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.lifecycle.ViewModelProvider;
 
 
 import java.io.IOException;
@@ -82,7 +81,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         //find the shortest Path by given ordered route.
         //(order -order of animal in the route , paths -list of edges in the path)
-        planned_route = AnimalItem.plan_route(animalItems);
+        planned_route = AnimalItem.plan_route(animalItems, "entrance_exit_gate");
         //List<DirectionData> orderedAnimalList = DirectionHelper.routeNode_to_DirectionData(planned_route);
 
         orderedAnimalList_Names = new ArrayList<>();
@@ -321,19 +320,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     }
 
     public void onClearButtonClick(View view) {
-        /*
-        zooRoute.clear();
-        String startExhibit = DirectionHelper.getNodeName(currentLocation);
-        String goalExhibit = DirectionHelper.getNodeName("entrance_exit_gate");
-        List<IdentifiedWeightedEdge> path = DirectionHelper.findPathBetween(startExhibit,goalExhibit);
-        List<String> paths = DirectionHelper.detailPath(path, startExhibit);
-        List<String> briefPaths = DirectionHelper.briefPath(path, startExhibit);
-        Double distance = DirectionHelper.totalDistance(path);
-        //temp
-        DirectionData walk = new DirectionData(startExhibit, goalExhibit, distance, paths, paths, briefPaths, briefPaths);
-        zooRoute.put(0, walk);
-        display(0,true);
-         */
+
         clearRoute();
         Utilities.clearSavedAnimalItem(this);
         intent = new Intent(this, SearchAnimalActivity.class);

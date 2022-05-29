@@ -1,7 +1,6 @@
 package edu.ucsd.cse110.project_ms1;
 
 import android.content.Context;
-import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
@@ -46,6 +45,7 @@ public class AnimalItem {
     public static Map<String, ZooData.EdgeInfo> eInfo;
     public static Graph<String, IdentifiedWeightedEdge> gInfo;
     public static Map<String, String> Latlng_ids_Map;
+//    public static Map<String, List<String>> neighbor_map;
     public static AnimalItem gate;
 
 
@@ -76,6 +76,7 @@ public class AnimalItem {
         gInfo = ZooData.loadZooGraphJSON(input);
 
         Latlng_ids_Map = new HashMap<String, String>();
+        //iterate through nodes
         for (Map.Entry<String, ZooData.VertexInfo> set : vInfo.entrySet()){
             ZooData.VertexInfo currentVertex = set.getValue();
 
@@ -94,6 +95,8 @@ public class AnimalItem {
                 );
             }
         }
+
+
     }
 
     @Override
@@ -130,9 +133,9 @@ public class AnimalItem {
     }
 
     //return a route that has a different order of input route, so it can be a good choice for the user
-    public static List<route_node> plan_route(List<AnimalItem> animal_items){
+    public static List<route_node> plan_route(List<AnimalItem> animal_items, String start_position){
+        String start = start_position;
         //begin and end positions
-        String start = "entrance_exit_gate";
         String goal;
         ArrayList<route_node> planned_route = new ArrayList<>();
         int num_iter=animal_items.size();
@@ -151,6 +154,10 @@ public class AnimalItem {
             //find next closest exhibit
             closest_animal = AnimalUtilities.getClosestAnimalItem(animal_items, start, min_distance, closest_animal);
             animal_items.remove(closest_animal);
+
+            //remove itself if applicable
+            if(closest_animal.id ==start_position) continue;
+
             // find the potential group name, may be null
             String potential_parent_id = vInfo.get( closest_animal.id).group_id;
             // itself is a parent/group exhibit
@@ -224,7 +231,7 @@ public class AnimalItem {
     }
 
     public Coord getCoords() {
-        ZooData.VertexInfo landmark = vInfo.get(this.id);
+        ZooData.VertexInfo landmark = vInfo.get(Latlng_ids_Map.get(this.id));
         Coord mycoord = new Coord(landmark.lat, landmark.lng);
         return mycoord;
     }
