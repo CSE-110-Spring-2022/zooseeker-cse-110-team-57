@@ -146,6 +146,7 @@
         android:layout_marginBottom="5dp"
         android:text="SKIP"
         android:textSize="20sp"
+        android:onClick="OnSkipClick"
         app:layout_constraintBottom_toTopOf="@+id/previous_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/detail_button"

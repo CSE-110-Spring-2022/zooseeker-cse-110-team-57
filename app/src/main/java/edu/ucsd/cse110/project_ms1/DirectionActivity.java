@@ -35,8 +35,10 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     private boolean useLocationService;
     boolean displayStatus;
     boolean isNext;
-    boolean going_forward;
+
+    boolean going_forward; // which direction of the user is going: forward/backward
     Button detailBtn;
+    Button skipBtn ;
     Intent intent;
     LocationModel viewModel;
 
@@ -62,7 +64,11 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         //retain the DirectionActivity
         Utilities.changeCurrentActivity(this, "DirectionActivity");
         AnimalUtilities.loadZooInfo(this);
+
+        // intialize button status
         going_forward = true;
+        skipBtn= findViewById(R.id.skip_button);
+
 
         //grab ordered list of animal id, begin from first item in the route.
         Intent intent = getIntent();
@@ -253,9 +259,16 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
     public void onNextButtonClick(View view) {
         order++;
+
         if (!going_forward){
             order-=2;
         }
+
+        //grey out skip if going to the exit
+        if (order+1==animalItems.size())
+            skipBtn.setEnabled(false);
+        else skipBtn.setEnabled(true);
+
         going_forward = true;
         if (order < planned_route.size()+1) {
             display(order, true);
@@ -264,7 +277,6 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             display(order, true);
             Utilities.showAlert(this, "invalid Action");
         }
-        int a =1;
     }
 
     public void onBackButtonClick(View view) {
@@ -272,6 +284,12 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         if (going_forward){
             order+=2;
         }
+
+        //grey out skip if going to the exit
+        if (order-1==0)
+            skipBtn.setEnabled(false);
+        else skipBtn.setEnabled(true);
+
         going_forward = false;
         if (order >= 0) {
             if (order >= orderedAnimalList_IDs.size()){
@@ -465,5 +483,21 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     public void onReplanButtonClick(View view) {
         Coord current = null;
         replan_and_save_status(current);
+    }
+
+    public void OnSkipClick(View view) {
+
+        //determine which one to remove
+        int index_remove;
+        if (going_forward) index_remove=order+1;
+        else index_remove = order-1;
+
+        orderedAnimalList_Names.remove(index_remove);
+        orderedAnimalList_IDs.remove(index_remove);
+        orderedAnimalList_child.remove(index_remove);
+        animalItems.remove(index_remove);
+
+        Coord current = null;
+        replan_and_save_status(null);
     }
 }
