@@ -481,7 +481,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
     //directly replan the route
     public void onReplanButtonClick(View view) {
-        Coord current = null;
+        Coord current = Coords.currentLocationCoord;
         replan_and_save_status(current);
     }
 
@@ -495,9 +495,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         orderedAnimalList_Names.remove(index_remove);
         orderedAnimalList_IDs.remove(index_remove);
         orderedAnimalList_child.remove(index_remove);
-        animalItems.remove(index_remove);
 
-        Coord current = null;
-        replan_and_save_status(null);
+        Coord current = Coords.currentLocationCoord;
+        replan_and_save_status(current);
     }
 }
