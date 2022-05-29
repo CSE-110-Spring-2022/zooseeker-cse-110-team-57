@@ -432,6 +432,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
     public void mockASinglePoint(Coord singlePoint){
         viewModel.mockLocation(singlePoint);
+        Coords.currentLocationCoord = singlePoint;
+        LatLngs.currentLocationLatLng = singlePoint.toLatLng();
     }
 
     public Future<?> mockAListOfPoints(List<Coord> route){
