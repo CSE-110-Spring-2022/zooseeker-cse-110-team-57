@@ -15,6 +15,7 @@ import org.junit.runner.RunWith;
 import android.content.Context;
 
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -79,26 +80,41 @@ public class MS2_USTest {
         //LocationModel viewModel = new ViewModelProvider().get(LocationModel.class);
     }
 
+//    @Test
+//    public void read_mocking_file_test() throws IOException {
+//        ActivityScenario<DirectionActivity> scenario = DirectionScenarioRule.getScenario();
+//        scenario.moveToState(Lifecycle.State.CREATED);
+//        scenario.onActivity(activity -> {
+//            Context context = ApplicationProvider.getApplicationContext();
+//            try {
+//                InputStream input = context.getAssets().open(DirectionActivity.MOCKING_FILE_NAME);
+//                List<Coord> points = ZooData.loadMockingJSON(input);
+//                List<Coord> correctPoints = new ArrayList<Coord>();
+//                correctPoints.add(new Coord(32.73459618734685, -117.14936));
+//                correctPoints.add(new Coord(32.73453269952234, -117.1526194979576));
+//                int i = 0;
+//                for (Coord point : points) {
+//                    assertEquals(point, correctPoints.get(i));
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        });
+//    }
+
     @Test
     public void read_mocking_file_test() throws IOException {
-        ActivityScenario<DirectionActivity> scenario = DirectionScenarioRule.getScenario();
-        scenario.moveToState(Lifecycle.State.CREATED);
-        scenario.onActivity(activity -> {
-            Context context = ApplicationProvider.getApplicationContext();
-            try {
-                InputStream input = context.getAssets().open(DirectionActivity.MOCKING_FILE_NAME);
-                List<Coord> points = ZooData.loadMockingJSON(input);
-                List<Coord> correctPoints = new ArrayList<Coord>();
-                correctPoints.add(new Coord(32.73459618734685, -117.14936));
-                correctPoints.add(new Coord(32.73453269952234, -117.1526194979576));
-                int i = 0;
-                for (Coord point : points) {
-                    assertEquals(point, correctPoints.get(i));
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        Context context = ApplicationProvider.getApplicationContext();
+        InputStream input = context.getAssets().open("mocking_location.json");
+        List<Coord> points = ZooData.loadMockingJSON(input);
+        List<Coord> correctPoints = new ArrayList<Coord>();
+        correctPoints.add(new Coord(32.73459618734685, -117.14936));
+        correctPoints.add(new Coord(32.73453269952234, -117.1526194979576));
+        int i = 0;
+        for (Coord point : points) {
+            assertEquals(point, correctPoints.get(i));
+            i++;
+        }
     }
 
     public void testFindPathBetween(){
