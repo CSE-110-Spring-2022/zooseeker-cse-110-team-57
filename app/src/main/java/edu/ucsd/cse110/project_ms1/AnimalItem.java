@@ -1,6 +1,8 @@
 package edu.ucsd.cse110.project_ms1;
 
 import android.content.Context;
+import android.location.Location;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
@@ -258,6 +260,30 @@ public class AnimalItem {
         Coord EntranceGate_Coord = new Coord(vInfo.get("entrance_exit_gate").lat, vInfo.get("entrance_exit_gate").lng);
         return EntranceGate_Coord;
     }
+
+    //find the nearest exhibit due to current location in all exhibit in zoo
+    public static String getNearestExhibit(LatLng curr){
+        String exhibit = "";
+        float smallest = 9999;
+        for(Map.Entry<String, ZooData.VertexInfo> vertexInfo : vInfo.entrySet()){
+
+            if(vertexInfo.getValue().lat == null){
+                continue;
+            }
+
+            float[] distance = new float[1];
+
+            //unit: meter
+            Location.distanceBetween(curr.latitude,curr.longitude,vertexInfo.getValue().lat,vertexInfo.getValue().lng,distance);
+            if (distance[0] <= smallest){
+                exhibit = vertexInfo.getKey();
+                smallest = distance[0];
+            }
+        }
+
+        return exhibit;
+    }
+
 }
 
 
