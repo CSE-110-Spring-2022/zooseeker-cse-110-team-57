@@ -141,8 +141,9 @@ public class MS2_USTest {
 
         assertTrue(sourceTrue);
         assertTrue(goalTrue);
-
     }
+
+    @Test skip()
     @Test
     public void getEntranceGateCoord_test(){
         ActivityScenario<SearchAnimalActivity> scenario = searchScenarioRule.getScenario();

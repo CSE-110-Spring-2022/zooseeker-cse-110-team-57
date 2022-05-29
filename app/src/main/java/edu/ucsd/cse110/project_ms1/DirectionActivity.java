@@ -488,15 +488,18 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     public void OnSkipClick(View view) {
 
         //determine which one to remove
-        int index_remove;
-        if (going_forward) index_remove=order+1;
-        else index_remove = order-1;
-
-        orderedAnimalList_Names.remove(index_remove);
-        orderedAnimalList_IDs.remove(index_remove);
-        orderedAnimalList_child.remove(index_remove);
+        skip(this.going_forward,this.order,orderedAnimalList_Names,orderedAnimalList_IDs,orderedAnimalList_child);
 
         Coord current = Coords.currentLocationCoord;
         replan_and_save_status(current);
+    }
+
+    public static void skip(boolean going_forward, int order,List<String> a1,List<String> a2,List<List<String>> a3) {
+        int index_remove;
+        if (going_forward) index_remove=order+1;
+        else index_remove = order-1;
+        a1.remove(index_remove);
+        a2.remove(index_remove);
+        a3.remove(index_remove);
     }
 }
