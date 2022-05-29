@@ -1,9 +1,17 @@
 package edu.ucsd.cse110.project_ms1;
 
+import static org.apache.commons.lang3.math.NumberUtils.max;
+import static org.apache.commons.lang3.math.NumberUtils.min;
+
+import static java.lang.Math.abs;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import org.jgrapht.GraphPath;
 
@@ -13,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import edu.ucsd.cse110.project_ms1.location.Coord;
 
@@ -227,5 +237,77 @@ public class DirectionHelper {
         return orderedAnimalList;
     }
 
+    public static boolean onRange(LatLng curr, LatLng nodeA, LatLng nodeB){
+        boolean x1 = curr.latitude >= min(nodeA.latitude, nodeB.latitude);
+        boolean x2 = curr.latitude <= max(nodeA.latitude,nodeB.latitude);
+        boolean y1 = curr.longitude >= min(nodeA.longitude, nodeB.longitude);
+        boolean y2 = curr.longitude <= max(nodeA.longitude,nodeB.longitude);
+
+        return x1 && x2 && y1 && y2;
+    }
+
+    //check if user current location between the two exhibit with 0.0000000000001 threshold
+    public static boolean onTrack(LatLng curr, LatLng nodeA, LatLng nodeB){
+        //y=mx+b
+
+        //m = y2-y1/x2-x1
+        double m = findSlope(nodeA,nodeB);
+        //b = y-mx
+        double b = nodeA.longitude - m*nodeA.latitude;
+
+        double x1 = curr.latitude - nodeA.latitude;
+        double y1 = curr.longitude - nodeA.longitude;
+
+        double x2 = nodeB.latitude - nodeA.latitude;
+        double y2 = nodeB.longitude - nodeA.longitude;
+
+        double cross = x1*y2 - y1*x2;
+
+        if(cross <= 0.0000000000001){
+            return true;
+        }
+        return false;
+    }
+
+    //find the slope of line that between two exhibits
+    public static double findSlope( LatLng nodeA, LatLng nodeB){
+        return nodeB.longitude- nodeA.longitude / nodeB.latitude - nodeA.latitude;
+    }
+
+
+    public static String findCurrStreet(String nearestExhibit, LatLng curr){
+        //all edge that connect to the nearestExhibit
+        Set<IdentifiedWeightedEdge> incomingEdges = AnimalItem.gInfo.incomingEdgesOf(nearestExhibit);
+        Log.d("findCurrStreet",incomingEdges.toString());
+        for (IdentifiedWeightedEdge edge : incomingEdges){
+            String nodeA = AnimalItem.gInfo.getEdgeSource(edge);
+            String nodeB = AnimalItem.gInfo.getEdgeTarget(edge);
+            LatLng LatLngA = getLatLng(nodeA);
+            LatLng LatLngB = getLatLng(nodeB);
+
+            //if current location on rectangle of two nodes as point
+            boolean onRange = onRange(curr,LatLngA,LatLngB);
+            //if current location on the line
+            boolean onLine = onTrack(curr,LatLngA,LatLngB);
+
+            if(onRange && onLine){
+                return edge.getId();
+            }
+
+        }
+        return incomingEdges.toString();
+    }
+
+    public static LatLng getLatLng(String exhibit){
+        for(Map.Entry<String, ZooData.VertexInfo> vertexInfo : AnimalItem.vInfo.entrySet()) {
+            if(vertexInfo.getKey().equals(exhibit)){
+                return new LatLng(vertexInfo.getValue().lat,vertexInfo.getValue().lng);
+            }
+        }
+        return new LatLng(0.0,0.0);
+    }
+
 
 }
+
+
