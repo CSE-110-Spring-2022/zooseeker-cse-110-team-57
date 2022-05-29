@@ -50,17 +50,15 @@ public class LocationModel extends AndroidViewModel {
 
         // Create and add the mock source.
         mockSource = new MutableLiveData<>();
-        //set entrance & exit gate coord
-        mockSource.postValue(AnimalItem.getExtranceGateCoord());
 
         //lastKnownCoords.addSource(mockSource, lastKnownCoords::setValue);
         lastKnownCoords.addSource(mockSource, new Observer<Coord>() {
             @Override
             public void onChanged(Coord coord) {
                 lastKnownCoords.setValue(coord);
-                Coords.currentLocationCoord = coord;
-                LatLngs.currentLocationLatLng = coord.toLatLng();
-                onLocationChangeListener.OnLocationChange(coord);
+//                Coords.currentLocationCoord = coord;
+//                LatLngs.currentLocationLatLng = coord.toLatLng();
+//                onLocationChangeListener.OnLocationChange(coord);
             }
         });
     }
@@ -117,9 +115,12 @@ public class LocationModel extends AndroidViewModel {
     public void mockLocation(Coord coords) {
         mockSource.setValue(coords);
         mockSource.postValue(coords);
-        getLastKnownCoords().observe(mOwner, (coord) -> {
-            Log.i(TAG, String.format("Observing location model update to %s", coord));
-        });
+        Coords.currentLocationCoord = coords;
+        LatLngs.currentLocationLatLng = coords.toLatLng();
+        onLocationChangeListener.OnLocationChange(coords);
+//        getLastKnownCoords().observe(mOwner, (coord) -> {
+//            Log.i(TAG, String.format("Observing location model update to %s", coord));
+//        });
     }
 
     @VisibleForTesting

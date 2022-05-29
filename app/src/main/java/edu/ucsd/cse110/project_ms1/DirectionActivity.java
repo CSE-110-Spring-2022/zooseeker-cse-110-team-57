@@ -123,9 +123,15 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         viewModel = ViewModelProviders.of(this,
                 new LocationModelFactory(this.getApplication(), this,
                         this)).get(LocationModel.class);
+
+        mockASinglePoint(AnimalItem.getExtranceGateCoord());
+        viewModel.getLastKnownCoords().observe(this, (coord) -> {
+            Log.i(TAG, String.format("Observing location model update to %s", coord));
+        });
         //use physical real location
         useLocationService = true;
-        Coords.currentLocationCoord = viewModel.getCurrentCoord();
+        Coord current = Coords.currentLocationCoord;
+        //Coords.currentLocationCoord = viewModel.getCurrentCoord();
 
                 //Get the order and isNext
         List<String> retainedInfo = DirectionHelper.loadDirectionsInformation(this);
