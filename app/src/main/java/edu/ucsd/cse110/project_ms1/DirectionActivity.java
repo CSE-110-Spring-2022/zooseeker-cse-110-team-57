@@ -218,13 +218,14 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
                 next.setText("End of tour");
             }
             //setting previous button and previous direction distance
-            if (index == 0) {
-                prevBtn.setEnabled(false);
-                prev.setText("Beginning of tour");
+
+            prevBtn.setEnabled(true);
+            String current = orderedAnimalList_IDs.get(index);
+
+            if (index<1) { // if coming from original
+                prev.setText("beginning of trip");
             }
-            else {
-                prevBtn.setEnabled(true);
-                String current = orderedAnimalList_IDs.get(index);
+            else{ // if coming from original
                 String lastSource = orderedAnimalList_IDs.get(index - 1);
                 List<IdentifiedWeightedEdge> prevPath = DirectionHelper.findPathBetween(current, lastSource);
                 double prevDistance = DirectionHelper.totalDistance(prevPath);
@@ -232,6 +233,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
                 String prevText = (lastSourceName + "  " + prevDistance + " ft");
                 prev.setText(prevText);
             }
+
         }
         else{
             //next button
@@ -498,6 +500,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         Coord current = Coords.currentLocationCoord;
         replan_and_save_status(current);
+        display(order, going_forward);
     }
 
     public static void skip(boolean going_forward, int order,List<String> a1,List<String> a2,List<List<String>> a3) {

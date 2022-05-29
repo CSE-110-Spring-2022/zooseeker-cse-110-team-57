@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.project_ms1;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -16,6 +17,7 @@ import android.content.Context;
 
 import android.content.SharedPreferences;
 import android.content.res.AssetManager;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -26,11 +28,14 @@ import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.project_ms1.location.Coord;
@@ -191,6 +196,99 @@ public class MS2_USTest {
 
 
     }
+
+    @Test
+    public void getNearestNode(){
+        LatLng expectLatLng = new LatLng(32.72442520989079, -117.16066409380507);
+        String expectNode = "intxn_front_lagoon_2";
+        String actualNode1 = AnimalItem.getNearestExhibit(expectLatLng);
+
+        assertEquals(expectNode,actualNode1);
+
+        LatLng expectLatLng2 = new LatLng(32.746320519009030, -117.16364410510080);
+        String expectNode2 = "hippo";
+        String actualNode12 = AnimalItem.getNearestExhibit(expectLatLng2);
+
+        assertEquals(expectNode2,actualNode12);
+
+    }
+
+
+
+    @Test
+    public void onRangeTrue(){
+        //NodeA = owens_aviary
+        //NodeB = fern_canyon
+        //expect street = owens_to_fern
+
+        LatLng nodeALatLng = new LatLng(32.73798565400121, -117.16949876733686);
+        LatLng nodeBLatLng = new LatLng(32.73480907296893, -117.16066409380508);
+        double midpointLat = (nodeALatLng.latitude + nodeBLatLng.latitude) /2;
+        double midpointLng = (nodeALatLng.longitude + nodeBLatLng.longitude) /2;
+        LatLng currLatLng = new LatLng(midpointLat, midpointLng);
+
+        boolean actual = DirectionHelper.onRange(currLatLng,nodeALatLng,nodeBLatLng);
+        assertTrue(actual);
+    }
+
+    @Test
+    public void onTrackTrue(){
+        //NodeA = owens_aviary
+        //NodeB = fern_canyon
+        //expect street = owens_to_fern
+
+        LatLng nodeALatLng = new LatLng(32.73798565400121, -117.16949876733686);
+        LatLng nodeBLatLng = new LatLng(32.73480907296893, -117.16066409380508);
+        double midpointLat = (nodeALatLng.latitude + nodeBLatLng.latitude) /2;
+        double midpointLng = (nodeALatLng.longitude + nodeBLatLng.longitude) /2;
+        LatLng currLatLng = new LatLng(midpointLat, midpointLng);
+
+        boolean actual = DirectionHelper.onTrack(currLatLng,nodeALatLng,nodeBLatLng);
+        assertTrue(actual);
+
+        LatLng currLatLng2 = new LatLng(32.736864688333235,-117.16079397323202);
+        boolean actual2 = DirectionHelper.onTrack(currLatLng2,nodeALatLng,nodeBLatLng);
+        assertFalse(actual2);
+    }
+
+
+    @Test
+    public void getLatLng(){
+        String expectNodeA = "owens_aviary";
+        LatLng expectLatLng = new LatLng(32.73798565400121, -117.16949876733686);
+
+        LatLng actualLatLng = DirectionHelper.getLatLng(expectNodeA);
+        assertEquals(0, Double.compare(expectLatLng.latitude, actualLatLng.latitude));
+        assertEquals(0, Double.compare(expectLatLng.longitude, actualLatLng.longitude));
+
+        String expectNodeB = "fern_canyon";
+        LatLng expectLatLngB = new LatLng(32.73480907296893, -117.17269958736802);
+        LatLng actualLatLngB = DirectionHelper.getLatLng(expectNodeB);
+        assertEquals(0, Double.compare(expectLatLngB.latitude, actualLatLngB.latitude));
+        assertEquals(0, Double.compare(expectLatLngB.longitude, actualLatLngB.longitude));
+
+
+    }
+
+    @Test
+    public void findCurrStreet(){
+        //NodeA = owens_aviary
+        //NodeB = fern_canyon
+        //expect street = owens_to_fern
+        String nearestExhibit = "owens_aviary";
+        LatLng nodeALatLng = new LatLng(32.73798565400121, -117.16949876733686);
+        LatLng nodeBLatLng = new LatLng(32.73480907296893, -117.17269958736802);
+        double midpointLat = (nodeALatLng.latitude + nodeBLatLng.latitude) /2;
+        double midpointLng = (nodeALatLng.longitude + nodeBLatLng.longitude) /2;
+        LatLng currLatLng = new LatLng(midpointLat, midpointLng);
+        String expectStreet = "owens_to_fern";
+        String actualStreet = DirectionHelper.findCurrStreet(nearestExhibit,currLatLng);
+
+        assertEquals(expectStreet,actualStreet);
+    }
+
+
+
 }
 
 
