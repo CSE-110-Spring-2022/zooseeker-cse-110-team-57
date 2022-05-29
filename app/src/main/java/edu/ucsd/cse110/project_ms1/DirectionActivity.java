@@ -130,8 +130,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         });
         //use physical real location
         useLocationService = true;
-        Coord current = Coords.currentLocationCoord;
-        //Coords.currentLocationCoord = viewModel.getCurrentCoord();
+        Coord current_lastKnownPoint = viewModel.getCurrentCoord();
 
                 //Get the order and isNext
         List<String> retainedInfo = DirectionHelper.loadDirectionsInformation(this);
