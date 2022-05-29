@@ -64,12 +64,8 @@ public class MS2_USTest {
         scenario.onActivity(activity -> {
             List<AnimalItem> toBeShown = null;
             Context context = ApplicationProvider.getApplicationContext();
-            try {
-                AnimalItem.loadInfo(context, "sample_node_info.json", "sample_edge_info.json", "sample_zoo_graph.json");
-                toBeShown = AnimalItem.search_by_tag(null);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            AnimalUtilities.loadZooInfo(activity);
+            toBeShown = AnimalItem.search_by_tag(null);
         });
     }
 
@@ -83,27 +79,27 @@ public class MS2_USTest {
         //LocationModel viewModel = new ViewModelProvider().get(LocationModel.class);
     }
 
-//    @Test
-//    public void read_mocking_file_test() throws IOException {
-//        ActivityScenario<DirectionActivity> scenario = DirectionScenarioRule.getScenario();
-//        scenario.moveToState(Lifecycle.State.CREATED);
-//        scenario.onActivity(activity -> {
-//            Context context = ApplicationProvider.getApplicationContext();
-//            try {
-//                InputStream input = context.getAssets().open(DirectionActivity.MOCKING_FILE_NAME);
-//                List<Coord> points = ZooData.loadMockingJSON(input);
-//                List<Coord> correctPoints = new ArrayList<Coord>();
-//                correctPoints.add(new Coord(32.73459618734685, -117.14936));
-//                correctPoints.add(new Coord(32.73453269952234, -117.1526194979576));
-//                int i = 0;
-//                for (Coord point : points) {
-//                    assertEquals(point, correctPoints.get(i));
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        });
-//    }
+    @Test
+    public void read_mocking_file_test() throws IOException {
+        ActivityScenario<DirectionActivity> scenario = DirectionScenarioRule.getScenario();
+        scenario.moveToState(Lifecycle.State.CREATED);
+        scenario.onActivity(activity -> {
+            Context context = ApplicationProvider.getApplicationContext();
+            try {
+                InputStream input = context.getAssets().open(DirectionActivity.MOCKING_FILE_NAME);
+                List<Coord> points = ZooData.loadMockingJSON(input);
+                List<Coord> correctPoints = new ArrayList<Coord>();
+                correctPoints.add(new Coord(32.73459618734685, -117.14936));
+                correctPoints.add(new Coord(32.73453269952234, -117.1526194979576));
+                int i = 0;
+                for (Coord point : points) {
+                    assertEquals(point, correctPoints.get(i));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
 
     public void testFindPathBetween(){
 
@@ -133,8 +129,14 @@ public class MS2_USTest {
     }
     @Test
     public void getEntranceGateCoord_test(){
-        Coord coord = AnimalItem.getExtranceGateCoord();
-        assertEquals(new Coord(32.73461, -117.14936), coord);
+        ActivityScenario<SearchAnimalActivity> scenario = searchScenarioRule.getScenario();
+        scenario.moveToState(Lifecycle.State.CREATED);
+        scenario.onActivity(activity -> {
+            Coord coord = AnimalItem.getExtranceGateCoord();
+            assertEquals(new Coord(32.73460, -117.14936), coord);
+        });
+
+
     }
 }
 
