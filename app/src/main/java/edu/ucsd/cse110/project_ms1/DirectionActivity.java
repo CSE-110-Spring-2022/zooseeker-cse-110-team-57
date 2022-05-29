@@ -413,8 +413,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     }
 
 
-
-    public void GPSButtonClick(View view){
+    public void onGPSButtonClick(View view){
         // If GPS is enabled, then update the model from the Location service.
         useLocationService = true;
         var permissionChecker = new LocationPermissionChecker(this);
