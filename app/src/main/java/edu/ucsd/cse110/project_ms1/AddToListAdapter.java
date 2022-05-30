@@ -28,7 +28,7 @@ public class AddToListAdapter extends RecyclerView.Adapter<AddToListAdapter.View
         this.animalItems = newAnimalItems;
         notifyDataSetChanged();
     }
-
+    //create ViewHolder for selected exhibits
     @NonNull
     @Override
     public AddToListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -50,18 +50,11 @@ public class AddToListAdapter extends RecyclerView.Adapter<AddToListAdapter.View
         return animalItems.size();
     }
 
-    /*
-        @Override
-        public int getItemId(int position){
 
-            return Integer.valueOf(animalItems.get(position).id);
-            //return 0;
-        }
-    */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView animalName;
         private AnimalItem animalItem;
-
+        //constructor
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.animalName = itemView.findViewById(R.id.an_selected_animal);

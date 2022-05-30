@@ -25,7 +25,6 @@ public abstract class AnimalItemDatabase extends RoomDatabase {
         return  singleton;
     }
 
-
     static AnimalItemDatabase makeDatabase(Context context){
         return Room.databaseBuilder(context, AnimalItemDatabase.class, "zoo.db").allowMainThreadQueries()
                 .addCallback(new Callback() {

@@ -247,7 +247,7 @@ import javax.xml.transform.TransformerFactory;
             }
         }
 
-        public void onClearClick(View view) {
+        public void onClearButtonClick_SearchActivity(View view) {
             Utilities.clearSavedAnimalItem(this);
             selectedAnimalItemList = loadAddToList();
             addToList_adapter.setSelectedAnimalItems(selectedAnimalItemList);

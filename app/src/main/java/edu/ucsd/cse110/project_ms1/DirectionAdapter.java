@@ -56,7 +56,7 @@ public class DirectionAdapter extends RecyclerView.Adapter<edu.ucsd.cse110.proje
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         private TextView edgeTextView;
-
+        //constructor of ViewHolder
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.edgeTextView = itemView.findViewById(R.id.a_direction_item);

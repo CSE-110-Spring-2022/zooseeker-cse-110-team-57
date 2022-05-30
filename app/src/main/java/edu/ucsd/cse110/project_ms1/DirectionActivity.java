@@ -52,7 +52,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     List<route_node> planned_route;
 
     private static final String TAG = "Location6666666";
-    public static final String MOCKING_FILE_NAME = "mocking.json";
+    public static final String MOCKING_FILE_NAME = "mocking_location.json";
     public static final String EXTRA_USE_LOCATION_SERVICE = "use_location_updated";
 
 
@@ -123,16 +123,17 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         viewModel = ViewModelProviders.of(this,
                 new LocationModelFactory(this.getApplication(), this,
                         this)).get(LocationModel.class);
-
+        //intialize current location to be at the entrance gate
         mockASinglePoint(AnimalItem.getExtranceGateCoord());
         viewModel.getLastKnownCoords().observe(this, (coord) -> {
             Log.i(TAG, String.format("Observing location model update to %s", coord));
         });
+        Coord current_lastKnownPoint = viewModel.getCurrentCoord();
         //use physical real location
         useLocationService = true;
-        Coord current_lastKnownPoint = viewModel.getCurrentCoord();
 
-                //Get the order and isNext
+
+        //Get the order and isNext
         List<String> retainedInfo = DirectionHelper.loadDirectionsInformation(this);
         order = Integer.valueOf(retainedInfo.get(0));
         isNext = Boolean.valueOf(retainedInfo.get(1));
@@ -154,10 +155,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         Button mockBtn = findViewById(R.id.mock_button);
         detailBtn = findViewById(R.id.detail_button);
 
-        //---------------comment this line if you enable the mock button---------------------------
-        //mockBtn.setEnabled(false);
-        //-----------------------------------------------------------------------------------
-
+        //set the directions text
         setDirectionTextDisplay();
 
         String sourceExhibit;
@@ -263,7 +261,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             }
         }
     }
-
+    //act when next button is clicked
     public void onNextButtonClick(View view) {
         order++;
 
@@ -286,6 +284,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         }
     }
 
+    ////act when previous button is clicked
     public void onBackButtonClick(View view) {
         order--;
         if (going_forward){
@@ -313,7 +312,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
 
 
-
+    //act when currentlocation is changed
     @Override
     public void OnLocationChange(Coord current) {
         boolean isOffRoute = AnimalUtilities.check_off_route(order, planned_route, current.toLatLng());
@@ -322,6 +321,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         }
     }
 
+    //replan the route
     private void replan_and_save_status(Coord current) {
         planned_route = AnimalUtilities.reroute(order, planned_route, current.toLatLng());
 
@@ -341,8 +341,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         editor.apply();
     }
 
-    public void onClearButtonClick(View view) {
-
+    //act when clear button is clicked
+    public void onClearButtonClick_DirectionActivity(View view) {
         clearRoute();
         Utilities.clearSavedAnimalItem(this);
         intent = new Intent(this, SearchAnimalActivity.class);
@@ -361,6 +361,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         display(order, isNext);
     }
 
+    //switch between detail and brief
     public void setDirectionTextDisplay() {
         if (displayStatus) {
             detailBtn.setText("DETAIL");
@@ -369,7 +370,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             detailBtn.setText("BRIEF");
         }
     }
-
+    //set the directions in which version
     public void setDisplay(String source, String goal, List<IdentifiedWeightedEdge> path) {
         if (displayStatus) {
             displayBrief(source, goal, path);
@@ -377,12 +378,13 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             displayDetail(source, goal, path);
         }
     }
-
+    //set the directions in detail version
     public void displayDetail(String source, String goal, List<IdentifiedWeightedEdge> path){
         List<String> pathDisplay = DirectionHelper.detailPath(path,source);
         direction_adapter.setDirectionsStringList(pathDisplay);
     }
 
+    //set the directions in brief version
     public void displayBrief(String source, String goal, List<IdentifiedWeightedEdge> path){
         List<String> pathDisplay = DirectionHelper.briefPath(path,source);
         direction_adapter.setDirectionsStringList(pathDisplay);
@@ -403,11 +405,12 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         editor.apply();
     }
 
+    //get the context
     public static Context getContext() {
         return mContext;
     }
 
-
+    //act when use GPS
     public void onGPSButtonClick(View view){
         // If GPS is enabled, then update the model from the Location service.
         useLocationService = true;
@@ -422,18 +425,20 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         });
     }
 
-
+    //mock a single point
     public void mockASinglePoint(Coord singlePoint){
         viewModel.mockLocation(singlePoint);
         Coords.currentLocationCoord = singlePoint;
         LatLngs.currentLocationLatLng = singlePoint.toLatLng();
     }
 
+    //mock a list of points
     public Future<?> mockAListOfPoints(List<Coord> route){
         Future<?> myfuture = viewModel.mockRoute(this, route, 500, TimeUnit.MILLISECONDS);
         return myfuture;
     }
 
+    //act when mock button is clicked
     public void onMockButtonClick(View view) throws IOException {
         //use mocking location
         //this.useLocationService = getIntent().getBooleanExtra(EXTRA_USE_LOCATION_SERVICE, false);
@@ -486,6 +491,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         replan_and_save_status(current);
     }
 
+    //act when Skip button is click
     public void OnSkipClick(View view) {
 
         //determine which one to remove
@@ -496,6 +502,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         display(order, going_forward);
     }
 
+    //skip the current animal
     public static void skip(boolean going_forward, int order,List<String> a1,List<String> a2,List<List<String>> a3) {
         int index_remove;
         if (going_forward) index_remove=order+1;

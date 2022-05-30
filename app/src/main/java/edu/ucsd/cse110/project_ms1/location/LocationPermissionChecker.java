@@ -15,7 +15,7 @@ public class LocationPermissionChecker {
     private ComponentActivity activity;
 
     final ActivityResultLauncher<String[]> requestPermissionLauncher;
-
+    //constructor
     public LocationPermissionChecker(ComponentActivity activity) {
         this.activity = activity;
         requestPermissionLauncher = activity.registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), perms -> {
@@ -24,7 +24,7 @@ public class LocationPermissionChecker {
             });
         });
     }
-
+    //get the permission
     public boolean ensurePermissions() {
         var requiredPermissions = new String[]{
             Manifest.permission.ACCESS_FINE_LOCATION,

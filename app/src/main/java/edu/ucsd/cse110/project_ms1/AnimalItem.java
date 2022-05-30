@@ -220,13 +220,13 @@ public class AnimalItem {
         }
         return retVal;
     }
-
+    //find the shortest path between source and sink
     public static GraphPath<String, IdentifiedWeightedEdge> adapted_find_shortest_path (Graph<String, IdentifiedWeightedEdge> gInfo, String source, String sink){
         source = Latlng_ids_Map.get(source);
         sink = Latlng_ids_Map.get(sink);
         return DijkstraShortestPath.findPathBetween(gInfo, source, sink);
     }
-
+    //get the String format of coord
     public String getCoordString(){
         var coords = getCoords();
         return String.format(Locale.getDefault(), "%3.6f, %3.6f", coords.lat, coords.lng);
@@ -242,6 +242,7 @@ public class AnimalItem {
 //        return isCloseTo(otherCoords, 0.001);
 //    }
 
+    //get the distance between two coords.
     public Double getDistanceToInFeet(Coord otherCoords) {
         Coord coord = getCoords();
 //        if (coord == null
@@ -255,7 +256,7 @@ public class AnimalItem {
         Double d_ft = Math.sqrt(Math.pow(dLat, 2) + Math.pow(dLng, 2));
         return Math.ceil(d_ft);
     }
-
+    //get the entrance gate coord
     public static Coord getExtranceGateCoord(){
         Coord EntranceGate_Coord = new Coord(vInfo.get("entrance_exit_gate").lat, vInfo.get("entrance_exit_gate").lng);
         return EntranceGate_Coord;

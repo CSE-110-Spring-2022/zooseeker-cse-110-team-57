@@ -15,14 +15,14 @@ public class LocationModelFactory extends ViewModelProvider.NewInstanceFactory {
     private OnLocationChangeListener onLocationChangeListener;
     private Context context;
 
-
+    //constructor with OnLocationChangeListener
     public LocationModelFactory(@NonNull Application application, Context context,
                                 OnLocationChangeListener onLocationChangeListener) {
         mApplication = application;
         this.onLocationChangeListener = onLocationChangeListener;
         this.context = context;
     }
-
+    //override create method
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {

@@ -50,7 +50,7 @@ public class Coords {
                 p1.lng + (p2.lng - p1.lng) * t
             ));
     }
-
+    //get 10 evenly spaced points in the line between "start" and "goal"
     public static List<Coord> getTenPointsInLine(String start, String goal){
         AnimalItem start_landmark = AnimalItem.search_by_tag(start).get(0);
         AnimalItem goal_landmark = AnimalItem.search_by_tag(goal).get(0);
