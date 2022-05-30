@@ -90,15 +90,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         planned_route = AnimalItem.plan_route(animalItems, "entrance_exit_gate");
         //List<DirectionData> orderedAnimalList = DirectionHelper.routeNode_to_DirectionData(planned_route);
 
-        orderedAnimalList_Names = new ArrayList<>();
-        orderedAnimalList_IDs = new ArrayList<>();
-        orderedAnimalList_child = new ArrayList<>();
-        for(route_node node : planned_route){
-            orderedAnimalList_Names.add(node.exhibit.name);
-            orderedAnimalList_IDs.add(node.exhibit.id);
-            orderedAnimalList_child.add(node.names);
 
-        }
+        populate_lists();
 
         //we need add the front gate into orderedAnimalList, so that route begin at gate
         orderedAnimalList_Names.add(0, "Entrance and Exit Gate");
@@ -142,6 +135,19 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         display(order, isNext);
 
     } //Initial End
+
+    //populate lists that are used for display
+    private void populate_lists() {
+        orderedAnimalList_Names = new ArrayList<>();
+        orderedAnimalList_IDs = new ArrayList<>();
+        orderedAnimalList_child = new ArrayList<>();
+        for(route_node node : planned_route){
+            orderedAnimalList_Names.add(node.exhibit.name);
+            orderedAnimalList_IDs.add(node.exhibit.id);
+            orderedAnimalList_child.add(node.names);
+
+        }
+    }
 
     public void display(int index, boolean isNext) {
         TextView start = findViewById(R.id.start_exhibit_name);
@@ -313,7 +319,6 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
 
 
-
     @Override
     public void OnLocationChange(Coord current) {
         boolean isOffRoute = AnimalUtilities.check_off_route(order,planned_route,current.toLatLng());
@@ -322,7 +327,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             if (user_want_update) {
                 replan_and_save_status(current);
 
-                //apply changes to display?
+                //apply changes to display
+                display(order, going_forward);
             }
         }
 
@@ -330,9 +336,9 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     }
 
     private void replan_and_save_status(Coord current) {
-        planned_route = AnimalUtilities.reroute(order, planned_route, current.toLatLng());
+        planned_route = AnimalUtilities.reroute(order, planned_route, current.toLatLng(), going_forward);
 
-        //pop out a notification window
+        populate_lists();
 
         //save to SharedPreferences
         List<String> animal_strings = new ArrayList<>();
@@ -498,6 +504,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         //determine which one to remove
         skip(this.going_forward,this.order,orderedAnimalList_Names,orderedAnimalList_IDs,orderedAnimalList_child);
+
+        if (!going_forward) order--;//because one less exhibit before
 
         Coord current = Coords.currentLocationCoord;
         replan_and_save_status(current);

@@ -67,13 +67,23 @@ public class AnimalUtilities {
         return  false;
     }
 
-    public static List<route_node> reroute (int visiting_order, List<route_node> route, LatLng curr_position){
+    public static List<route_node> reroute(int visiting_order, List<route_node> route, LatLng curr_position, boolean going_forward){
         List<AnimalItem> left_animal_items = new ArrayList<>();
 
-        while(visiting_order<route.size()-1){
+        if (going_forward) {
+            while (visiting_order < route.size() - 1) {
 
-            left_animal_items.add(route.get(visiting_order+1).exhibit);
-            route.remove(visiting_order+1);
+                left_animal_items.add(route.get(visiting_order + 1).exhibit);
+                route.remove(visiting_order + 1);
+            }
+        }
+        else{
+
+            for (int i=0; i<visiting_order;i++) {
+
+                left_animal_items.add(route.get(0).exhibit);
+                route.remove(0);
+            }
         }
 
         String start = find_starting_point(left_animal_items,curr_position);
@@ -81,8 +91,15 @@ public class AnimalUtilities {
         List<route_node> rest_route = AnimalItem.plan_route(left_animal_items, start);
 
         //concat (first half of) original and rest_route
-        List<route_node> newRoute = Stream.concat(route.stream(), rest_route.stream())
-                .collect(Collectors.toList());
+        List<route_node> newRoute;
+        if (going_forward) {
+            newRoute = Stream.concat(route.stream(), rest_route.stream())
+                    .collect(Collectors.toList());
+        }
+        else {
+            newRoute = Stream.concat(rest_route.stream(), route.stream())
+                    .collect(Collectors.toList());
+        }
 
 
         List<String> newNames = new ArrayList<>();
@@ -92,6 +109,7 @@ public class AnimalUtilities {
         return  newRoute;
     }
 
+    //given the left animals to visit, return where I should go first
     public static String find_starting_point(List<AnimalItem> animals, LatLng curr_position){
         String retval = null;
         double min_dis = Double.MAX_VALUE;
