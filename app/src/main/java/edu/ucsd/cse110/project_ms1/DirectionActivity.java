@@ -198,9 +198,10 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         }
         setDisplay(sourceExhibit, goalExhibit, path, false);
 
-        String startText = "From: " + DirectionHelper.getNodeName(sourceExhibit);
+        String startText = "Closest Landmark: " + AnimalItem.getClosestLandmark(Coords.currentLocationCoord).name;
+        //String startText = "From: " + DirectionHelper.getNodeName(sourceExhibit);
+        //start.setText(startText);
         Log.d("endText3",endText);
-        start.setText(startText);
         end.setText(endText);
         distance.setText(Double.toString(DirectionHelper.totalDistance(path)) + " ft");
 
@@ -434,23 +435,29 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     //set the directions in detail version
     public void displayDetail(String source, String goal, List<IdentifiedWeightedEdge> path, boolean NeedUpdate){
         List<String> pathDisplay = new ArrayList<>();
+        Double updateDistance = 0.0;
         if (path.size() == 1){
-            String edgeInfo = getSingleEdgeInfo(path);
+            String edgeInfo = DirectionHelper.getSingleEdgeInfo(path.get(0));
             pathDisplay.add(0, edgeInfo);
         }
         else{
             if (NeedUpdate){
-                //construct inserted edge info
                 IdentifiedWeightedEdge insertion = path.remove(0);
+                //normal path info
                 pathDisplay = DirectionHelper.detailPath(path,source);
-                String edgeInfo = getInsertionEdgeInfo(path, insertion);
+                updateDistance = DirectionHelper.totalDistance(path);
+                //addtional edge info
+                String edgeInfo = DirectionHelper.getSingleEdgeInfo(insertion);
                 pathDisplay.add(0, edgeInfo);
+                updateDistance += Double.valueOf(DirectionHelper.getCloserEndpointInfo(insertion).get(1));
+                //set the Closest Landmark and Total Distance
+                showUpdateTotalDistance(updateDistance);
                 //show alert
-                String street =AnimalItem.vInfo.get(goal).name;
-                showUpdateAlert(street);
+                String street = AnimalItem.vInfo.get(goal).name;
+                DirectionHelper.showUpdateAlert(this, street);
             }
             else{
-                pathDisplay = DirectionHelper.detailPath(path,source);
+                pathDisplay = DirectionHelper.detailPath(path, source);
             }
         }
         direction_adapter.setDirectionsStringList(pathDisplay);
@@ -460,67 +467,39 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     //set the directions in brief version
     public void displayBrief(String source, String goal, List<IdentifiedWeightedEdge> path, boolean NeedUpdate){
         List<String> pathDisplay = new ArrayList<>();
+        Double updateDistance = 0.0;
         if (path.size() == 1){
-            String edgeInfo = getSingleEdgeInfo(path);
+            String edgeInfo = DirectionHelper.getSingleEdgeInfo(path.get(0));
             pathDisplay.add(0, edgeInfo);
         }
         else{
             if (NeedUpdate){
-                //construct inserted edge info
                 IdentifiedWeightedEdge insertion = path.remove(0);
+                //normal path info
                 pathDisplay = DirectionHelper.detailPath(path,source);
-                String edgeInfo = getInsertionEdgeInfo(path, insertion);
+                updateDistance = DirectionHelper.totalDistance(path);
+                //additional edge info
+                String edgeInfo = DirectionHelper.getSingleEdgeInfo(insertion);
                 pathDisplay.add(0, edgeInfo);
+                updateDistance += Double.valueOf(DirectionHelper.getCloserEndpointInfo(insertion).get(1));
+                //set the Closest Landmark and Total Distance
+                showUpdateTotalDistance(updateDistance);
                 //show alert
-                String street =AnimalItem.vInfo.get(goal).name;
-                showUpdateAlert(street);
+                String street = AnimalItem.vInfo.get(goal).name;
+                DirectionHelper.showUpdateAlert(this, street);
             }
             else{
-                pathDisplay = DirectionHelper.briefPath(path,source);
+                pathDisplay = DirectionHelper.briefPath(path, source);
             }
         }
         direction_adapter.setDirectionsStringList(pathDisplay);
     }
 
-    private void showUpdateAlert(String street) {
-        String reminder = "The direction instruction to \"" + street + "\" has been updated.";
-        Utilities.showAlert(this, reminder);
+    //show update total distance
+    private void showUpdateTotalDistance(Double updateDistance) {
+        TextView totalDistance = findViewById(R.id.path_total_distance);
+        totalDistance.setText(Double.toString(updateDistance) + " ft");
     }
-
-    @NonNull
-    private String getInsertionEdgeInfo(List<IdentifiedWeightedEdge> path, IdentifiedWeightedEdge insertion) {
-        double distance = AnimalItem.gInfo.getEdgeWeight(insertion);
-        String street = AnimalItem.eInfo.get(insertion.getId()).street;
-        String insertion_goal = AnimalItem.gInfo.getEdgeSource(path.get(0));
-        String target = AnimalItem.vInfo.get(insertion_goal).name;
-        String edgeInfo = "Proceed on \"" + street + "\" " + distance + " ft towards \"" + target + "\"";
-        return edgeInfo;
-    }
-
-    @NonNull
-    private String getSingleEdgeInfo(List<IdentifiedWeightedEdge> path){
-        String street = AnimalItem.eInfo.get(path.get(0).getId()).street;
-        String target = null;
-        double distance = 999999999.0;
-        ZooData.VertexInfo singleEdge_source = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeSource(path.get(0)));
-        ZooData.VertexInfo singleEdge_goal = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeTarget(path.get(0)));
-        Coord singleEdge_source_coord = new Coord(singleEdge_source.lat, singleEdge_source.lng);
-        Coord singleEdge_goal_coord = new Coord(singleEdge_goal.lat, singleEdge_goal.lng);
-        double Source_distance = AnimalItem.distance_between_coords(Coords.currentLocationCoord, singleEdge_source_coord);
-        double Goal_distance = AnimalItem.distance_between_coords(Coords.currentLocationCoord, singleEdge_goal_coord);
-        if (Source_distance <= Goal_distance){
-            distance = Source_distance;
-            target = singleEdge_source.name;
-        }
-        else{
-            distance = Goal_distance;
-            target = singleEdge_goal.name;
-        }
-        String edgeInfo = "Proceed on \"" + street + "\" " + distance + " ft towards \"" + target + "\"";
-        return edgeInfo;
-    }
-
-
 
     //load displaying status brief/detain from shared preference
     public void loadDisplayStatus() {

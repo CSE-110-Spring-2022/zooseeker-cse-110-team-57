@@ -9,6 +9,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -23,6 +26,7 @@ import java.util.Map;
 import java.util.Set;
 
 import edu.ucsd.cse110.project_ms1.location.Coord;
+import edu.ucsd.cse110.project_ms1.location.Coords;
 
 public class DirectionHelper {
 
@@ -161,6 +165,42 @@ public class DirectionHelper {
             display.add(edgeInfo);
         }
         return display;
+    }
+
+    @NonNull
+    public static String getSingleEdgeInfo(IdentifiedWeightedEdge singleEdge){
+        String street = AnimalItem.eInfo.get(singleEdge.getId()).street;
+        List<String> CloserEndpointInfo = getCloserEndpointInfo(singleEdge);
+        String target = CloserEndpointInfo.get(0);
+        String distance = CloserEndpointInfo.get(1);
+        String edgeInfo = "Proceed on \"" + street + "\" " + distance + " ft towards \"" + target + "\"";
+        return edgeInfo;
+    }
+
+    //get the closer endpoints of an edge and distance based on current location Coord
+    public static List<String> getCloserEndpointInfo(IdentifiedWeightedEdge singleEdge) {
+        List<String> CloserEndPointList = new ArrayList<>();
+        ZooData.VertexInfo singleEdge_source = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeSource(singleEdge));
+        ZooData.VertexInfo singleEdge_goal = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeTarget(singleEdge));
+        Coord singleEdge_source_coord = new Coord(singleEdge_source.lat, singleEdge_source.lng);
+        Coord singleEdge_goal_coord = new Coord(singleEdge_goal.lat, singleEdge_goal.lng);
+        double Source_distance = AnimalItem.distance_between_coords(Coords.currentLocationCoord, singleEdge_source_coord);
+        double Goal_distance = AnimalItem.distance_between_coords(Coords.currentLocationCoord, singleEdge_goal_coord);
+        if (Source_distance <= Goal_distance){
+            CloserEndPointList.add(singleEdge_source.name);
+            CloserEndPointList.add(Double.toString(Source_distance));
+        }
+        else{
+            CloserEndPointList.add(singleEdge_goal.name);
+            CloserEndPointList.add(Double.toString(Goal_distance));
+        }
+        return CloserEndPointList;
+    }
+
+
+    public static void showUpdateAlert(Context context, String street) {
+        String reminder = "The direction instruction to \"" + street + "\" has been updated.";
+        Utilities.showAlert((Activity) context, reminder);
     }
 
 
