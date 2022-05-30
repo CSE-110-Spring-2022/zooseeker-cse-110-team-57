@@ -65,7 +65,7 @@ public class AnimalUtilities {
         return  false;
     }
 
-    
+    //reroute
     public static List<route_node> reroute(int visiting_order, List<route_node> route, LatLng curr_position, boolean going_forward){
         List<AnimalItem> left_animal_items = new ArrayList<>();
 
@@ -126,6 +126,25 @@ public class AnimalUtilities {
             if (s.contains(str)) return true;
         }
         return  false;
+    }
+
+    public static List<route_node> updateRoute(int visiting_order, List<route_node> route, LatLng curr_position, boolean going_forward){
+        List<AnimalItem> left_animal_items = new ArrayList<>();
+        if (going_forward) {
+            while (visiting_order < route.size() - 1) {
+
+                left_animal_items.add(route.get(visiting_order + 1).exhibit);
+                route.remove(visiting_order + 1);
+            }
+        }
+        else{
+
+            for (int i=0; i<visiting_order;i++) {
+
+                left_animal_items.add(route.get(0).exhibit);
+                route.remove(0);
+            }
+        }
     }
 
 }
