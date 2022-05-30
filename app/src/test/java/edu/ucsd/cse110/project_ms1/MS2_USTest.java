@@ -284,7 +284,7 @@ public class MS2_USTest {
         String gPath = "zoo_graph.json";
         Context context = ApplicationProvider.getApplicationContext();
 
-        LatLng latlng = new LatLng(32,-117);
+        LatLng latlng = new LatLng(32.73561,-117.14936);
         boolean going_forward =  true;
         ArrayList<AnimalItem> animalItemArrayList = new ArrayList<>();
         AnimalItem a1 = new AnimalItem("orangutan",
@@ -318,6 +318,8 @@ public class MS2_USTest {
         for (route_node node : route){
             System.out.println(node.names);
         }
+
+        route.remove(2);
 
         // reroute on order i
         List<route_node> r = AnimalUtilities.reroute(1,  route, latlng, going_forward);

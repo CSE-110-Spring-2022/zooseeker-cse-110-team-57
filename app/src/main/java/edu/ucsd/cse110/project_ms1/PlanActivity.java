@@ -100,7 +100,7 @@ public class PlanActivity extends AppCompatActivity{
         SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         //convert AnimalItem into a string containing all related information of a selected animal
-        String joined = String.join(",", animal_names );
+        String joined = String.join(" | ", animal_names );
 
         //Map(animal name, animal information)
         editor.putString("route", joined);
