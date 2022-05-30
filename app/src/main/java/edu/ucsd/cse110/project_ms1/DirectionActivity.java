@@ -194,6 +194,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             path = DirectionHelper.findPathBetween(sourceExhibit,goalExhibit);
             DirectionHelper.saveDirectionsInformation(this, order, false);
         }
+
         setDisplay(sourceExhibit, goalExhibit, path);
 
         String startText = "From: " + DirectionHelper.getNodeName(sourceExhibit);
