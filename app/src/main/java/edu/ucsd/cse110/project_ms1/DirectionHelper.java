@@ -320,9 +320,9 @@ public class DirectionHelper {
     public static double getPathDistanceBetween(Coord current, AnimalItem Destination){
         double first_path, second_path;
         //get the closest landmark
-        String closestName = AnimalItem.getClosestLandmark(current);
+        AnimalItem closestName = AnimalItem.getClosestLandmark(current);
         //get the current street
-        IdentifiedWeightedEdge currentStreet = findCurrStreet(closestName, current.toLatLng());
+        IdentifiedWeightedEdge currentStreet = findCurrStreet(closestName.name, current.toLatLng());
 
         ///find the names and coords of Source and Goal of street
         String streetSource_Name = AnimalItem.gInfo.getEdgeSource(currentStreet);
