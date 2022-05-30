@@ -94,11 +94,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         populate_lists();
 
-        //we need add the front gate into orderedAnimalList, so that route begin at gate
-        orderedAnimalList_Names.add(0, "Entrance and Exit Gate");
-        orderedAnimalList_IDs.add(0, "entrance_exit_gate");
-        orderedAnimalList_child.add(0, Arrays.asList("Entrance and Exit Gate"));
-        Log.d("orderedAnimalList_Names",orderedAnimalList_Names.toString());
+
 
 
 //        orderedAnimalList.add("entrance_exit_gate");
@@ -149,6 +145,12 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             orderedAnimalList_child.add(node.names);
 
         }
+
+        //we need add the front gate into orderedAnimalList, so that route begin at gate
+        orderedAnimalList_Names.add(0, "Entrance and Exit Gate");
+        orderedAnimalList_IDs.add(0, "entrance_exit_gate");
+        orderedAnimalList_child.add(0, Arrays.asList("Entrance and Exit Gate"));
+        Log.d("orderedAnimalList_Names",orderedAnimalList_Names.toString());
     }
 
     public void display(int index, boolean isNext) {
@@ -210,7 +212,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             // next button
             if (index < orderedAnimalList_Names.size() - 2) {
                 nextBtn.setEnabled(true);
-                skipBtn.setEnabled(false);
+                skipBtn.setEnabled(true);
                 String nextSource = orderedAnimalList_IDs.get(index + 1);
                 String nextGoal = orderedAnimalList_IDs.get(index + 2);
                 List<IdentifiedWeightedEdge> nextPath = DirectionHelper.findPathBetween(nextSource, nextGoal);
@@ -271,6 +273,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
                 prev.setText(prevText);
             }
         }
+        int a =2;
     }
     //act when next button is clicked
     public void onNextButtonClick(View view) {
@@ -524,7 +527,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     public void OnSkipClick(View view) {
 
         //determine which one to remove
-        skip(this.going_forward,this.order,orderedAnimalList_Names,orderedAnimalList_IDs,orderedAnimalList_child);
+        skip(this.going_forward,this.order,
+                orderedAnimalList_Names,orderedAnimalList_IDs,orderedAnimalList_child, planned_route);
 
         if (!going_forward) order--;//because one less exhibit before
 
@@ -534,13 +538,14 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     }
 
     //skip the current animal
-    public static void skip(boolean going_forward, int order,List<String> a1,List<String> a2,List<List<String>> a3) {
+    public static void skip(boolean going_forward, int order, List<String> a1, List<String> a2, List<List<String>> a3, List<route_node> route_nodeList) {
         int index_remove;
         if (going_forward) index_remove=order+1;
         else index_remove = order-1;
         a1.remove(index_remove);
         a2.remove(index_remove);
         a3.remove(index_remove);
+        route_nodeList.remove(index_remove-1);
     }
 
     public void update_and_save_status(Coord current) {

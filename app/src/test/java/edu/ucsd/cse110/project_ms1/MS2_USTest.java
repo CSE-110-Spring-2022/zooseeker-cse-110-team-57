@@ -4,8 +4,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,14 +13,7 @@ import org.junit.runner.RunWith;
 
 import android.content.Context;
 
-import android.content.SharedPreferences;
-import android.content.res.AssetManager;
-import android.util.Log;
-import android.widget.Button;
-import android.widget.TextView;
-
 import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -35,12 +26,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.project_ms1.location.Coord;
 import edu.ucsd.cse110.project_ms1.location.Coords;
-import edu.ucsd.cse110.project_ms1.location.LocationModel;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -162,7 +150,7 @@ public class MS2_USTest {
         List<String> a1_copy = new ArrayList<>(a1);
         List<String> a2_copy = new ArrayList<>(a2);
         List<List<String>> a3_copy = new ArrayList<>(a3);
-        DirectionActivity.skip(true,1,a1,a2,a3);
+        DirectionActivity.skip(true,1,a1,a2,a3, null);
         a1_copy.remove(2);
         a2_copy.remove(2);
         a3_copy.remove(2);
@@ -170,7 +158,7 @@ public class MS2_USTest {
         assertEquals(a2_copy,a2);
         assertEquals(a3_copy,a3);
 
-        DirectionActivity.skip(false,1,a1,a2,a3);
+        DirectionActivity.skip(false,1,a1,a2,a3, null);
         a1_copy.remove(0);
         a2_copy.remove(0);
         a3_copy.remove(0);

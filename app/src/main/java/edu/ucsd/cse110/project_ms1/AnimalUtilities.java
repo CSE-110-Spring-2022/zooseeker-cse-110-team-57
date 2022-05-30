@@ -88,8 +88,13 @@ public class AnimalUtilities {
 
         String start = find_starting_point(left_animal_items, curr_position);
 
-        List<route_node> rest_route = AnimalItem.plan_route(left_animal_items, start);
-
+        List<route_node> rest_route;
+        if (left_animal_items.size()==0){
+            rest_route = new ArrayList<>();
+        }
+        else {
+            rest_route = AnimalItem.plan_route(left_animal_items, start);
+        }
         //concat (first half of) original and rest_route
         List<route_node> newRoute;
         if (going_forward) {
