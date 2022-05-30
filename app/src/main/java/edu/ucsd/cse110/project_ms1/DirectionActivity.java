@@ -211,10 +211,10 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         //setting next button and next direction distance
         //disable the prev btn at the first page and next btn at last page.
         if (going_forward) {
+
             // next button
             if (index < orderedAnimalList_Names.size() - 2) {
                 nextBtn.setEnabled(true);
-                skipBtn.setEnabled(true);
                 String nextSource = orderedAnimalList_IDs.get(index + 1);
                 String nextGoal = orderedAnimalList_IDs.get(index + 2);
                 List<IdentifiedWeightedEdge> nextPath = DirectionHelper.findPathBetween(nextSource, nextGoal);
@@ -225,7 +225,6 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             }
             else {
                 nextBtn.setEnabled(false);
-                skipBtn.setEnabled(false);
                 next.setText("End of tour");
             }
             //setting previous button and previous direction distance
@@ -247,6 +246,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         }
         else{
+
             //next button
             nextBtn.setEnabled(true);
             String nextSource = orderedAnimalList_IDs.get(index - 1);
@@ -260,7 +260,6 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             // previous button
             if (index == 1) {
                 prevBtn.setEnabled(false);
-                skipBtn.setEnabled(false);
                 prev.setText("Beginning of tour");
             }
             else {
@@ -573,7 +572,25 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         Coord current = Coords.currentLocationCoord;
         replan_and_save_status(current);
-        display(order, going_forward);
+
+
+        //skip last exihibit and go to gate
+        if ( going_forward && order >= orderedAnimalList_Names.size() - 1){
+
+            skipBtn.setEnabled(false);
+            updateRoute(order, true, Coords.currentLocationCoord, orderedAnimalList_Names);
+            order--;
+        }
+        //skip first exhibit and go back to gate
+        else if (!going_forward && order == 0){
+            skipBtn.setEnabled((false));
+            updateRoute(1, false, Coords.currentLocationCoord, orderedAnimalList_Names);
+            order++;
+        }
+        //normal
+        else{
+            display(order, going_forward);
+        }
     }
 
     //skip the current animal
