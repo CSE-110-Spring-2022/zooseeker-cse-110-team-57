@@ -19,10 +19,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.IdentityHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -211,6 +214,12 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         //setting next button and next direction distance
         //disable the prev btn at the first page and next btn at last page.
         if (going_forward) {
+            //click button
+            if (order >= orderedAnimalList_Names.size() - 1){
+                skipBtn.setEnabled(false);
+            }else{
+                skipBtn.setEnabled(true);
+            }
 
             // next button
             if (index < orderedAnimalList_Names.size() - 2) {
@@ -246,6 +255,12 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         }
         else{
+            //click button
+            if (order <=  1){
+                skipBtn.setEnabled(false);
+            }else{
+                skipBtn.setEnabled(true);
+            }
 
             //next button
             nextBtn.setEnabled(true);
@@ -347,6 +362,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
                 .setMessage(message)
                 .setPositiveButton("Yes", (dialog, id)->{
                     replan_and_save_status(currentCoord);
+                    display(order, going_forward);
                 })
                 .setNegativeButton("No",(dialog,id)->{
                     updateRoute(this.order, this.going_forward, currentCoord, orderedAnimalList_IDs);
@@ -361,7 +377,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         populate_lists();
         //apply changes to display
-        display(order, going_forward);
+
 
         //save to SharedPreferences
         List<String> animal_strings = new ArrayList<>();
@@ -420,19 +436,22 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     //set the directions in detail version
     public void displayDetail(String source, String goal, List<IdentifiedWeightedEdge> path, boolean NeedUpdate){
         List<String> pathDisplay = new ArrayList<>();
-        if (NeedUpdate){
-            IdentifiedWeightedEdge insertion = path.remove(0);
-            if (path.size() != 0){
-                pathDisplay = DirectionHelper.detailPath(path,source);
-            }
-            //construct inserted edge info
-            String edgeInfo = getInsertionEdgeInfo(path, insertion);
+        if (path.size() == 1){
+            String edgeInfo = getSingleEdgeInfo(path);
             pathDisplay.add(0, edgeInfo);
         }
         else{
-             pathDisplay = DirectionHelper.detailPath(path,source);
+            if (NeedUpdate){
+                //construct inserted edge info
+                IdentifiedWeightedEdge insertion = path.remove(0);
+                pathDisplay = DirectionHelper.detailPath(path,source);
+                String edgeInfo = getInsertionEdgeInfo(path, insertion);
+                pathDisplay.add(0, edgeInfo);
+            }
+            else{
+                pathDisplay = DirectionHelper.detailPath(path,source);
+            }
         }
-
         direction_adapter.setDirectionsStringList(pathDisplay);
     }
 
@@ -440,17 +459,21 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     //set the directions in brief version
     public void displayBrief(String source, String goal, List<IdentifiedWeightedEdge> path, boolean NeedUpdate){
         List<String> pathDisplay = new ArrayList<>();
-        if (NeedUpdate){
-            IdentifiedWeightedEdge insertion = path.remove(0);
-            if (path.size() != 0){
-                pathDisplay = DirectionHelper.detailPath(path,source);
-            }
-            //construct inserted edge info
-            String edgeInfo = getInsertionEdgeInfo(path, insertion);
+        if (path.size() == 1){
+            String edgeInfo = getSingleEdgeInfo(path);
             pathDisplay.add(0, edgeInfo);
         }
         else{
-            pathDisplay = DirectionHelper.briefPath(path,source);
+            if (NeedUpdate){
+                //construct inserted edge info
+                IdentifiedWeightedEdge insertion = path.remove(0);
+                pathDisplay = DirectionHelper.detailPath(path,source);
+                String edgeInfo = getInsertionEdgeInfo(path, insertion);
+                pathDisplay.add(0, edgeInfo);
+            }
+            else{
+                pathDisplay = DirectionHelper.briefPath(path,source);
+            }
         }
         direction_adapter.setDirectionsStringList(pathDisplay);
     }
@@ -460,6 +483,29 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         String street = AnimalItem.eInfo.get(insertion.getId()).street;
         String insertion_goal = AnimalItem.gInfo.getEdgeSource(path.get(0));
         String target = AnimalItem.vInfo.get(insertion_goal).name;
+        String edgeInfo = "Proceed on " + street + " " + distance + " ft towards " + target;
+        return edgeInfo;
+    }
+
+    @NonNull
+    private String getSingleEdgeInfo(List<IdentifiedWeightedEdge> path){
+        String street = AnimalItem.eInfo.get(path.get(0).getId()).street;
+        String target = null;
+        double distance = 999999999.0;
+        ZooData.VertexInfo singleEdge_source = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeSource(path.get(0)));
+        ZooData.VertexInfo singleEdge_goal = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeTarget(path.get(0)));
+        Coord singleEdge_source_coord = new Coord(singleEdge_source.lat, singleEdge_source.lng);
+        Coord singleEdge_goal_coord = new Coord(singleEdge_goal.lat, singleEdge_goal.lng);
+        double Source_distance = AnimalItem.distance_between_coords(Coords.currentLocationCoord, singleEdge_source_coord);
+        double Goal_distance = AnimalItem.distance_between_coords(Coords.currentLocationCoord, singleEdge_goal_coord);
+        if (Source_distance <= Goal_distance){
+            distance = Source_distance;
+            target = singleEdge_source.name;
+        }
+        else{
+            distance = Goal_distance;
+            target = singleEdge_goal.name;
+        }
         String edgeInfo = "Proceed on " + street + " " + distance + " ft towards " + target;
         return edgeInfo;
     }
@@ -563,6 +609,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     public void onReplanButtonClick(View view) {
         Coord current = Coords.currentLocationCoord;
         replan_and_save_status(current);
+        display(order, going_forward);
     }
 
     //act when Skip button is click
@@ -579,13 +626,13 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
 
         //skip last exihibit and go to gate
-        if ( going_forward && order >= orderedAnimalList_Names.size() - 1){
+        if ( going_forward && order >= orderedAnimalList_Names.size() - 2){
             skipBtn.setEnabled(false);
             updateRoute(order, going_forward, Coords.currentLocationCoord, orderedAnimalList_IDs);
             order--;
         }
         //skip first exhibit and go back to gate
-        else if (!going_forward && order == 0){
+        else if (!going_forward && order <= 1){
             skipBtn.setEnabled((false));
             updateRoute(1, going_forward, Coords.currentLocationCoord, orderedAnimalList_IDs);
             order++;
@@ -608,7 +655,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     }
 
     public void updateRoute(int order, boolean going_forward, Coord current, List<String> orderedAnimalList_IDs) {
-        List<IdentifiedWeightedEdge> updatePath = new ArrayList<>();
+        List<IdentifiedWeightedEdge> updatePath = new LinkedList<>();
         String goalExhibit = null;
         //get the goal exhibit
         if (going_forward){
@@ -627,8 +674,10 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         //get the current street
         IdentifiedWeightedEdge currentStreet = DirectionHelper.findCurrStreet(closestLandmark.id,
                 current.toLatLng());
-        updatePath.add(0, currentStreet);
-        setDisplay(closestLandmark.name, goalExhibit, updatePath, true);
+
+        List<IdentifiedWeightedEdge> updated_path = new ArrayList<>(updatePath);
+        updated_path.add(0, currentStreet);
+        setDisplay(closestLandmark.name, goalExhibit, updated_path, true);
     }
 
 
