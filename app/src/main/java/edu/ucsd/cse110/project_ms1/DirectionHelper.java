@@ -329,7 +329,6 @@ public class DirectionHelper {
         Coord streetSource_Coord = new Coord(AnimalItem.vInfo.get(streetSource_Name).lat, AnimalItem.vInfo.get(streetSource_Name).lng);
         Coord streetGoal_Coord = new Coord(AnimalItem.vInfo.get(streetGoal_Name).lat, AnimalItem.vInfo.get(streetGoal_Name).lng);
 
-
         //Path 1: from current to streetSource to Destination
         first_path = AnimalItem.distance_between_coords(current, streetSource_Coord);
         first_path += DijkstraShortestPath.findPathBetween(AnimalItem.gInfo,
@@ -344,7 +343,8 @@ public class DirectionHelper {
         return result;
     }
 
-    
+
+
 
 
 }

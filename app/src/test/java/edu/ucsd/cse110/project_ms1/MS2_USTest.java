@@ -196,7 +196,7 @@ public class MS2_USTest {
 
 
     }
-
+/*
     @Test
     public void getNearestNode(){
         LatLng expectLatLng = new LatLng(32.72442520989079, -117.16066409380507);
@@ -210,9 +210,8 @@ public class MS2_USTest {
         String actualNode12 = AnimalItem.getNearestExhibit(expectLatLng2);
 
         assertEquals(expectNode2,actualNode12);
-
     }
-
+*/
 
 
     @Test
@@ -282,8 +281,7 @@ public class MS2_USTest {
         double midpointLng = (nodeALatLng.longitude + nodeBLatLng.longitude) /2;
         LatLng currLatLng = new LatLng(midpointLat, midpointLng);
         String expectStreet = "owens_to_fern";
-        String actualStreet = DirectionHelper.findCurrStreet(nearestExhibit,currLatLng);
-
+        String actualStreet = DirectionHelper.findCurrStreet(nearestExhibit,currLatLng).toString();
         assertEquals(expectStreet,actualStreet);
     }
 
