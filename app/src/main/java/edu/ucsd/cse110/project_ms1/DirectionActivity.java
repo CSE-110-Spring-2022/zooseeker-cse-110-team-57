@@ -552,12 +552,19 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     }
 
     public void updateRoute(int order, boolean going_forward, Coord current, List<String> orderedAnimalList_Names) {
+        List<IdentifiedWeightedEdge> updatePath = new ArrayList<>();
         //get the goal exhibit
         String goalExhibit = (going_forward)? orderedAnimalList_Names.get(order): orderedAnimalList_Names.get(order + 1);
         //get the closestLandmark
         String closestLandmarkName = AnimalItem.getClosestLandmark(current);
         //get the path between closest landmark to goal exhibit
-        List<IdentifiedWeightedEdge> updatePath = DirectionHelper.findPathBetween(closestLandmarkName, goalExhibit);
+        if (!closestLandmarkName.equals(goalExhibit)){
+            return;
+        }
+        else{
+            updatePath = DirectionHelper.findPathBetween(closestLandmarkName, goalExhibit);
+        }
+
         //get the current street
         IdentifiedWeightedEdge currentStreet = DirectionHelper.findCurrStreet(closestLandmarkName,
                 current.toLatLng());
