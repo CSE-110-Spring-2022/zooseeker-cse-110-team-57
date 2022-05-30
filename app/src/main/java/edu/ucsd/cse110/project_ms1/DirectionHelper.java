@@ -318,22 +318,23 @@ public class DirectionHelper {
         //get the current street
         IdentifiedWeightedEdge currentStreet = findCurrStreet(closestName.id, current.toLatLng());
 
-        ///find the names and coords of Source and Goal of street
-        String streetSource_Name = AnimalItem.gInfo.getEdgeSource(currentStreet);
-        String streetGoal_Name = AnimalItem.gInfo.getEdgeTarget(currentStreet);
+        ///find the Source and Goal of street
+        ZooData.VertexInfo streetSource = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeSource(currentStreet));
+        ZooData.VertexInfo streetGoal = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeTarget(currentStreet));
 
-        Coord streetSource_Coord = new Coord(AnimalItem.vInfo.get(streetSource_Name).lat, AnimalItem.vInfo.get(streetSource_Name).lng);
-        Coord streetGoal_Coord = new Coord(AnimalItem.vInfo.get(streetGoal_Name).lat, AnimalItem.vInfo.get(streetGoal_Name).lng);
+        //get the coord of Souce and Goal
+        Coord streetSource_Coord = new Coord(streetSource.lat, streetSource.lng);
+        Coord streetGoal_Coord = new Coord(streetGoal.lat, streetGoal.lng);
 
         //Path 1: from current to streetSource to Destination
         first_path = AnimalItem.distance_between_coords(current, streetSource_Coord);
-        first_path += DijkstraShortestPath.findPathBetween(AnimalItem.gInfo,
-                streetSource_Name, Destination.id).getWeight();
+        first_path += AnimalItem.adapted_find_shortest_path(AnimalItem.gInfo,
+                streetSource.id, Destination.id).getWeight();
 
         //Path 2: from current to streetGoal to Destination
         second_path = AnimalItem.distance_between_coords(current, streetGoal_Coord);
-        first_path += DijkstraShortestPath.findPathBetween(AnimalItem.gInfo,
-                streetGoal_Name, Destination.id).getWeight();
+        first_path += AnimalItem.adapted_find_shortest_path(AnimalItem.gInfo,
+                streetGoal.id, Destination.id).getWeight();
 
         //return the shorter path
         double result = (first_path <=second_path) ? first_path : second_path;
