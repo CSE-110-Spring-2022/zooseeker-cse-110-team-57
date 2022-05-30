@@ -44,29 +44,24 @@ public class LocationModel extends AndroidViewModel {
 
     public LocationModel(@NonNull Application application, Context context, OnLocationChangeListener onLocationChangeListener) {
         super(application);
-        lastKnownCoords = new MediatorLiveData<>();
         this.onLocationChangeListener = onLocationChangeListener;
         this.mOwner = (LifecycleOwner) context;
 
         // Create and add the mock source.
+        lastKnownCoords = new MediatorLiveData<>();
         mockSource = new MutableLiveData<>();
-
-        //lastKnownCoords.addSource(mockSource, lastKnownCoords::setValue);
         lastKnownCoords.addSource(mockSource, new Observer<Coord>() {
             @Override
             public void onChanged(Coord coord) {
                 lastKnownCoords.setValue(coord);
-//                Coords.currentLocationCoord = coord;
-//                LatLngs.currentLocationLatLng = coord.toLatLng();
-//                onLocationChangeListener.OnLocationChange(coord);
             }
         });
     }
-
+    //getter of lastKnownCoords
     public LiveData<Coord> getLastKnownCoords() {
         return lastKnownCoords;
     }
-
+    //getter of value of lastKnowCoords
     public Coord getCurrentCoord(){
         return lastKnownCoords.getValue();
     }
@@ -101,7 +96,6 @@ public class LocationModel extends AndroidViewModel {
         };
         // Register for updates.
         locationManager.requestLocationUpdates(provider, 0, 0f, locationListener);
-
         locationProviderSource = providerSource;
         lastKnownCoords.addSource(locationProviderSource, lastKnownCoords::setValue);
     }
@@ -110,7 +104,7 @@ public class LocationModel extends AndroidViewModel {
         if (locationProviderSource == null) return;
         lastKnownCoords.removeSource(locationProviderSource);
     }
-
+    //mock a single point
     @VisibleForTesting
     public void mockLocation(Coord coords) {
         mockSource.setValue(coords);
@@ -120,7 +114,7 @@ public class LocationModel extends AndroidViewModel {
 //            Log.i(TAG, String.format("Observing location model update to %s", coord));
 //        });
     }
-
+    //mock a list of points
     @VisibleForTesting
     public Future<?> mockRoute(Context context, List<Coord> route, long delay, TimeUnit unit) {
         return Executors.newSingleThreadExecutor().submit(() -> {

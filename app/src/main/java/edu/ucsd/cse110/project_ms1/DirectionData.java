@@ -6,7 +6,7 @@ public class DirectionData {
     public String exhibitName;
     public String exhibitID;
     public List<String> childList;
-
+    //A mediator function
     DirectionData(String exhibitName,
                   String exhibitID,
                   List<String> childList){

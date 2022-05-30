@@ -16,11 +16,13 @@ public class Coord {
     public static final Double DEG_LNG_IN_FT = 307515.50;
     public static final Double BASE = 100.00;
 
+    //constructor 1
     public Coord(Double lat, Double lng) {
         this.lat = lat;
         this.lng = lng;
     }
 
+    //constructor 2
     public Coord(LatLng ll){
         this.lat = ll.latitude;
         this.lng = ll.longitude;
@@ -29,19 +31,19 @@ public class Coord {
     public static Coord of(Double lat, Double lng) {
         return new Coord(lat, lng);
     }
-
+    //change Latlng to Coord
     public static Coord fromLatLng(LatLng latLng) {
         return Coord.of(latLng.latitude, latLng.longitude);
     }
-
+    //chage Coord to Latlng
     public LatLng toLatLng() {
         return new LatLng(lat, lng);
     }
-
+    //chang Location to Coord
     public static Coord fromLocation(Location location) {
         return Coord.of(location.getLatitude(), location.getLongitude());
     }
-
+    //check if two Coords are equal
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -60,7 +62,7 @@ public class Coord {
     public String toString() {
         return String.format("Coord{lat=%s, lng=%s}", lat, lng);
     }
-
+    //Change Coord to Pair<Double, Double> in feet
     public Pair<Double, Double> CoordToFeet(){
         return Pair.create(this.lat * DEG_LAT_IN_FT, this.lng * DEG_LNG_IN_FT);
     }

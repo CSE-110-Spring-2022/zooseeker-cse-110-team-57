@@ -16,6 +16,7 @@ import java.util.stream.Stream;
 import edu.ucsd.cse110.project_ms1.location.Coord;
 
 public class AnimalUtilities {
+    //load 3 Json files
     public static void loadZooInfo(Context context){
         String vPath = "exhibit_info.json";
         String ePath = "trail_info.json";
@@ -26,7 +27,7 @@ public class AnimalUtilities {
             e.printStackTrace();
         }
     }
-
+    //get the closest animalitem
     public static AnimalItem getClosestAnimalItem(List<AnimalItem> animal_items, String start, double min_distance, AnimalItem closest_animal) {
         String goal;
         //use for loop to find next closet exhibit
@@ -44,19 +45,16 @@ public class AnimalUtilities {
         return closest_animal;
     }
 
-//    public static  double get_distance(LatLng l1, LatLng l2){
-//        return 0;
-//    }
 
+    //get the distance between a Coord and a AnimalItem
     public static  double get_distance(LatLng ll, AnimalItem animal){
         return animal.getDistanceToInFeet(new Coord(ll));
     }
 
+    //Check if Off-route is needed
     public static boolean check_off_route (int visiting_order, List<route_node> route, LatLng curr_position){
-
         //if just going to exit gate
         if (visiting_order+1 == route.size()) return false;
-
         AnimalItem planned_next_animal = route.get(visiting_order+1).exhibit;
         double distance_to_the_next =get_distance(curr_position,planned_next_animal);
         for (int i=visiting_order+1; i<route.size()-1; i++){
@@ -67,7 +65,12 @@ public class AnimalUtilities {
         return  false;
     }
 
+<<<<<<< HEAD
     public static List<route_node> reroute(int visiting_order, List<route_node> route, LatLng curr_position, boolean going_forward){
+=======
+    //replaning the route
+    public static List<route_node> reroute (int visiting_order, List<route_node> route, LatLng curr_position){
+>>>>>>> 8ceae57a073f8e717e424c250273fcd0277f78e3
         List<AnimalItem> left_animal_items = new ArrayList<>();
 
         if (going_forward) {
@@ -121,7 +124,7 @@ public class AnimalUtilities {
         }
         return  retval;
     }
-
+    
     public static boolean matchByTag(List<String> stringList, String str){
         for (String s : stringList){
             if (s.contains(str)) return true;
