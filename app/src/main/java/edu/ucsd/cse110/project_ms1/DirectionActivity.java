@@ -530,13 +530,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     public void OnSkipClick(View view) {
 
         //determine which one to remove
-<<<<<<< HEAD
         skip(this.going_forward,this.order,
                 orderedAnimalList_Names,orderedAnimalList_IDs,orderedAnimalList_child, planned_route);
-=======
-        skip(this.going_forward, this.order, orderedAnimalList_Names, orderedAnimalList_IDs,
-                orderedAnimalList_child);
->>>>>>> 5cafc42f78c848d4a0a0d3271d14681284d58be3
 
         if (!going_forward) order--;//because one less exhibit before
 
