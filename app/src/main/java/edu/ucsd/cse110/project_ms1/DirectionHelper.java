@@ -9,14 +9,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import org.jgrapht.GraphPath;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -88,10 +86,10 @@ public class DirectionHelper {
     }
 
     //get the directions in detail version
-    public static List<String> detailPath(List<IdentifiedWeightedEdge> path, String start){
+    public static List<String> detailPath(List<IdentifiedWeightedEdge> path, String source_id){
         List<String> display = new ArrayList<>();
         String street = path.get(0).getId();
-        String source = start;
+        String source = AnimalItem.vInfo.get(source_id).name;
         String target = "";
         String edgeInfo = "";
         Double distance = 0.0;
@@ -124,10 +122,10 @@ public class DirectionHelper {
         return display;
     }
     //get the directions in brief version
-    public static List<String> briefPath(List<IdentifiedWeightedEdge> path, String startNode){
+    public static List<String> briefPath(List<IdentifiedWeightedEdge> path, String source_id){
         List<String> display = new ArrayList<>();
         String street = AnimalItem.eInfo.get(path.get(0).getId()).street;
-        String source = startNode;
+        String source = AnimalItem.vInfo.get(source_id).name;
         String target;
         String edgeInfo;
         Double totalDistance = 0.0;
@@ -380,6 +378,7 @@ public class DirectionHelper {
         double result = (first_path <=second_path) ? first_path : second_path;
         return result;
     }
+
 
 
 
