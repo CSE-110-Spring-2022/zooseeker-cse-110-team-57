@@ -335,7 +335,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             showReplanAlert(this, current);
         }
         else{
-            updateRoute(this.order, this.going_forward, true, current, orderedAnimalList_Names);
+            updateRoute(this.order, this.going_forward, current, orderedAnimalList_Names);
         }
     }
 
@@ -349,7 +349,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
                     replan_and_save_status(currentCoord);
                 })
                 .setNegativeButton("No",(dialog,id)->{
-                    updateRoute(this.order, this.going_forward, true, currentCoord, orderedAnimalList_Names);
+                    updateRoute(this.order, this.going_forward, currentCoord, orderedAnimalList_Names);
                 })
                 .setCancelable(true);
         AlertDialog alertDialog = alertBuilder.create();
@@ -576,15 +576,14 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         //skip last exihibit and go to gate
         if ( going_forward && order >= orderedAnimalList_Names.size() - 1){
-
             skipBtn.setEnabled(false);
-            updateRoute(order, true, Coords.currentLocationCoord, orderedAnimalList_Names);
+            updateRoute(order, going_forward, Coords.currentLocationCoord, orderedAnimalList_Names);
             order--;
         }
         //skip first exhibit and go back to gate
         else if (!going_forward && order == 0){
             skipBtn.setEnabled((false));
-            updateRoute(1, false, Coords.currentLocationCoord, orderedAnimalList_Names);
+            updateRoute(1, going_forward, Coords.currentLocationCoord, orderedAnimalList_Names);
             order++;
         }
         //normal
@@ -604,16 +603,16 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         route_nodeList.remove(index_remove-1);
     }
 
-    public void updateRoute(int order, boolean going_forward, boolean is_goal_edgeSource, Coord current, List<String> orderedAnimalList_Names) {
+    public void updateRoute(int order, boolean going_forward, Coord current, List<String> orderedAnimalList_Names) {
         List<IdentifiedWeightedEdge> updatePath = new ArrayList<>();
         String goalExhibit = null;
         //get the goal exhibit
         if (going_forward){
-             goalExhibit = (is_goal_edgeSource)? orderedAnimalList_Names.get(order): orderedAnimalList_Names.get(order + 1);
+            goalExhibit = orderedAnimalList_Names.get(order + 1);
         }
         else{
             order--;
-            goalExhibit = (is_goal_edgeSource)? orderedAnimalList_Names.get(order): orderedAnimalList_Names.get(order + 1);
+            goalExhibit = orderedAnimalList_Names.get(order);
         }
         //get the closestLandmark
         AnimalItem closestLandmark = AnimalItem.getClosestLandmark(current);
