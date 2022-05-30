@@ -306,19 +306,21 @@ public class MS2_USTest {
 
         AnimalItem.loadInfo(context, vPath, ePath, gPath);
 
+        //selected animal list
         animalItemArrayList.add(a1);
         animalItemArrayList.add(a2);
         animalItemArrayList.add(a3);
-        animalItemArrayList.add(a4);
 
 
-        List<route_node> route = AnimalItem.plan_route(animalItemArrayList,a4.id, false);
+        // optimized route
+        List<route_node> route = AnimalItem.plan_route(animalItemArrayList, a4.id, false);
 
         for (route_node node : route){
             System.out.println(node.names);
         }
 
-        List<route_node> r = AnimalUtilities.reroute(0,  route, latlng, going_forward);
+        // reroute on order i
+        List<route_node> r = AnimalUtilities.reroute(1,  route, latlng, going_forward);
         for (route_node node : r){
             System.out.println(node.names);
         }
@@ -328,8 +330,42 @@ public class MS2_USTest {
 
 
     @Test
-    public void findStartPoint() throws IOException {
+    public void findStartPoint() throws IOException {//load zooData
+        String vPath = "exhibit_info.json";
+        String ePath = "trail_info.json";
+        String gPath = "zoo_graph.json";
+        Context context = ApplicationProvider.getApplicationContext();
 
+        LatLng latlng = new LatLng(32,-117);
+        boolean going_forward =  true;
+        ArrayList<AnimalItem> animalItemArrayList = new ArrayList<>();
+        AnimalItem a1 = new AnimalItem("orangutan",
+                new ArrayList<>(),
+                "Orangutans",
+                new LatLng(32.736864688333235,-117.16364410510093));
+        AnimalItem a2 = new AnimalItem("siamang",
+                new ArrayList<>(),
+                "Siamangs",
+                new LatLng(32.736864688333235,-117.16079397323202));
+        AnimalItem a3 = new AnimalItem("toucan",
+                new ArrayList<>(),
+                "Toucan",
+                new LatLng(32.736864688333235,-117.16079397323202));
+        AnimalItem a4 = new AnimalItem("entrance_exit_gate",
+                new ArrayList<>(),
+                "Entrance and Exit Gate",
+                new LatLng(32.73561,-117.14936));
+
+        AnimalItem.loadInfo(context, vPath, ePath, gPath);
+
+        animalItemArrayList.add(a1);
+        animalItemArrayList.add(a2);
+        animalItemArrayList.add(a3);
+        animalItemArrayList.add(a4);
+
+
+        String result = AnimalUtilities.find_starting_point(animalItemArrayList,new LatLng(32.73561,-117.14936));
+        System.out.println(result);
     }
 
     @Test
@@ -365,8 +401,6 @@ public class MS2_USTest {
         animalItemArrayList.add(a1);
         animalItemArrayList.add(a2);
         animalItemArrayList.add(a3);
-        animalItemArrayList.add(a4);
-
 
         List<route_node> route = AnimalItem.plan_route(animalItemArrayList,a4.id, false);
     }
