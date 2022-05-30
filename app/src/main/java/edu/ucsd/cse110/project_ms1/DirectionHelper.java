@@ -14,9 +14,11 @@ import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.jgrapht.GraphPath;
+import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.AccessMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -28,12 +30,14 @@ import edu.ucsd.cse110.project_ms1.location.Coord;
 
 public class DirectionHelper {
 
+    //get the names of all selected animals
     public static List<String> animalInRoute(List<AnimalItem> orderedAnimalList){
         List<String> route = new ArrayList<>();
         orderedAnimalList.forEach(animalItem ->route.add(animalItem.id));
         return route;
     }
 
+    //load AnimalItem from sharedPreferences
     public static List<AnimalItem> loadAnimalItem(Context context, List<String> orderedAnimal){
         SharedPreferences sharedPreferences = context.getSharedPreferences("Team57", Activity.MODE_PRIVATE);
         StringAndAnimalItem stringAndAnimalItem = new StringAndAnimalItem();
@@ -54,7 +58,7 @@ public class DirectionHelper {
         return orderedAnimalItemList;
     }
 
-
+    //HashMap of edges
     public static HashMap<Integer,List<IdentifiedWeightedEdge>> findRoute(List<route_node> planned_route){
         //  (order,paths)
         HashMap<Integer,List<IdentifiedWeightedEdge>> route = new HashMap<>();
@@ -72,7 +76,7 @@ public class DirectionHelper {
 
         return route;
     }
-
+    //find the path between "source" and "goal"
     public static List<IdentifiedWeightedEdge> findPathBetween(String source,String goal){
 
             GraphPath<String, IdentifiedWeightedEdge> path = AnimalItem.adapted_find_shortest_path(AnimalItem.gInfo, source, goal);
@@ -82,7 +86,7 @@ public class DirectionHelper {
         return streets;
     }
 
-
+    //get the directions in detail version
     public static List<String> detailPath(List<IdentifiedWeightedEdge> path, String start){
         List<String> display = new ArrayList<>();
         String street = path.get(0).getId();
@@ -118,7 +122,7 @@ public class DirectionHelper {
         }
         return display;
     }
-
+    //get the directions in brief version
     public static List<String> briefPath(List<IdentifiedWeightedEdge> path, String startNode){
         List<String> display = new ArrayList<>();
         String street = AnimalItem.eInfo.get(path.get(0).getId()).street;
@@ -163,7 +167,7 @@ public class DirectionHelper {
     }
 
 
-
+    //get the total distance of path
     public static double totalDistance(List<IdentifiedWeightedEdge> path){
         double distance = 0.0;
         for(IdentifiedWeightedEdge edge : path){
@@ -176,6 +180,7 @@ public class DirectionHelper {
         return AnimalItem.vInfo.get(id).name;
     }
 
+    //save the direction order and isNext
     public static void saveDirectionsInformation(Context context, int order, boolean isNext){
         SharedPreferences sharedPreferences = context.getSharedPreferences("Team57", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -184,7 +189,7 @@ public class DirectionHelper {
         editor.commit();
         editor.apply();
     }
-
+    //load the direction order and isNext
     public static List<String> loadDirectionsInformation(Context context){
         List<String> retainedInfo = new ArrayList<String>();
         SharedPreferences sharedPreferences = context.getSharedPreferences("Team57", Activity.MODE_PRIVATE);
@@ -194,7 +199,7 @@ public class DirectionHelper {
         retainedInfo.add(currentIsNext);
         return retainedInfo;
     }
-
+    //restore the direction order is isNext
     public static void restoreCurrentOrderAndIsNext(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences("Team57", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -216,7 +221,7 @@ public class DirectionHelper {
     }
 
  */
-
+    //routeNode to directionData
     public static List<DirectionData> routeNode_to_DirectionData(List<route_node> planned_route) {
 
         List<DirectionData> orderedAnimalList = new ArrayList<>();
@@ -237,6 +242,7 @@ public class DirectionHelper {
         return orderedAnimalList;
     }
 
+    //Check the LatLng is on range
     public static boolean onRange(LatLng curr, LatLng nodeA, LatLng nodeB){
         boolean x1 = curr.latitude >= min(nodeA.latitude, nodeB.latitude);
         boolean x2 = curr.latitude <= max(nodeA.latitude,nodeB.latitude);
@@ -274,8 +280,8 @@ public class DirectionHelper {
         return nodeB.longitude- nodeA.longitude / nodeB.latitude - nodeA.latitude;
     }
 
-
-    public static String findCurrStreet(String nearestExhibit, LatLng curr){
+    //find the current street
+    public static IdentifiedWeightedEdge findCurrStreet(String nearestExhibit, LatLng curr){
         //all edge that connect to the nearestExhibit
         Set<IdentifiedWeightedEdge> incomingEdges = AnimalItem.gInfo.incomingEdgesOf(nearestExhibit);
         Log.d("findCurrStreet",incomingEdges.toString());
@@ -291,13 +297,13 @@ public class DirectionHelper {
             boolean onLine = onTrack(curr,LatLngA,LatLngB);
 
             if(onRange && onLine){
-                return edge.getId();
+                return edge;
             }
 
         }
-        return incomingEdges.toString();
+        return null;
     }
-
+    //getter
     public static LatLng getLatLng(String exhibit){
         for(Map.Entry<String, ZooData.VertexInfo> vertexInfo : AnimalItem.vInfo.entrySet()) {
             if(vertexInfo.getKey().equals(exhibit)){
@@ -306,7 +312,48 @@ public class DirectionHelper {
         }
         return new LatLng(0.0,0.0);
     }
+    //get the shortest path distance from current location to destination
+    public static double getPathDistanceBetween(Coord current, AnimalItem Destination){
+        double first_path, second_path;
+        //find the current street
+        List<AnimalItem> all_landmarks = AnimalItem.search_by_tag(null) ;
+        all_landmarks.add(AnimalItem.gate);
+        String closestName = null;
+        double min = 999999999;
+        for (AnimalItem currentLandmark : all_landmarks){
+            double currentDis = AnimalUtilities.get_distance(current.toLatLng(), currentLandmark);
+            if (currentDis < min){
+                min = currentDis;
+                closestName = currentLandmark.name;
+            }
+        }
 
+        IdentifiedWeightedEdge currentStreet = findCurrStreet(closestName, current.toLatLng());
+
+        ///find the Source and Goal of street
+        String streetSource_Name = AnimalItem.gInfo.getEdgeSource(currentStreet);
+        String streetGoal_Name = AnimalItem.gInfo.getEdgeTarget(currentStreet);
+
+        Coord streetSource_Coord = new Coord(AnimalItem.vInfo.get(streetSource_Name).lat, AnimalItem.vInfo.get(streetSource_Name).lng);
+        Coord streetGoal_Coord = new Coord(AnimalItem.vInfo.get(streetGoal_Name).lat, AnimalItem.vInfo.get(streetGoal_Name).lng);
+
+        //Path 1: from current to streetSource to Destination
+        first_path = AnimalItem.distance_between_coords(current, streetSource_Coord);
+        first_path += DijkstraShortestPath.findPathBetween(AnimalItem.gInfo,
+                streetSource_Name, Destination.name).getWeight();
+
+        //Path 2: from current to streetGoal to Destination
+        second_path = AnimalItem.distance_between_coords(current, streetGoal_Coord);
+        first_path += DijkstraShortestPath.findPathBetween(AnimalItem.gInfo,
+                streetGoal_Name, Destination.name).getWeight();
+
+        if (first_path <= second_path){
+            return first_path;
+        }
+        else{
+            return second_path;
+        }
+    }
 
 }
 

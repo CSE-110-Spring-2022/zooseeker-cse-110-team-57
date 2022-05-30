@@ -17,7 +17,7 @@ import edu.ucsd.cse110.project_ms1.location.Coord;
 
 public class AnimalUtilities {
     //load 3 Json files
-    public static void loadZooInfo(Context context){
+    public static void loadZooInfo(Context context) {
         String vPath = "exhibit_info.json";
         String ePath = "trail_info.json";
         String gPath = "zoo_graph.json";
@@ -27,13 +27,14 @@ public class AnimalUtilities {
             e.printStackTrace();
         }
     }
+
     //get the closest animalitem
     public static AnimalItem getClosestAnimalItem(List<AnimalItem> animal_items, String start, double min_distance, AnimalItem closest_animal) {
         String goal;
         //use for loop to find next closet exhibit
         for (AnimalItem item : animal_items) {
             goal = item.id;
-            Graph<String, IdentifiedWeightedEdge>  graph = AnimalItem.gInfo;
+            Graph<String, IdentifiedWeightedEdge> graph = AnimalItem.gInfo;
             GraphPath<String, IdentifiedWeightedEdge> path = AnimalItem.adapted_find_shortest_path(graph, start, goal);
             double curr_dis = AnimalItem.route_length(path);
             if (curr_dis < min_distance) {
@@ -47,12 +48,12 @@ public class AnimalUtilities {
 
 
     //get the distance between a Coord and a AnimalItem
-    public static  double get_distance(LatLng ll, AnimalItem animal){
+    public static double get_distance(LatLng ll, AnimalItem animal) {
         return animal.getDistanceToInFeet(new Coord(ll));
     }
 
     //Check if Off-route is needed
-    public static boolean check_off_route (int visiting_order, List<route_node> route, LatLng curr_position){
+    public static boolean check_off_route(int visiting_order, List<route_node> route, LatLng curr_position) {
         //if just going to exit gate
         if (visiting_order+1 == route.size()) return false;
         AnimalItem planned_next_animal = route.get(visiting_order).exhibit;
@@ -63,10 +64,11 @@ public class AnimalUtilities {
             double dis = get_distance(curr_position,animal);
             if (dis<distance_to_the_next) return true;
         }
-        return  false;
+        return false;
     }
 
-    public static List<route_node> reroute(int visiting_order, List<route_node> route, LatLng curr_position, boolean going_forward){
+    //reroute
+    public static List<route_node> reroute(int visiting_order, List<route_node> route, LatLng curr_position, boolean going_forward) {
         List<AnimalItem> left_animal_items = new ArrayList<>();
 
         if (going_forward) {
@@ -75,17 +77,16 @@ public class AnimalUtilities {
                 left_animal_items.add(route.get(visiting_order + 1).exhibit);
                 route.remove(visiting_order + 1);
             }
-        }
-        else{
+        } else {
 
-            for (int i=0; i<visiting_order;i++) {
+            for (int i = 0; i < visiting_order; i++) {
 
                 left_animal_items.add(route.get(0).exhibit);
                 route.remove(0);
             }
         }
 
-        String start = find_starting_point(left_animal_items,curr_position);
+        String start = find_starting_point(left_animal_items, curr_position);
 
         List<route_node> rest_route = AnimalItem.plan_route(left_animal_items, start);
 
@@ -94,38 +95,43 @@ public class AnimalUtilities {
         if (going_forward) {
             newRoute = Stream.concat(route.stream(), rest_route.stream())
                     .collect(Collectors.toList());
-        }
-        else {
+        } else {
             newRoute = Stream.concat(rest_route.stream(), route.stream())
                     .collect(Collectors.toList());
         }
 
 
         List<String> newNames = new ArrayList<>();
-        for (route_node r : newRoute){
+        for (route_node r : newRoute) {
             newNames.add(r.exhibit.name);
         }
-        return  newRoute;
+        return newRoute;
     }
 
     //given the left animals to visit, return where I should go first
-    public static String find_starting_point(List<AnimalItem> animals, LatLng curr_position){
+    public static String find_starting_point(List<AnimalItem> animals, LatLng curr_position) {
         String retval = null;
         double min_dis = Double.MAX_VALUE;
-        for (AnimalItem  animal : animals){
-            if (min_dis > get_distance(curr_position, animal)){
+        for (AnimalItem animal : animals) {
+            if (min_dis > get_distance(curr_position, animal)) {
                 min_dis = get_distance(curr_position, animal);
                 retval = animal.id;
             }
         }
-        return  retval;
+        return retval;
     }
-    
-    public static boolean matchByTag(List<String> stringList, String str){
-        for (String s : stringList){
+
+    public static boolean matchByTag(List<String> stringList, String str) {
+        for (String s : stringList) {
             if (s.contains(str)) return true;
         }
-        return  false;
+        return false;
     }
+
+    public static List<route_node> updateRoute(int visiting_order, List<route_node> route, LatLng curr_position, boolean going_forward) {
+        List<route_node> list_route = new ArrayList<>();
+        return null;
+    }
+
 
 }

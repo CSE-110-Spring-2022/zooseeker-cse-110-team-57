@@ -49,13 +49,13 @@ public class ZooData {
             this.group_id = group_id;
         }
     }
-
+    //informatoin of edge
     public static class EdgeInfo {
         public String id;
         public String street;
     }
 
-
+    //load the vertex information form Json file
     public static Map<String, ZooData.VertexInfo> loadVertexInfoJSON(InputStream inputStream) {
 
         Reader reader = new InputStreamReader(inputStream);
@@ -77,7 +77,7 @@ public class ZooData {
 
         return indexedZooData;
     }
-
+    //load the edge information form Json file
     public static Map<String, ZooData.EdgeInfo> loadEdgeInfoJSON(InputStream inputStream) {
         Reader reader = new InputStreamReader(inputStream);
 
@@ -91,7 +91,7 @@ public class ZooData {
 
         return indexedZooData;
     }
-
+    //load the graph information form Json file
     public static Graph<String, IdentifiedWeightedEdge> loadZooGraphJSON(InputStream inputStream) {
         // Create an empty graph to populate.
         Graph<String, IdentifiedWeightedEdge> g = new DefaultUndirectedWeightedGraph<>(IdentifiedWeightedEdge.class);
@@ -115,7 +115,7 @@ public class ZooData {
 
         return g;
     }
-
+    //load the mocking points information form Json file
     public static List<Coord> loadMockingJSON(InputStream inputStream){
         Reader reader = new InputStreamReader(inputStream);
         Gson gson = new Gson();

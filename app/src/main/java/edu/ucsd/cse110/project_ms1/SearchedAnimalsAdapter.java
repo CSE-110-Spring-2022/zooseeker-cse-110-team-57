@@ -31,27 +31,29 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
     private OnAddListener myOnAddListener;
     private IsAnimalFoundPass myIsAnimalFoundPass;
 
+    //Add button listener
     public interface OnAddListener{
         void OnAddClick(int position);
     }
-
+    //is animal found listener
     public interface IsAnimalFoundPass{
         public void pass(List<AnimalItem> isAnimalFound);
     }
 
+    //constructor
     public SearchedAnimalsAdapter(OnAddListener onAddListener, IsAnimalFoundPass isAnimalFoundPass){
         this.all_animal_items = AnimalItem.search_by_tag(null);
         this.searched_animal_items = new ArrayList<>();
         this.myOnAddListener = onAddListener;
         this.myIsAnimalFoundPass = isAnimalFoundPass;
     }
-
+    //setter
     public void setSearched_animal_items(List<AnimalItem> new_searched_animal_items){
         searched_animal_items.clear();
         searched_animal_items = new_searched_animal_items;
         notifyDataSetChanged();
     }
-
+    //animalFilter function
     public Filter animalItemFilter = new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence charSequence) {
@@ -69,7 +71,7 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
             filtered.values = filteredList;
             return filtered;
         }
-
+        //publish filtered results
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
             searched_animal_items.clear();
@@ -113,6 +115,7 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
         private AnimalItem animal_item;
         OnAddListener onAddListener;
 
+        //constructor
         public ViewHolder(@NonNull View itemView, OnAddListener onAddListener) {
             super(itemView);
             this.animalName = itemView.findViewById(R.id.an_animal_from_search);
@@ -132,7 +135,7 @@ public class SearchedAnimalsAdapter extends RecyclerView.Adapter<SearchedAnimals
             this.animal_item = animal_item;
             this.animalName.setText(animal_item.name);
         }
-
+        //override onclick method
         @Override
         public void onClick(View view) {
             onAddListener.OnAddClick(getAdapterPosition());

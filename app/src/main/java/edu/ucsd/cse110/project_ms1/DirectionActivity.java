@@ -36,7 +36,6 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     int order;
     private boolean useLocationService;
     boolean displayStatus;
-    boolean isNext;
 
     boolean going_forward; // which direction of the user is going: forward/backward
     Button detailBtn;
@@ -128,14 +127,14 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         useLocationService = true;
 
 
-        //Get the order and isNext
+        //Get the order and going_forward
         List<String> retainedInfo = DirectionHelper.loadDirectionsInformation(this);
         order = Integer.valueOf(retainedInfo.get(0));
-        isNext = Boolean.valueOf(retainedInfo.get(1));
+        going_forward = Boolean.valueOf(retainedInfo.get(1));
 
         // display status
         loadDisplayStatus();
-        display(order, isNext);
+        display(order, going_forward);
 
     } //Initial End
 
@@ -374,7 +373,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     //act when clear button is clicked
     public void onClearButtonClick_DirectionActivity(View view) {
         clearRoute();
-        Utilities.clearSavedAnimalItem(this);
+        Utilities.clearSharedPreference(this);
         intent = new Intent(this, SearchAnimalActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         finish();
@@ -388,7 +387,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     public void OnSettingDisplayClick(View view) {
         saveDisplayStatus();
         setDirectionTextDisplay();
-        display(order, isNext);
+        display(order, going_forward);
     }
 
     //switch between detail and brief
@@ -543,4 +542,26 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         a2.remove(index_remove);
         a3.remove(index_remove);
     }
+
+    public void update_and_save_status(Coord current) {
+        planned_route = AnimalUtilities.updateRoute(order, planned_route, current.toLatLng(), going_forward);
+
+        populate_lists();
+        //apply changes to display
+        display(order, going_forward);
+
+        //save to SharedPreferences
+        List<String> animal_strings = new ArrayList<>();
+        for (route_node myRoute_node : planned_route) {
+            String myAnimal = myRoute_node.exhibit.name;
+            animal_strings.add(myAnimal);
+        }
+        SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        String joined = String.join(",", animal_strings);
+        editor.putString("route", joined);
+        editor.commit();
+        editor.apply();
+    }
+
 }

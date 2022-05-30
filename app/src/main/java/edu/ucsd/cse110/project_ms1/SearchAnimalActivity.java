@@ -144,7 +144,7 @@ import javax.xml.transform.TransformerFactory;
         }
 
         //----------------------Below are functions in SharedPreferences-------------------------------
-
+        //save the selected animals in sharepreference
         public void saveAddToList(AnimalItem newSelectedAnimalItem) {
             //link the animalItem name with the string form of animalItem
             SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
@@ -156,7 +156,7 @@ import javax.xml.transform.TransformerFactory;
             editor.commit();
             editor.apply();
         }
-
+        //load the selected animals in sharepreference
         public List<AnimalItem> loadAddToList() {
             SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
             List<AnimalItem> selectedAnimalItemList = new ArrayList<AnimalItem>();
@@ -190,7 +190,7 @@ import javax.xml.transform.TransformerFactory;
 
         }
 
-
+        //act when plan button is clicked
         public void onPlanClick(View view) {
             Intent intent = new Intent(this, PlanActivity.class);
             if (selectedAnimalNameStringList.isEmpty()) {
@@ -202,7 +202,7 @@ import javax.xml.transform.TransformerFactory;
             startActivityForResult(intent, ACTIVITY_CONSTANT);
         }
 
-
+        //search bar menu
         @Override
         public boolean onCreateOptionsMenu(Menu menu) {
             MenuInflater inflater = getMenuInflater();
@@ -238,6 +238,7 @@ import javax.xml.transform.TransformerFactory;
             return true;
         }
 
+        //set the NoSuchAnimal alert
         @Override
         public void pass(List<AnimalItem> isAnimalFound) {
             if (isAnimalFound.isEmpty()) {
@@ -247,8 +248,9 @@ import javax.xml.transform.TransformerFactory;
             }
         }
 
+        //act when clear button is clicked
         public void onClearButtonClick_SearchActivity(View view) {
-            Utilities.clearSavedAnimalItem(this);
+            Utilities.clearSharedPreference(this);
             selectedAnimalItemList = loadAddToList();
             addToList_adapter.setSelectedAnimalItems(selectedAnimalItemList);
             animalNumbers.setText(Integer.toString(preSelectedAnimalItemList.size()));

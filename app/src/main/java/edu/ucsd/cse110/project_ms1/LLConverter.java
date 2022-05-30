@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class LLConverter {
+    //String to LatLng
     @TypeConverter
     public static LatLng storedStringToLL(String value) {
         ArrayList<String> nums = new ArrayList<>(Arrays.asList(value.split("\\s*,\\s*")));
@@ -16,7 +17,7 @@ public class LLConverter {
         return new LatLng(lat,lng);
 
     }
-
+    //LatLng to String
     @TypeConverter
     public static String LLToStoredString(LatLng ll) {
         double var1 = ll.latitude;
