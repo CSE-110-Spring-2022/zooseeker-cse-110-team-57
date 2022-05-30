@@ -5,6 +5,7 @@ import android.location.Location;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
@@ -292,6 +293,22 @@ public class AnimalItem {
         return exhibit;
     }
      */
+    @Nullable
+    public static String getClosestLandmark(Coord current) {
+        //find the current street
+        List<AnimalItem> all_landmarks = AnimalItem.search_by_tag(null) ;
+        all_landmarks.add(AnimalItem.gate);
+        String closestName = null;
+        double min = 999999999;
+        for (AnimalItem currentLandmark : all_landmarks){
+            double currentDis = AnimalUtilities.get_distance(current.toLatLng(), currentLandmark);
+            if (currentDis < min){
+                min = currentDis;
+                closestName = currentLandmark.name;
+            }
+        }
+        return closestName;
+    }
 
 }
 

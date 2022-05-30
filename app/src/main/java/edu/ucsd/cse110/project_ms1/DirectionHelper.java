@@ -11,6 +11,8 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import org.jgrapht.GraphPath;
@@ -312,21 +314,11 @@ public class DirectionHelper {
         }
         return new LatLng(0.0,0.0);
     }
+
     //get the shortest path distance from current location to destination
     public static double getPathDistanceBetween(Coord current, AnimalItem Destination){
         double first_path, second_path;
-        //find the current street
-        List<AnimalItem> all_landmarks = AnimalItem.search_by_tag(null) ;
-        all_landmarks.add(AnimalItem.gate);
-        String closestName = null;
-        double min = 999999999;
-        for (AnimalItem currentLandmark : all_landmarks){
-            double currentDis = AnimalUtilities.get_distance(current.toLatLng(), currentLandmark);
-            if (currentDis < min){
-                min = currentDis;
-                closestName = currentLandmark.name;
-            }
-        }
+        String closestName = AnimalItem.getClosestLandmark(current);
 
         IdentifiedWeightedEdge currentStreet = findCurrStreet(closestName, current.toLatLng());
 
@@ -337,6 +329,7 @@ public class DirectionHelper {
         Coord streetSource_Coord = new Coord(AnimalItem.vInfo.get(streetSource_Name).lat, AnimalItem.vInfo.get(streetSource_Name).lng);
         Coord streetGoal_Coord = new Coord(AnimalItem.vInfo.get(streetGoal_Name).lat, AnimalItem.vInfo.get(streetGoal_Name).lng);
 
+
         //Path 1: from current to streetSource to Destination
         first_path = AnimalItem.distance_between_coords(current, streetSource_Coord);
         first_path += DijkstraShortestPath.findPathBetween(AnimalItem.gInfo,
@@ -346,14 +339,13 @@ public class DirectionHelper {
         second_path = AnimalItem.distance_between_coords(current, streetGoal_Coord);
         first_path += DijkstraShortestPath.findPathBetween(AnimalItem.gInfo,
                 streetGoal_Name, Destination.name).getWeight();
-
-        if (first_path <= second_path){
-            return first_path;
-        }
-        else{
-            return second_path;
-        }
+        //return the shorter path
+        double result = (first_path <=second_path) ? first_path : second_path;
+        return result;
     }
+
+    
+
 
 }
 
