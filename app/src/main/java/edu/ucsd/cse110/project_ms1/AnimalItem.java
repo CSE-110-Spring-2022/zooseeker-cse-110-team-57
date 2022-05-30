@@ -13,7 +13,6 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -136,17 +135,17 @@ public class AnimalItem {
     }
 
     //return a route that has a different order of input route, so it can be a good choice for the user
-    public static List<route_node> plan_route(List<AnimalItem> animal_items, String start_position){
-        int gate_index=0; // 0 means gate is at beginning, -1 means at the end
+    public static List<route_node> plan_route(List<AnimalItem> animal_items, String start_position, boolean maybe_reverse){
+        //remove
         if (animal_items.get(0).id.equals("entrance_exit_gate")){
             animal_items.remove(0);
         }
         else{
-            gate_index=-1;
             if (animal_items.get(animal_items.size()-1).id.equals("entrance_exit_gate")){
                 animal_items.remove(animal_items.size()-1);
             }
         }
+
         String start = start_position;
         //begin and end positions
         String goal;
@@ -169,7 +168,7 @@ public class AnimalItem {
             animal_items.remove(closest_animal);
 
             //remove itself if applicable
-//            if(closest_animal.id .equals( start_position)) continue;
+            if(closest_animal.id == start_position) continue;
 
             // find the potential group name, may be null
             String potential_parent_id = vInfo.get( closest_animal.id).group_id;
@@ -220,7 +219,7 @@ public class AnimalItem {
             planned_route.add(myRouteNode);
         }
 
-        if (gate_index ==0){
+        if (!DirectionActivity.going_forward){
             Collections.reverse(planned_route);
         }
         return  planned_route;

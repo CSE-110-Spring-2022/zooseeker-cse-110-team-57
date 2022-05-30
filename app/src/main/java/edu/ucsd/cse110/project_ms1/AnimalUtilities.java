@@ -75,17 +75,19 @@ public class AnimalUtilities {
         if (going_forward) {
             while (visiting_order < route.size() - 1) {
 
-                left_animal_items.add(route.get(visiting_order + 1).exhibit);
-                route.remove(visiting_order + 1);
+                left_animal_items.add(route.get(visiting_order ).exhibit);
+                route.remove(visiting_order );
             }
+            route.remove(route.size()-1); //remove the gate, because it will be generated later
         } else {
 
-            for (int i = 0; i < visiting_order; i++) {
+            for (int i = 0; i < visiting_order-1; i++) {
 
                 left_animal_items.add(route.get(0).exhibit);
                 route.remove(0);
             }
         }
+
 
         String start = find_starting_point(left_animal_items, curr_position);
 
@@ -94,7 +96,7 @@ public class AnimalUtilities {
             rest_route = new ArrayList<>();
         }
         else {
-            rest_route = AnimalItem.plan_route(left_animal_items, start);
+            rest_route = AnimalItem.plan_route(left_animal_items, start, false);
         }
         //concat (first half of) original and rest_route
         List<route_node> newRoute;
@@ -102,6 +104,7 @@ public class AnimalUtilities {
             newRoute = Stream.concat(route.stream(), rest_route.stream())
                     .collect(Collectors.toList());
         } else {
+            rest_route.remove(0); //remove the generated gate
             newRoute = Stream.concat(rest_route.stream(), route.stream())
                     .collect(Collectors.toList());
         }

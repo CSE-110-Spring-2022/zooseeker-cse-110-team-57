@@ -312,7 +312,7 @@ public class MS2_USTest {
         animalItemArrayList.add(a4);
 
 
-        List<route_node> route = AnimalItem.plan_route(animalItemArrayList,a4.id);
+        List<route_node> route = AnimalItem.plan_route(animalItemArrayList,a4.id, false);
 
         for (route_node node : route){
             System.out.println(node.names);
@@ -368,7 +368,7 @@ public class MS2_USTest {
         animalItemArrayList.add(a4);
 
 
-        List<route_node> route = AnimalItem.plan_route(animalItemArrayList,a4.id);
+        List<route_node> route = AnimalItem.plan_route(animalItemArrayList,a4.id, false);
     }
 
 

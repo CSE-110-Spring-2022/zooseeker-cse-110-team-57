@@ -19,12 +19,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.IdentityHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Future;
@@ -42,7 +39,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     private boolean useLocationService;
     boolean displayStatus;
 
-    boolean going_forward; // which direction of the user is going: forward/backward
+    static boolean going_forward = true; // which direction of the user is going: forward/backward
     Button detailBtn;
     Button skipBtn ;
     Intent intent;
@@ -93,7 +90,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         //find the shortest Path by given ordered route.
         //(order -order of animal in the route , paths -list of edges in the path)
-        planned_route = AnimalItem.plan_route(animalItems, "entrance_exit_gate");
+        planned_route = AnimalItem.plan_route(animalItems, "entrance_exit_gate", false);
         //List<DirectionData> orderedAnimalList = DirectionHelper.routeNode_to_DirectionData(planned_route);
 
 

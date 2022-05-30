@@ -70,7 +70,7 @@ public class PlanActivity extends AppCompatActivity{
             selectedAnimalItemList.add(animalItem);
         }
         //get the route
-        routeNodeList = AnimalItem.plan_route(selectedAnimalItemList, "entrance_exit_gate");
+        routeNodeList = AnimalItem.plan_route(selectedAnimalItemList, "entrance_exit_gate", false);
         //remove the exit gate
         List<route_node> routeNodeListWithoutExitGate = new ArrayList<>(routeNodeList);
         int exit_gate_index = routeNodeList.size() - 1;
