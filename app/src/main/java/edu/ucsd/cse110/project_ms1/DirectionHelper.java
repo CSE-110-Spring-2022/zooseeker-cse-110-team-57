@@ -110,10 +110,10 @@ public class DirectionHelper {
             String nextStreet = AnimalItem.eInfo.get(edge.getId()).street;
 
             if(street.equals(nextStreet)){
-                edgeInfo = "Continue on " + street + " " + distance + " ft towards " + target;
+                edgeInfo = "Continue on \"" + street + "\" " + distance + " ft towards \"" + target + "\"";
             }else{
                 street = nextStreet;
-                edgeInfo = "Proceed on " + street + " " + distance + " ft towards " + target;
+                edgeInfo = "Proceed on \"" + street + "\" " + distance + " ft towards \"" + target + "\"";
             }
             display.add(edgeInfo);
         }
@@ -154,7 +154,7 @@ public class DirectionHelper {
             }
 
             totalDistance += distance;
-            edgeInfo = "Proceed on " + street + " " + totalDistance + " ft towards " + target;
+            edgeInfo = "Proceed on \"" + street + "\" " + totalDistance + " ft towards \"" + target + "\"";
             totalDistance = 0.0;
             street = nextStreet;
 

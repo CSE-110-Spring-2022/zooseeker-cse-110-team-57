@@ -239,7 +239,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             String current = orderedAnimalList_IDs.get(index);
 
             if (index<1) { // if coming from original
-                prev.setText("beginning of trip");
+                prev.setText("Beginning of tour");
             }
             else{ // if coming from original
                 String lastSource = orderedAnimalList_IDs.get(index - 1);
@@ -307,7 +307,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         } else {
             order = planned_route.size() ;
             display(order, true);
-            Utilities.showAlert(this, "invalid Action");
+            Utilities.showAlert(this, "Invalid Action");
         }
     }
 
@@ -332,7 +332,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         } else {
             order = 0;
             display(order, false);
-            Utilities.showAlert(this, "invalid Action");
+            Utilities.showAlert(this, "Invalid Action");
         }
         int a =1;
     }
@@ -359,6 +359,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
                 .setMessage(message)
                 .setPositiveButton("Yes", (dialog, id)->{
                     replan_and_save_status(currentCoord);
+                    Utilities.showAlert(this, "The route is replanned.");
                     display(order, going_forward);
                 })
                 .setNegativeButton("No",(dialog,id)->{
@@ -444,6 +445,9 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
                 pathDisplay = DirectionHelper.detailPath(path,source);
                 String edgeInfo = getInsertionEdgeInfo(path, insertion);
                 pathDisplay.add(0, edgeInfo);
+                //show alert
+                String street =AnimalItem.vInfo.get(goal).name;
+                showUpdateAlert(street);
             }
             else{
                 pathDisplay = DirectionHelper.detailPath(path,source);
@@ -467,6 +471,9 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
                 pathDisplay = DirectionHelper.detailPath(path,source);
                 String edgeInfo = getInsertionEdgeInfo(path, insertion);
                 pathDisplay.add(0, edgeInfo);
+                //show alert
+                String street =AnimalItem.vInfo.get(goal).name;
+                showUpdateAlert(street);
             }
             else{
                 pathDisplay = DirectionHelper.briefPath(path,source);
@@ -474,13 +481,19 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         }
         direction_adapter.setDirectionsStringList(pathDisplay);
     }
+
+    private void showUpdateAlert(String street) {
+        String reminder = "The direction instruction to \"" + street + "\" has been updated.";
+        Utilities.showAlert(this, reminder);
+    }
+
     @NonNull
     private String getInsertionEdgeInfo(List<IdentifiedWeightedEdge> path, IdentifiedWeightedEdge insertion) {
         double distance = AnimalItem.gInfo.getEdgeWeight(insertion);
         String street = AnimalItem.eInfo.get(insertion.getId()).street;
         String insertion_goal = AnimalItem.gInfo.getEdgeSource(path.get(0));
         String target = AnimalItem.vInfo.get(insertion_goal).name;
-        String edgeInfo = "Proceed on " + street + " " + distance + " ft towards " + target;
+        String edgeInfo = "Proceed on \"" + street + "\" " + distance + " ft towards \"" + target + "\"";
         return edgeInfo;
     }
 
@@ -503,9 +516,11 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             distance = Goal_distance;
             target = singleEdge_goal.name;
         }
-        String edgeInfo = "Proceed on " + street + " " + distance + " ft towards " + target;
+        String edgeInfo = "Proceed on \"" + street + "\" " + distance + " ft towards \"" + target + "\"";
         return edgeInfo;
     }
+
+
 
     //load displaying status brief/detain from shared preference
     public void loadDisplayStatus() {
@@ -625,17 +640,20 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         //skip last exihibit and go to gate
         if ( going_forward && order >= orderedAnimalList_Names.size() - 2){
             skipBtn.setEnabled(false);
+            Utilities.showAlert(this, "You are back to \"Entrance and Exit Gate\".");
             updateRoute(order, going_forward, Coords.currentLocationCoord, orderedAnimalList_IDs);
             order--;
         }
         //skip first exhibit and go back to gate
         else if (!going_forward && order <= 1){
             skipBtn.setEnabled((false));
+            Utilities.showAlert(this, "You are back to \"Entrance and Exit Gate\".");
             updateRoute(1, going_forward, Coords.currentLocationCoord, orderedAnimalList_IDs);
             order++;
         }
         //normal
         else{
+            Utilities.showAlert(this, "The route has been replanned.");
             display(order, going_forward);
         }
     }
@@ -653,28 +671,29 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
     public void updateRoute(int order, boolean going_forward, Coord current, List<String> orderedAnimalList_IDs) {
         List<IdentifiedWeightedEdge> updatePath = new LinkedList<>();
-        String goalExhibit = null;
+        String goalExhibit_id = null;
         //get the goal exhibit
         if (going_forward){
-            goalExhibit = orderedAnimalList_IDs.get(order + 1);
+            goalExhibit_id = orderedAnimalList_IDs.get(order + 1);
         }
         else{
             order--;
-            goalExhibit = orderedAnimalList_IDs.get(order);
+            goalExhibit_id = orderedAnimalList_IDs.get(order);
         }
         //get the closestLandmark
         AnimalItem closestLandmark = AnimalItem.getClosestLandmark(current);
         //get the path between closest landmark to goal exhibit
-        if (!closestLandmark.name.equals(goalExhibit)){
-            updatePath = DirectionHelper.findPathBetween(closestLandmark.id, goalExhibit);
+        if (!closestLandmark.name.equals(goalExhibit_id)){
+            updatePath = DirectionHelper.findPathBetween(closestLandmark.id, goalExhibit_id);
         }
         //get the current street
         IdentifiedWeightedEdge currentStreet = DirectionHelper.findCurrStreet(closestLandmark.id,
                 current.toLatLng());
-
+        //add the insertion street in front
         List<IdentifiedWeightedEdge> updated_path = new ArrayList<>(updatePath);
         updated_path.add(0, currentStreet);
-        setDisplay(closestLandmark.name, goalExhibit, updated_path, true);
+        //display updated directions
+        setDisplay(closestLandmark.name, goalExhibit_id, updated_path, true);
     }
 
 
