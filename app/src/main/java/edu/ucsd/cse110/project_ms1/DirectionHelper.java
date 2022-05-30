@@ -8,6 +8,7 @@ import static java.lang.Math.abs;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import edu.ucsd.cse110.project_ms1.location.Coord;
@@ -287,14 +289,14 @@ public class DirectionHelper {
         return x1 && x2 && y1 && y2;
     }
 
-    //check if user current location between the two exhibit with 0.0000000000001 threshold
+    //check if user current location between the two exhibit with 0.000001 threshold
     public static boolean onTrack(LatLng curr, LatLng nodeA, LatLng nodeB){
         //y=mx+b
 
-        //m = y2-y1/x2-x1
-        double m = findSlope(nodeA,nodeB);
-        //b = y-mx
-        double b = nodeA.longitude - m*nodeA.latitude;
+//        //m = y2-y1/x2-x1
+//        double m = findSlope(nodeA,nodeB);
+//        //b = y-mx
+//        double b = nodeA.longitude - m*nodeA.latitude;
 
         double x1 = curr.latitude - nodeA.latitude;
         double y1 = curr.longitude - nodeA.longitude;
@@ -302,12 +304,7 @@ public class DirectionHelper {
         double x2 = nodeB.latitude - nodeA.latitude;
         double y2 = nodeB.longitude - nodeA.longitude;
 
-        double cross = x1*y2 - y1*x2;
-
-        if(cross <= 0.0000000000001){
-            return true;
-        }
-        return false;
+        return Math.abs(x1*y2 - y1*x2) < 0.000001;
     }
 
     //find the slope of line that between two exhibits
@@ -320,6 +317,7 @@ public class DirectionHelper {
         //all edge that connect to the nearestExhibit
         Set<IdentifiedWeightedEdge> incomingEdges = AnimalItem.gInfo.incomingEdgesOf(nearestExhibit);
         Log.d("findCurrStreet",incomingEdges.toString());
+        IdentifiedWeightedEdge possibleEdge = incomingEdges.stream().findFirst().get();
         for (IdentifiedWeightedEdge edge : incomingEdges){
             String nodeA = AnimalItem.gInfo.getEdgeSource(edge);
             String nodeB = AnimalItem.gInfo.getEdgeTarget(edge);
@@ -331,12 +329,16 @@ public class DirectionHelper {
             //if current location on the line
             boolean onLine = onTrack(curr,LatLngA,LatLngB);
 
+            if(onRange){
+                possibleEdge = edge;
+            }
+
             if(onRange && onLine){
                 return edge;
             }
 
         }
-        return null;
+        return possibleEdge;
     }
     //getter
     public static LatLng getLatLng(String exhibit){
@@ -361,6 +363,7 @@ public class DirectionHelper {
         ZooData.VertexInfo streetGoal = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeTarget(currentStreet));
 
         //get the coord of Souce and Goal
+//        System.out.println(currentStreet.toString());
         Coord streetSource_Coord = new Coord(streetSource.lat, streetSource.lng);
         Coord streetGoal_Coord = new Coord(streetGoal.lat, streetGoal.lng);
 
@@ -375,8 +378,7 @@ public class DirectionHelper {
                 streetGoal.id, Destination.id).getWeight();
 
         //return the shorter path
-        double result = (first_path <=second_path) ? first_path : second_path;
-        return result;
+        return Math.min(first_path, second_path);
     }
 
 
