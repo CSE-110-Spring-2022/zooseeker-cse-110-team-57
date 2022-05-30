@@ -57,13 +57,14 @@ public class AnimalUtilities {
         //if just going to exit gate
         if (visiting_order + 1 == route.size()) {return false;}
         AnimalItem planned_next_animal = route.get(visiting_order).exhibit;
-        double distance_to_the_next = get_distance(curr_position, planned_next_animal);
+        double distance_to_the_next = DirectionHelper.getPathDistanceBetween(new Coord(curr_position), planned_next_animal);
 
         for (int i = visiting_order + 1; i < route.size() - 1; i++) {
             AnimalItem animal = route.get(i).exhibit;
-            double dis = get_distance(curr_position, animal);
+            double dis = DirectionHelper.getPathDistanceBetween(new Coord(curr_position), animal);
             if (dis < distance_to_the_next) return true;
         }
+
         return false;
     }
 
@@ -118,8 +119,8 @@ public class AnimalUtilities {
         String retval = null;
         double min_dis = Double.MAX_VALUE;
         for (AnimalItem animal : animals) {
-            if (min_dis > get_distance(curr_position, animal)) {
-                min_dis = get_distance(curr_position, animal);
+            if (min_dis > DirectionHelper.getPathDistanceBetween(new Coord(curr_position), animal)) {
+                min_dis = DirectionHelper.getPathDistanceBetween(new Coord(curr_position), animal);
                 retval = animal.id;
             }
         }
