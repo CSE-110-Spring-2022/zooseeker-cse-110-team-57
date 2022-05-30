@@ -127,7 +127,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         useLocationService = true;
 
 
-        //Get the order and isNext
+        //Get the order and going_forward
         List<String> retainedInfo = DirectionHelper.loadDirectionsInformation(this);
         order = Integer.valueOf(retainedInfo.get(0));
         going_forward = Boolean.valueOf(retainedInfo.get(1));
@@ -559,5 +559,5 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         editor.commit();
         editor.apply();
     }
-    
+
 }
