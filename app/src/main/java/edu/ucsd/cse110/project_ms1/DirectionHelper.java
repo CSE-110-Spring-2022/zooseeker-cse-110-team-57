@@ -8,19 +8,13 @@ import static java.lang.Math.abs;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.location.Location;
 import android.util.Log;
-
-import androidx.annotation.Nullable;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.AccessMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -79,10 +73,10 @@ public class DirectionHelper {
         return route;
     }
     //find the path between "source" and "goal"
-    public static List<IdentifiedWeightedEdge> findPathBetween(String source,String goal){
+    public static List<IdentifiedWeightedEdge> findPathBetween(String source_id, String goal_id){
 
             GraphPath<String, IdentifiedWeightedEdge> path =
-                    AnimalItem.adapted_find_shortest_path(AnimalItem.gInfo, source, goal);
+                    AnimalItem.adapted_find_shortest_path(AnimalItem.gInfo, source_id, goal_id);
             //list of street in this walk.
             List<IdentifiedWeightedEdge> streets = path.getEdgeList();
 
@@ -322,7 +316,7 @@ public class DirectionHelper {
         //get the closest landmark
         AnimalItem closestName = AnimalItem.getClosestLandmark(current);
         //get the current street
-        IdentifiedWeightedEdge currentStreet = findCurrStreet(closestName.name, current.toLatLng());
+        IdentifiedWeightedEdge currentStreet = findCurrStreet(closestName.id, current.toLatLng());
 
         ///find the names and coords of Source and Goal of street
         String streetSource_Name = AnimalItem.gInfo.getEdgeSource(currentStreet);
@@ -334,12 +328,12 @@ public class DirectionHelper {
         //Path 1: from current to streetSource to Destination
         first_path = AnimalItem.distance_between_coords(current, streetSource_Coord);
         first_path += DijkstraShortestPath.findPathBetween(AnimalItem.gInfo,
-                streetSource_Name, Destination.name).getWeight();
+                streetSource_Name, Destination.id).getWeight();
 
         //Path 2: from current to streetGoal to Destination
         second_path = AnimalItem.distance_between_coords(current, streetGoal_Coord);
         first_path += DijkstraShortestPath.findPathBetween(AnimalItem.gInfo,
-                streetGoal_Name, Destination.name).getWeight();
+                streetGoal_Name, Destination.id).getWeight();
 
         //return the shorter path
         double result = (first_path <=second_path) ? first_path : second_path;

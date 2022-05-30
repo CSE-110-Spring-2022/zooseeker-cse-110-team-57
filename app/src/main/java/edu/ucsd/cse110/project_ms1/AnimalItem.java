@@ -1,8 +1,6 @@
 package edu.ucsd.cse110.project_ms1;
 
 import android.content.Context;
-import android.location.Location;
-import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -222,10 +220,10 @@ public class AnimalItem {
         return retVal;
     }
     //find the shortest path between source and sink
-    public static GraphPath<String, IdentifiedWeightedEdge> adapted_find_shortest_path (Graph<String, IdentifiedWeightedEdge> gInfo, String source, String sink){
-        source = Latlng_ids_Map.get(source);
-        sink = Latlng_ids_Map.get(sink);
-        return DijkstraShortestPath.findPathBetween(gInfo, source, sink);
+    public static GraphPath<String, IdentifiedWeightedEdge> adapted_find_shortest_path (Graph<String, IdentifiedWeightedEdge> gInfo, String source_id, String sink_id){
+        String source_id_parent = Latlng_ids_Map.get(source_id);
+        String sink_id_parent = Latlng_ids_Map.get(sink_id);
+        return DijkstraShortestPath.findPathBetween(gInfo, source_id_parent, sink_id_parent);
     }
     //get the String format of coord
     public String getCoordString(){
