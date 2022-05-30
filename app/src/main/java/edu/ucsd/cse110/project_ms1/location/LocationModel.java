@@ -16,7 +16,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -26,7 +25,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import edu.ucsd.cse110.project_ms1.AnimalItem;
-import edu.ucsd.cse110.project_ms1.DirectionActivity;
 import edu.ucsd.cse110.project_ms1.LatLngs;
 import edu.ucsd.cse110.project_ms1.OnLocationChangeListener;
 
@@ -50,6 +48,12 @@ public class LocationModel extends AndroidViewModel {
         // Create and add the mock source.
         lastKnownCoords = new MediatorLiveData<>();
         mockSource = new MutableLiveData<>();
+
+        //set the initialized location
+        Coord gateCoord = AnimalItem.getExtranceGateCoord();
+        mockSource.setValue(gateCoord);
+        mockSource.postValue(gateCoord);
+
         lastKnownCoords.addSource(mockSource, new Observer<Coord>() {
             @Override
             public void onChanged(Coord coord) {
@@ -106,14 +110,22 @@ public class LocationModel extends AndroidViewModel {
     }
     //mock a single point
     @VisibleForTesting
-    public void mockLocation(Coord coords) {
-        mockSource.setValue(coords);
-        mockSource.postValue(coords);
-        onLocationChangeListener.OnLocationChange(coords);
-//        getLastKnownCoords().observe(mOwner, (coord) -> {
-//            Log.i(TAG, String.format("Observing location model update to %s", coord));
-//        });
+    public void mockLocation(Coord updateCoord) {
+        //if updated Coord != current Coord
+        if (!updateCoord.equals(getCurrentCoord())) {
+            mockSource.setValue(updateCoord);
+            mockSource.postValue(updateCoord);
+            Coords.currentLocationCoord = updateCoord;
+            LatLngs.currentLocationLatLng = updateCoord.toLatLng();
+            onLocationChangeListener.OnLocationChange(updateCoord);
+        }
+        /*
+        getLastKnownCoords().observe(mOwner, (coord) -> {
+            Log.i(TAG, String.format("Observing location model update to %s", coord));
+        });
+         */
     }
+
     //mock a list of points
     @VisibleForTesting
     public Future<?> mockRoute(Context context, List<Coord> route, long delay, TimeUnit unit) {

@@ -346,25 +346,6 @@ public class DirectionHelper {
         return result;
     }
 
-
-/*
-    private static List<IdentifiedWeightedEdge> getUnchangedPartOfPath(
-            List<IdentifiedWeightedEdge> originalPath, int order, boolean isLeftPart) {
-        List<IdentifiedWeightedEdge> unchangedPart = new ArrayList<>();
-        if (isLeftPart){
-            for (int i = 0; i < order; i++){
-                unchangedPart.add(originalPath.get(i));
-            }
-        }
-        else{
-            for (int i = order + 1; i < originalPath.size(); i++){
-                unchangedPart.add(originalPath.get(i));
-            }
-        }
-        return unchangedPart;
-    }
-*/
-
 }
 
 
