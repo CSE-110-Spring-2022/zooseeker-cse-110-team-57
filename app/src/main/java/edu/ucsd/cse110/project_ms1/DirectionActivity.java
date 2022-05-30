@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -424,10 +425,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             IdentifiedWeightedEdge insertion = path.remove(0);
             pathDisplay = DirectionHelper.detailPath(path,source);
             //construct inserted edge info
-            String street = AnimalItem.eInfo.get(insertion.getId()).street;
-            double totalDistance = AnimalItem.gInfo.getEdgeWeight(insertion);
-            String target = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeTarget(edge)).name;
-            String edgeInfo = "Proceed on " + street + " " + totalDistance + " ft towards " + target;
+            String edgeInfo = getInsertionEdgeInfo(path, insertion);
+            pathDisplay.add(0, edgeInfo);
         }
         else{
              pathDisplay = DirectionHelper.detailPath(path,source);
@@ -436,17 +435,30 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         direction_adapter.setDirectionsStringList(pathDisplay);
     }
 
+
     //set the directions in brief version
     public void displayBrief(String source, String goal, List<IdentifiedWeightedEdge> path, boolean NeedUpdate){
         List<String> pathDisplay = new ArrayList<>();
         if (NeedUpdate){
             IdentifiedWeightedEdge insertion = path.remove(0);
             pathDisplay = DirectionHelper.briefPath(path,source);
+            //construct inserted edge info
+            String edgeInfo = getInsertionEdgeInfo(path, insertion);
+            pathDisplay.add(0, edgeInfo);
         }
         else{
             pathDisplay = DirectionHelper.briefPath(path,source);
         }
         direction_adapter.setDirectionsStringList(pathDisplay);
+    }
+    @NonNull
+    private String getInsertionEdgeInfo(List<IdentifiedWeightedEdge> path, IdentifiedWeightedEdge insertion) {
+        double distance = AnimalItem.gInfo.getEdgeWeight(insertion);
+        String street = AnimalItem.eInfo.get(insertion.getId()).street;
+        String insertion_goal = AnimalItem.gInfo.getEdgeSource(path.get(0));
+        String target = AnimalItem.vInfo.get(insertion_goal).name;
+        String edgeInfo = "Proceed on " + street + " " + distance + " ft towards " + target;
+        return edgeInfo;
     }
 
     //load displaying status brief/detain from shared preference
