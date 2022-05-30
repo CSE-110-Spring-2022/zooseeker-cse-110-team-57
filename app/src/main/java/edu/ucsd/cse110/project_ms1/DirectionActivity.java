@@ -333,19 +333,22 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         if (isOffRoute){
             showReplanAlert(this, current);
         }
+        else{
+            updateRoute(this.order, this.going_forward, current, orderedAnimalList_Names);
+        }
     }
 
     //pop out a window that  ask user whether replan
-    public void showReplanAlert(Activity activity, Coord current){
+    public void showReplanAlert(Activity activity, Coord currentCoord){
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(activity);
         String message = "Do you want to replan the route?";
         alertBuilder.setTitle("Alert!")
                 .setMessage(message)
                 .setPositiveButton("Yes", (dialog, id)->{
-                    replan_and_save_status(current);
+                    replan_and_save_status(currentCoord);
                 })
                 .setNegativeButton("No",(dialog,id)->{
-                    dialog.cancel();
+                    updateRoute(this.order, this.going_forward, currentCoord, orderedAnimalList_Names);
                 })
                 .setCancelable(true);
         AlertDialog alertDialog = alertBuilder.create();
@@ -527,8 +530,13 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     public void OnSkipClick(View view) {
 
         //determine which one to remove
+<<<<<<< HEAD
         skip(this.going_forward,this.order,
                 orderedAnimalList_Names,orderedAnimalList_IDs,orderedAnimalList_child, planned_route);
+=======
+        skip(this.going_forward, this.order, orderedAnimalList_Names, orderedAnimalList_IDs,
+                orderedAnimalList_child);
+>>>>>>> 5cafc42f78c848d4a0a0d3271d14681284d58be3
 
         if (!going_forward) order--;//because one less exhibit before
 
@@ -548,25 +556,19 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         route_nodeList.remove(index_remove-1);
     }
 
-    public void update_and_save_status(Coord current) {
-        planned_route = AnimalUtilities.updateRoute(order, planned_route, current.toLatLng(), going_forward);
-
-        populate_lists();
-        //apply changes to display
-        display(order, going_forward);
-
-        //save to SharedPreferences
-        List<String> animal_strings = new ArrayList<>();
-        for (route_node myRoute_node : planned_route) {
-            String myAnimal = myRoute_node.exhibit.name;
-            animal_strings.add(myAnimal);
-        }
-        SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        String joined = String.join(",", animal_strings);
-        editor.putString("route", joined);
-        editor.commit();
-        editor.apply();
+    public void updateRoute(int order, boolean going_forward, Coord current, List<String> orderedAnimalList_Names) {
+        //get the goal exhibit
+        String goalExhibit = (going_forward)? orderedAnimalList_Names.get(order): orderedAnimalList_Names.get(order + 1);
+        //get the closestLandmark
+        String closestLandmarkName = AnimalItem.getClosestLandmark(current);
+        //get the path between closest landmark to goal exhibit
+        List<IdentifiedWeightedEdge> updatePath = DirectionHelper.findPathBetween(closestLandmarkName, goalExhibit);
+        //get the current street
+        IdentifiedWeightedEdge currentStreet = DirectionHelper.findCurrStreet(closestLandmarkName,
+                current.toLatLng());
+        updatePath.add(0, currentStreet);
+        setDisplay(closestLandmarkName, goalExhibit, updatePath);
     }
+
 
 }
