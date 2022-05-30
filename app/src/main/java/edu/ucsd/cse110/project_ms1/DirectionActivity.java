@@ -556,16 +556,16 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         //get the goal exhibit
         String goalExhibit = (going_forward)? orderedAnimalList_Names.get(order): orderedAnimalList_Names.get(order + 1);
         //get the closestLandmark
-        String closestLandmarkName = AnimalItem.getClosestLandmark(current);
+        AnimalItem closestLandmark = AnimalItem.getClosestLandmark(current);
         //get the path between closest landmark to goal exhibit
-        if (!closestLandmarkName.equals(goalExhibit)){
-            updatePath = DirectionHelper.findPathBetween(closestLandmarkName, goalExhibit);
+        if (!closestLandmark.name.equals(goalExhibit)){
+            updatePath = DirectionHelper.findPathBetween(closestLandmark.name, goalExhibit);
         }
         //get the current street
-        IdentifiedWeightedEdge currentStreet = DirectionHelper.findCurrStreet(closestLandmarkName,
+        IdentifiedWeightedEdge currentStreet = DirectionHelper.findCurrStreet(closestLandmark.id,
                 current.toLatLng());
         updatePath.add(0, currentStreet);
-        setDisplay(closestLandmarkName, goalExhibit, updatePath);
+        setDisplay(closestLandmark.name, goalExhibit, updatePath);
     }
 
 

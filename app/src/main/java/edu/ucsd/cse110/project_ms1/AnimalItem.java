@@ -294,17 +294,17 @@ public class AnimalItem {
     }
      */
     @Nullable
-    public static String getClosestLandmark(Coord current) {
+    public static AnimalItem getClosestLandmark(Coord current) {
         //find the current street
         List<AnimalItem> all_landmarks = AnimalItem.search_by_tag(null) ;
         all_landmarks.add(AnimalItem.gate);
-        String closestName = null;
+        AnimalItem closestName = null;
         double min = 999999999;
         for (AnimalItem currentLandmark : all_landmarks){
             double currentDis = AnimalUtilities.get_distance(current.toLatLng(), currentLandmark);
             if (currentDis < min){
                 min = currentDis;
-                closestName = currentLandmark.name;
+                closestName = currentLandmark;
             }
         }
         return closestName;
