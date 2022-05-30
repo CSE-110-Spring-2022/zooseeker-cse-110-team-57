@@ -152,7 +152,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         orderedAnimalList_Names.add(0, "Entrance and Exit Gate");
         orderedAnimalList_IDs.add(0, "entrance_exit_gate");
         orderedAnimalList_child.add(0, Arrays.asList("Entrance and Exit Gate"));
-        Log.d("orderedAnimalList_Names",orderedAnimalList_Names.toString());
+//        Log.d("orderedAnimalList_Names",orderedAnimalList_Names.toString());
     }
 
     public void display(int index, boolean isNext) {
@@ -172,8 +172,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         String sourceExhibit;
         String goalExhibit;
         List<IdentifiedWeightedEdge> path;
-        Log.d("indexDisplay", " "+index+" ");
-        Log.d("sizeDisplay", " "+orderedAnimalList_IDs.size()+" ");
+        Log.v("indexDisplay", " "+index+" ");
+        Log.v("sizeDisplay", " "+orderedAnimalList_IDs.size()+" ");
 
         //Set the "From" and "To"
         String endText = "To: ";
@@ -656,6 +656,10 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             Utilities.showAlert(this, "The route has been replanned.");
             display(order, going_forward);
         }
+
+        Log.d("order",Integer.toString(order));
+        Log.d("route status", String.join(", ", orderedAnimalList_IDs));
+
     }
 
     //skip the current animal

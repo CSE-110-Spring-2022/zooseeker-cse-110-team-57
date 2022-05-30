@@ -168,7 +168,7 @@ public class AnimalItem {
             animal_items.remove(closest_animal);
 
             //remove itself if applicable
-            if(closest_animal.id == start_position) continue;
+//            if(closest_animal.id == start_position) continue;
 
             // find the potential group name, may be null
             String potential_parent_id = vInfo.get( closest_animal.id).group_id;
@@ -191,9 +191,16 @@ public class AnimalItem {
             //find the address of the goal
             GraphPath<String, IdentifiedWeightedEdge> path = adapted_find_shortest_path(gInfo, start, closest_animal.id);
             int pathSize = path.getEdgeList().size();
-            IdentifiedWeightedEdge myEdge = path.getEdgeList().get(pathSize - 1);
-            address_id = myEdge.getId();
-            String address= eInfo.get(address_id).street;
+            String address;
+
+            if(pathSize!=0) {
+                IdentifiedWeightedEdge myEdge = path.getEdgeList().get(pathSize - 1);
+                address_id = myEdge.getId();
+                address = eInfo.get(address_id).street;
+            }
+            else {
+                address = "NOT IMPORTANT?!?!?!?!";
+            }
 
             //construct parent item for the node if current is a sub_animal
             AnimalItem parent = new AnimalItem(null,null,null,null);
@@ -337,9 +344,14 @@ class route_node
         this.parent_item = parent_item;
     }
 
+    public String get_concat_names(){
+        return String.join(", ", this.names);
+    }
+
     public AnimalItem exhibit;
     public String address;
     public double  distance;
     public List<String> names;
     public AnimalItem parent_item;
+    String concated_names;
 };

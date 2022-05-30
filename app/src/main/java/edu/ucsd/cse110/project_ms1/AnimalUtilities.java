@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.project_ms1;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -72,6 +73,7 @@ public class AnimalUtilities {
     public static List<route_node> reroute(int visiting_order, List<route_node> route, LatLng curr_position, boolean going_forward) {
         List<AnimalItem> left_animal_items = new ArrayList<>();
 
+        // find what is left to visit
         if (going_forward) {
             while (visiting_order < route.size() - 1) {
 
@@ -89,8 +91,8 @@ public class AnimalUtilities {
         }
 
 
+        //find the route to the left exhibits
         String start = find_starting_point(left_animal_items, curr_position);
-
         List<route_node> rest_route;
         if (left_animal_items.size()==0){
             rest_route = new ArrayList<>();
@@ -98,6 +100,21 @@ public class AnimalUtilities {
         else {
             rest_route = AnimalItem.plan_route(left_animal_items, start, false);
         }
+
+        //debugging
+        ArrayList<String> to_visit_names= new ArrayList<>();
+        for (route_node r : rest_route) {
+            to_visit_names.add(r.exhibit.name);
+        }
+        Log.d("rest animal", String.join(", ", to_visit_names));
+
+        ArrayList<String> visited_animals= new ArrayList<>();
+        for (route_node r : route) {
+            visited_animals.add(r.exhibit.name);
+        }
+        Log.d("visited animal", String.join(", ", visited_animals));
+
+
         //concat (first half of) original and rest_route
         List<route_node> newRoute;
         if (going_forward) {
@@ -108,6 +125,7 @@ public class AnimalUtilities {
             newRoute = Stream.concat(rest_route.stream(), route.stream())
                     .collect(Collectors.toList());
         }
+
 
 
         List<String> newNames = new ArrayList<>();

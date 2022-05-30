@@ -281,7 +281,7 @@ public class DirectionHelper {
     public static IdentifiedWeightedEdge findCurrStreet(String nearestExhibit, LatLng curr){
         //all edge that connect to the nearestExhibit
         Set<IdentifiedWeightedEdge> incomingEdges = AnimalItem.gInfo.incomingEdgesOf(nearestExhibit);
-        Log.d("findCurrStreet",incomingEdges.toString());
+        Log.v("findCurrStreet",incomingEdges.toString());
         for (IdentifiedWeightedEdge edge : incomingEdges){
             String nodeA = AnimalItem.gInfo.getEdgeSource(edge);
             String nodeB = AnimalItem.gInfo.getEdgeTarget(edge);
