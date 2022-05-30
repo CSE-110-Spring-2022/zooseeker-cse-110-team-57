@@ -211,6 +211,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             // next button
             if (index < orderedAnimalList_Names.size() - 2) {
                 nextBtn.setEnabled(true);
+                skipBtn.setEnabled(false);
                 String nextSource = orderedAnimalList_IDs.get(index + 1);
                 String nextGoal = orderedAnimalList_IDs.get(index + 2);
                 List<IdentifiedWeightedEdge> nextPath = DirectionHelper.findPathBetween(nextSource, nextGoal);
@@ -221,6 +222,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             }
             else {
                 nextBtn.setEnabled(false);
+                skipBtn.setEnabled(false);
                 next.setText("End of tour");
             }
             //setting previous button and previous direction distance
@@ -255,10 +257,12 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             // previous button
             if (index == 1) {
                 prevBtn.setEnabled(false);
+                skipBtn.setEnabled(false);
                 prev.setText("Beginning of tour");
             }
             else {
                 prevBtn.setEnabled(true);
+                skipBtn.setEnabled(true);
                 String current = orderedAnimalList_IDs.get(index-1);
                 String lastSource = orderedAnimalList_IDs.get(index - 2);
                 List<IdentifiedWeightedEdge> prevPath = DirectionHelper.findPathBetween(current, lastSource);
@@ -278,9 +282,9 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         }
 
         //grey out skip if going to the exit
-        if (order+1==animalItems.size())
-            skipBtn.setEnabled(false);
-        else skipBtn.setEnabled(true);
+//        if (order+1==animalItems.size())
+//            skipBtn.setEnabled(false);
+//        else skipBtn.setEnabled(true);
 
         going_forward = true;
         if (order < planned_route.size()+1) {
@@ -299,10 +303,10 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             order+=2;
         }
 
-        //grey out skip if going to the exit
-        if (order-1==0)
-            skipBtn.setEnabled(false);
-        else skipBtn.setEnabled(true);
+//        //grey out skip if going to the exit
+//        if (order-1==0)
+//            skipBtn.setEnabled(false);
+//        else skipBtn.setEnabled(true);
 
         going_forward = false;
         if (order >= 0) {

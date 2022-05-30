@@ -98,7 +98,7 @@ public class AnimalItem {
             }
         }
 
-
+        int a =0;
     }
 
     @Override

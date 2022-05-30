@@ -55,10 +55,11 @@ public class AnimalUtilities {
     public static boolean check_off_route (int visiting_order, List<route_node> route, LatLng curr_position){
         //if just going to exit gate
         if (visiting_order+1 == route.size()) return false;
-        AnimalItem planned_next_animal = route.get(visiting_order+1).exhibit;
+        AnimalItem planned_next_animal = route.get(visiting_order).exhibit;
         double distance_to_the_next =get_distance(curr_position,planned_next_animal);
+
         for (int i=visiting_order+1; i<route.size()-1; i++){
-            AnimalItem animal = route.get(i+1).exhibit;
+            AnimalItem animal = route.get(i).exhibit;
             double dis = get_distance(curr_position,animal);
             if (dis<distance_to_the_next) return true;
         }
