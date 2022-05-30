@@ -129,7 +129,7 @@ public class AnimalUtilities {
 
     public static List<route_node> updateRoute(int visiting_order, List<route_node> route, LatLng curr_position, boolean going_forward) {
         List<route_node> list_route = new ArrayList<>();
-        return;
+        return null;
     }
 
 

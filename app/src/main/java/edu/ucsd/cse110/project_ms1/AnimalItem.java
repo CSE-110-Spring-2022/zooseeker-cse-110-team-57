@@ -251,11 +251,16 @@ public class AnimalItem {
 //                || otherCoords.lat == null || otherCoords.lng == null){
 //            return -1.0;
 //        }
-        Double dLat = (coord.lat - otherCoords.lat)* DEG_LAT_IN_FT;
-        Double dLng = (coord.lng - otherCoords.lng) * DEG_LNG_IN_FT;
+        return distance_between_coords(otherCoords, coord);
+    }
+
+    public static double distance_between_coords(Coord coord1, Coord coord2) {
+        Double dLat = (coord2.lat - coord1.lat)* DEG_LAT_IN_FT;
+        Double dLng = (coord2.lng - coord1.lng) * DEG_LNG_IN_FT;
         Double d_ft = Math.sqrt(Math.pow(dLat, 2) + Math.pow(dLng, 2));
         return Math.ceil(d_ft);
     }
+
     //get the entrance gate coord
     public static Coord getExtranceGateCoord(){
         Coord EntranceGate_Coord = new Coord(vInfo.get("entrance_exit_gate").lat, vInfo.get("entrance_exit_gate").lng);
@@ -263,6 +268,8 @@ public class AnimalItem {
     }
 
     //find the nearest exhibit due to current location in all exhibit in zoo
+    //Abandon this function because it doesn't fit the unit
+    /*
     public static String getNearestExhibit(LatLng curr){
         String exhibit = "";
         float smallest = 9999;
@@ -284,6 +291,7 @@ public class AnimalItem {
 
         return exhibit;
     }
+     */
 
 }
 
