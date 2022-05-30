@@ -277,7 +277,13 @@ public class MS2_USTest {
 
 
     @Test
-    public void reroute(){
+    public void reroute() throws IOException {
+        //load zooData
+        String vPath = "exhibit_info.json";
+        String ePath = "trail_info.json";
+        String gPath = "zoo_graph.json";
+        Context context = ApplicationProvider.getApplicationContext();
+
         LatLng latlng = new LatLng(32,-117);
         boolean going_forward =  true;
         ArrayList<AnimalItem> animalItemArrayList = new ArrayList<>();
@@ -298,15 +304,21 @@ public class MS2_USTest {
                 "Entrance and Exit Gate",
                 new LatLng(32.73561,-117.14936));
 
+        AnimalItem.loadInfo(context, vPath, ePath, gPath);
         animalItemArrayList.add(a4);
         animalItemArrayList.add(a1);
         animalItemArrayList.add(a2);
         animalItemArrayList.add(a3);
         animalItemArrayList.add(a4);
 
-        List<route_node> route = AnimalItem.plan_route(animalItemArrayList,a4.name);
-        List<route_node> r = AnimalUtilities.reroute(1,  route, latlng, going_forward);
-        System.out.println(r);
+
+        List<route_node> route = AnimalItem.plan_route(animalItemArrayList,a4.id);
+
+        List<route_node> r = AnimalUtilities.reroute(2,  route, latlng, going_forward);
+        for (route_node node : r){
+            System.out.println(node.names);
+        }
+        //??
     }
 
 
