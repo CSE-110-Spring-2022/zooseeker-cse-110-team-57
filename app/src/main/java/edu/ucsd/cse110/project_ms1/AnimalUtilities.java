@@ -65,12 +65,9 @@ public class AnimalUtilities {
         return  false;
     }
 
-<<<<<<< HEAD
-    public static List<route_node> reroute(int visiting_order, List<route_node> route, LatLng curr_position, boolean going_forward){
-=======
+
     //replaning the route
-    public static List<route_node> reroute (int visiting_order, List<route_node> route, LatLng curr_position){
->>>>>>> 8ceae57a073f8e717e424c250273fcd0277f78e3
+    public static List<route_node> reroute(int visiting_order, List<route_node> route, LatLng curr_position, boolean going_forward){
         List<AnimalItem> left_animal_items = new ArrayList<>();
 
         if (going_forward) {

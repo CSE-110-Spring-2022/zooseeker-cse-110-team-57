@@ -370,7 +370,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     //act when clear button is clicked
     public void onClearButtonClick_DirectionActivity(View view) {
         clearRoute();
-        Utilities.clearSavedAnimalItem(this);
+        Utilities.clearSharedPreference(this);
         intent = new Intent(this, SearchAnimalActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         finish();

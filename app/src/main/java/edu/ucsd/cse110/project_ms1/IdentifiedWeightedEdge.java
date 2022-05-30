@@ -29,7 +29,7 @@ public class IdentifiedWeightedEdge extends DefaultWeightedEdge implements Compa
         }
     }
 
-
+    //return 0 if two edge are equal, return -1 if edge weight is smaller
     public int compareTo(IdentifiedWeightedEdge otherEdge) {
         if(this.getWeight() < otherEdge.getWeight()){
             return -1;

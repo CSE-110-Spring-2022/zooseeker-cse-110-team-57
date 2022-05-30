@@ -48,7 +48,7 @@ public class PlanAdapter extends RecyclerView.Adapter<PlanAdapter.ViewHolder>{
          private TextView routedExhibitDistance;
          private AnimalItem routedAnimalItem;
 
-
+        //constructor
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.routedExhibitName = itemView.findViewById(R.id.exhibit_name);

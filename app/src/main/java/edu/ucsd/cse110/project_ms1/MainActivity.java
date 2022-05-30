@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         //goToDirectionActivity();
         //-----------------------------------------------------------------------------------------
 
+        //restore the current activity
         SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
         String ActivityTarget = sharedPreferences.getString("currentActivity", "SearchAnimalActivity");
         switch(ActivityTarget){
@@ -37,25 +38,19 @@ public class MainActivity extends AppCompatActivity {
         }
         startActivity(intent);
     }
+
+    //go to SearchAnimalActivity
     public void goToSearchAnimalActivity(){
         Utilities.changeCurrentActivity(this, "SearchAnimalActivity");
     }
+    //go to PlanActivity
     public void goToPlanActivity(){
         Utilities.changeCurrentActivity(this, "PlanActivity");
     }
+    //go to DirectionActivity
     public void goToDirectionActivity(){
         Utilities.changeCurrentActivity(this, "DirectionActivity");
     }
 }
 
-/**
- * Reference:
- *
- * For techniques related to TypeConvert, this website provided much help
- * https://medium.com/@toddcookevt/android-room-storing-lists-of-objects-766cca57e3f9
- *
- * Also thanks for help from https://www.youtube.com/watch?v=pM1fAmUQn8g about using search
- * bar in android studio
- *
- *
- */
+
