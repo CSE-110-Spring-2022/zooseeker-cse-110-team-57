@@ -29,7 +29,7 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class MS1_12 {
+public class MS1_12_Step_backwards_in_plan {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =

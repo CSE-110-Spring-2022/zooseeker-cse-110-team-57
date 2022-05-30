@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Pair;
+import android.widget.Button;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -17,6 +18,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import edu.ucsd.cse110.project_ms1.location.Coord;
 
 public class Utilities {
     public static void showAlert(Activity activity, String message){
@@ -32,6 +35,7 @@ public class Utilities {
         AlertDialog alertDialog = alertBuilder.create();
         alertDialog.show();
     }
+
 
     public static void clearSavedAnimalItem(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences("Team57", 0);

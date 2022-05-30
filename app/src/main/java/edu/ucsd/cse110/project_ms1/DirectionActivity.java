@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.project_ms1;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -321,24 +323,35 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
     @Override
     public void OnLocationChange(Coord current) {
-        boolean isOffRoute = AnimalUtilities.check_off_route(order,planned_route,current.toLatLng());
+        boolean isOffRoute = AnimalUtilities.check_off_route(order, planned_route, current.toLatLng());
         if (isOffRoute){
-            boolean user_want_update = true;
-            if (user_want_update) {
-                replan_and_save_status(current);
-
-                //apply changes to display
-                display(order, going_forward);
-            }
+            showReplanAlert(this, current);
         }
-
-
     }
 
-    private void replan_and_save_status(Coord current) {
+    //pop out a window that  ask user whether replan
+    public void showReplanAlert(Activity activity, Coord current){
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(activity);
+        String message = "Do you want to replan the route?";
+        alertBuilder.setTitle("Alert!")
+                .setMessage(message)
+                .setPositiveButton("Yes", (dialog, id)->{
+                    replan_and_save_status(current);
+                })
+                .setNegativeButton("No",(dialog,id)->{
+                    dialog.cancel();
+                })
+                .setCancelable(true);
+        AlertDialog alertDialog = alertBuilder.create();
+        alertDialog.show();
+    }
+
+    public void replan_and_save_status(Coord current) {
         planned_route = AnimalUtilities.reroute(order, planned_route, current.toLatLng(), going_forward);
 
         populate_lists();
+        //apply changes to display
+        display(order, going_forward);
 
         //save to SharedPreferences
         List<String> animal_strings = new ArrayList<>();
@@ -421,8 +434,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     }
 
 
-
-    public void GPSButtonClick(View view){
+    public void onGPSButtonClick(View view){
         // If GPS is enabled, then update the model from the Location service.
         useLocationService = true;
         var permissionChecker = new LocationPermissionChecker(this);
