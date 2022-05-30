@@ -81,7 +81,8 @@ public class DirectionHelper {
     //find the path between "source" and "goal"
     public static List<IdentifiedWeightedEdge> findPathBetween(String source,String goal){
 
-            GraphPath<String, IdentifiedWeightedEdge> path = AnimalItem.adapted_find_shortest_path(AnimalItem.gInfo, source, goal);
+            GraphPath<String, IdentifiedWeightedEdge> path =
+                    AnimalItem.adapted_find_shortest_path(AnimalItem.gInfo, source, goal);
             //list of street in this walk.
             List<IdentifiedWeightedEdge> streets = path.getEdgeList();
 
@@ -318,11 +319,12 @@ public class DirectionHelper {
     //get the shortest path distance from current location to destination
     public static double getPathDistanceBetween(Coord current, AnimalItem Destination){
         double first_path, second_path;
+        //get the closest landmark
         String closestName = AnimalItem.getClosestLandmark(current);
-
+        //get the current street
         IdentifiedWeightedEdge currentStreet = findCurrStreet(closestName, current.toLatLng());
 
-        ///find the Source and Goal of street
+        ///find the names and coords of Source and Goal of street
         String streetSource_Name = AnimalItem.gInfo.getEdgeSource(currentStreet);
         String streetGoal_Name = AnimalItem.gInfo.getEdgeTarget(currentStreet);
 
@@ -338,14 +340,30 @@ public class DirectionHelper {
         second_path = AnimalItem.distance_between_coords(current, streetGoal_Coord);
         first_path += DijkstraShortestPath.findPathBetween(AnimalItem.gInfo,
                 streetGoal_Name, Destination.name).getWeight();
+
         //return the shorter path
         double result = (first_path <=second_path) ? first_path : second_path;
         return result;
     }
 
 
-
-
+/*
+    private static List<IdentifiedWeightedEdge> getUnchangedPartOfPath(
+            List<IdentifiedWeightedEdge> originalPath, int order, boolean isLeftPart) {
+        List<IdentifiedWeightedEdge> unchangedPart = new ArrayList<>();
+        if (isLeftPart){
+            for (int i = 0; i < order; i++){
+                unchangedPart.add(originalPath.get(i));
+            }
+        }
+        else{
+            for (int i = order + 1; i < originalPath.size(); i++){
+                unchangedPart.add(originalPath.get(i));
+            }
+        }
+        return unchangedPart;
+    }
+*/
 
 }
 
