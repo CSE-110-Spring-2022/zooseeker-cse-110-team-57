@@ -176,14 +176,8 @@ public class MS2_USTest {
         assertEquals(a2_copy,a2);
         assertEquals(a3_copy,a3);
         assertEquals(nodes, nodes_copy);
-//        System.out.println(a1);
-//        System.out.println(a2);
-//        System.out.println(a3);
-//        System.out.println(a1_copy);
-//        System.out.println(a2_copy);
-//        System.out.println(a3_copy);
-
     }
+
     @Test
     public void getEntranceGateCoord_test(){
         ActivityScenario<SearchAnimalActivity> scenario = searchScenarioRule.getScenario();
@@ -361,36 +355,30 @@ public class MS2_USTest {
         String gPath = "zoo_graph.json";
         Context context = ApplicationProvider.getApplicationContext();
 
-        LatLng latlng = new LatLng(32,-117);
-        boolean going_forward =  true;
         ArrayList<AnimalItem> animalItemArrayList = new ArrayList<>();
-        AnimalItem a1 = new AnimalItem("orangutan",
-                new ArrayList<>(),
-                "Orangutans",
-                new LatLng(32.736864688333235,-117.16364410510093));
-        AnimalItem a2 = new AnimalItem("siamang",
-                new ArrayList<>(),
-                "Siamangs",
-                new LatLng(32.736864688333235,-117.16079397323202));
-        AnimalItem a3 = new AnimalItem("toucan",
-                new ArrayList<>(),
-                "Toucan",
-                new LatLng(32.736864688333235,-117.16079397323202));
-        AnimalItem a4 = new AnimalItem("entrance_exit_gate",
-                new ArrayList<>(),
-                "Entrance and Exit Gate",
-                new LatLng(32.73561,-117.14936));
+        AnimalItem a1  = AnimalItem.search_by_tag("Orangutans").get(0);
+        AnimalItem a2 = AnimalItem.search_by_tag("Siamangs").get(0);
+        AnimalItem a3 = AnimalItem.search_by_tag("Toucan").get(0);
 
         AnimalItem.loadInfo(context, vPath, ePath, gPath);
 
         animalItemArrayList.add(a1);
         animalItemArrayList.add(a2);
         animalItemArrayList.add(a3);
-        animalItemArrayList.add(a4);
 
 
-        String result = AnimalUtilities.find_starting_point(animalItemArrayList,new LatLng(32.73561,-117.14936));
-        System.out.println(result);
+        String r1 = AnimalUtilities.find_starting_point(animalItemArrayList,
+                new LatLng(32.73561,-117.14936));//Entrance
+        assertEquals(a2.id,r1);
+
+        String r2 = AnimalUtilities.find_starting_point(animalItemArrayList,
+                new LatLng(32.7379,-117.1694));//Owens
+        assertEquals(a3.id,r2);
+
+        String r3 = AnimalUtilities.find_starting_point(animalItemArrayList,
+                new LatLng(32.7463,-117.1665));//Crocodiles
+        assertEquals(a3.id,r3);
+
     }
 
     @Test
@@ -422,7 +410,6 @@ public class MS2_USTest {
                 new LatLng(32.73561,-117.14936));
 
         AnimalItem.loadInfo(context, vPath, ePath, gPath);
-
         animalItemArrayList.add(a1);
         animalItemArrayList.add(a2);
         animalItemArrayList.add(a3);
