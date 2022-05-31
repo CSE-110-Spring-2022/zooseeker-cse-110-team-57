@@ -355,8 +355,6 @@ public class MS2_USTest {
         String gPath = "zoo_graph.json";
         Context context = ApplicationProvider.getApplicationContext();
 
-        LatLng current = new LatLng(32,-117);
-
         ArrayList<AnimalItem> animalItemArrayList = new ArrayList<>();
         AnimalItem a1  = AnimalItem.search_by_tag("Orangutans").get(0);
         AnimalItem a2 = AnimalItem.search_by_tag("Siamangs").get(0);
@@ -369,8 +367,18 @@ public class MS2_USTest {
         animalItemArrayList.add(a3);
 
 
-        String result = AnimalUtilities.find_starting_point(animalItemArrayList,new LatLng(32.73561,-117.14936));
-        System.out.println(result);
+        String r1 = AnimalUtilities.find_starting_point(animalItemArrayList,
+                new LatLng(32.73561,-117.14936));//Entrance
+        assertEquals(a2.id,r1);
+
+        String r2 = AnimalUtilities.find_starting_point(animalItemArrayList,
+                new LatLng(32.7379,-117.1694));//Owens
+        assertEquals(a3.id,r2);
+
+        String r3 = AnimalUtilities.find_starting_point(animalItemArrayList,
+                new LatLng(32.7463,-117.1665));//Crocodiles
+        assertEquals(a3.id,r3);
+
     }
 
     @Test
