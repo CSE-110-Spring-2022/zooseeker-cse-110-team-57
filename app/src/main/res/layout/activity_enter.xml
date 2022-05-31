@@ -9,7 +9,7 @@
     <EditText
         android:id="@+id/Latitude_text"
         android:layout_width="300dp"
-        android:layout_height="0dp"
+        android:layout_height="50dp"
         android:layout_marginTop="200dp"
         android:hint="Enter: Latitude"
         android:inputType="numberSigned|number"
