@@ -126,46 +126,60 @@ public class DirectionHelper {
     //get the directions in brief version
     public static List<String> briefPath(List<IdentifiedWeightedEdge> path, String source_id){
         List<String> display = new ArrayList<>();
-        String street = AnimalItem.eInfo.get(path.get(0).getId()).street;
-        String source = AnimalItem.vInfo.get(source_id).name;
-        String target;
-        String edgeInfo;
-        Double totalDistance = 0.0;
+        List<Double> distances = new ArrayList<>();
+        List<String> streets = new ArrayList<>();
+        List<String> targets = new ArrayList<>();
 
-        for(IdentifiedWeightedEdge edge : path){
-            //target node name
-            String edgeSource = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeSource(edge)).name;
-            /*
-            Log.d("edgeSource in displayPath",edgeSource);
-            Log.d("source in displayPath",source);
-            */
-            if(edgeSource.equals(source)){
-                target = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeTarget(edge)).name;
-            }else{
-                target = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeSource(edge)).name;
-            }
-            //move the source toward node in the path
-            source = new String(target);
+        DirectionHelper.briefBuild(path,source_id,distances,streets,targets);
 
-            //distance that user need to walk on this street.
-            Double distance = AnimalItem.gInfo.getEdgeWeight(edge);
-            //If we continues on the same street.
-            String nextStreet = AnimalItem.eInfo.get(edge.getId()).street;
-
-            if(street.equals(nextStreet) && path.size()>1){
-                totalDistance += distance;
-                continue;
-            }
-
-            totalDistance += distance;
-            edgeInfo = "Proceed on \"" + street + "\" " + totalDistance + " ft towards \"" + target + "\"";
-            totalDistance = 0.0;
-            street = nextStreet;
-
+        Log.d("briefPathDistance",distances.toString());
+        Log.d("briefPathStreets",streets.toString());
+        Log.d("briefPathTargets",targets.toString());
+        for(int i = 0; i < streets.size();i++){
+            String edgeInfo = "Proceed on \"" + streets.get(i) + "\" " + distances.get(i).toString() + " ft towards \"" + targets.get(i) + "\"";
             display.add(edgeInfo);
         }
         return display;
     }
+
+    public static void briefBuild(List<IdentifiedWeightedEdge> path, String source_id, List<Double> distances,
+                                      List<String> streets, List<String> targets){
+        String source = AnimalItem.vInfo.get(source_id).name;
+        for(int i = 0; i < path.size();i++){
+            String target;
+            //target node name
+            String edgeSource = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeSource(path.get(i))).name;
+            if(edgeSource.equals(source)){
+                target = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeTarget(path.get(i))).name;
+            }else{
+                target = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeSource(path.get(i))).name;
+            }
+            //move the source toward node in the path
+            source = target;
+            /*
+            Log.d("edgeSource in displayPath",edgeSource);
+            Log.d("source in displayPath",source);
+            */
+
+            IdentifiedWeightedEdge edge = path.get(i);
+            //If we continues on the same street.
+            String street = AnimalItem.eInfo.get(edge.getId()).street;
+            //distance that user need to walk on this street.
+            double distance = AnimalItem.gInfo.getEdgeWeight(edge);
+
+
+            if(!streets.contains(street)){
+                streets.add(street);
+                targets.add(target);
+                distances.add(distance);
+            }else {
+                double newDistance = distances.get(distances.size()-1)+distance;
+                distances.set(distances.size()-1, newDistance);
+                targets.set(targets.size()-1, target);
+            }
+        }
+    }
+
 
     @NonNull
     public static String getSingleEdgeInfo(IdentifiedWeightedEdge singleEdge){
