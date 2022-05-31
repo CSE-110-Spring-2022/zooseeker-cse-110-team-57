@@ -92,9 +92,6 @@ public class LocationModel extends AndroidViewModel {
                 Coord coord = Coord.fromLocation(location);
                 Log.i(TAG, String.format("Model received GPS location update: %s", coord));
                 providerSource.postValue(coord);
-                LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-                LatLngs.currentLocationLatLng = currentLatLng;
-                Coords.currentLocationCoord = Coord.fromLocation(location);
                 onLocationChangeListener.OnLocationChange(coord);
             }
         };

@@ -383,19 +383,20 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     @Override
     public void OnLocationChange(Coord current) {
         //update currentLocationCoord
-        Coords.currentLocationCoord = current;
-        LatLngs.currentLocationLatLng = current.toLatLng();
+        Coord nearestLandmark = new Coord(AnimalItem.getClosestLandmark(current).position) ;
+        Coords.currentLocationCoord = nearestLandmark;
+        LatLngs.currentLocationLatLng = nearestLandmark.toLatLng();
         setClosestLandmarkText();
         //check is off_route
-        boolean isOffRoute = AnimalUtilities.check_off_route(order, planned_route, current.toLatLng());
+        boolean isOffRoute = AnimalUtilities.check_off_route(order, planned_route, Coords.currentLocationCoord.toLatLng());
         if (isOffRoute){
-            showReplanAlert(this, current);
+            showReplanAlert(this, Coords.currentLocationCoord);
         }
         else{
             boolean needUpdate = isNeedUpdate(order);
             //if direction need update
             if (needUpdate){
-                updateRoute(this.order, this.going_forward, current, orderedAnimalList_IDs);
+                updateRoute(this.order, this.going_forward, Coords.currentLocationCoord, orderedAnimalList_IDs);
             }
             //follow the normal instruction
             else{
