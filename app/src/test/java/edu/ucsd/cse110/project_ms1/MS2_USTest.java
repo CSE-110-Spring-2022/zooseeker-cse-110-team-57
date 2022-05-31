@@ -189,7 +189,7 @@ public class MS2_USTest {
         scenario.moveToState(Lifecycle.State.CREATED);
         scenario.onActivity(activity -> {
             Coord coord = AnimalItem.getExtranceGateCoord();
-            assertEquals(new Coord(32.73460, -117.14936), coord);
+            assertEquals(new Coord(32.73459618734685, -117.14936), coord);
         });
 
 
@@ -250,24 +250,6 @@ public class MS2_USTest {
         assertFalse(actual2);
     }
 
-
-    @Test
-    public void getLatLng(){
-        String expectNodeA = "owens_aviary";
-        LatLng expectLatLng = new LatLng(32.73798565400121, -117.16949876733686);
-
-        LatLng actualLatLng = DirectionHelper.getLatLng(expectNodeA);
-        assertEquals(0, Double.compare(expectLatLng.latitude, actualLatLng.latitude));
-        assertEquals(0, Double.compare(expectLatLng.longitude, actualLatLng.longitude));
-
-        String expectNodeB = "fern_canyon";
-        LatLng expectLatLngB = new LatLng(32.73480907296893, -117.17269958736802);
-        LatLng actualLatLngB = DirectionHelper.getLatLng(expectNodeB);
-        assertEquals(0, Double.compare(expectLatLngB.latitude, actualLatLngB.latitude));
-        assertEquals(0, Double.compare(expectLatLngB.longitude, actualLatLngB.longitude));
-
-
-    }
 
     @Test
     public void findCurrStreet(){
