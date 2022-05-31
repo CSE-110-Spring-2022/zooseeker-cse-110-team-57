@@ -52,7 +52,7 @@ public class MS1_13c_clear_selected_exhibits {
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.all_searched_animals),
-                                        0),
+                                        2),
                                 1),
                         isDisplayed()));
         materialButton.perform(click());
@@ -62,12 +62,22 @@ public class MS1_13c_clear_selected_exhibits {
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.all_searched_animals),
-                                        1),
+                                        3),
                                 1),
                         isDisplayed()));
         materialButton2.perform(click());
 
         ViewInteraction materialButton3 = onView(
+                allOf(withId(R.id.add_to_button), withText("Add"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.all_searched_animals),
+                                        4),
+                                1),
+                        isDisplayed()));
+        materialButton3.perform(click());
+
+        ViewInteraction materialButton4 = onView(
                 allOf(withId(R.id.clear_button), withText("Clear"),
                         childAtPosition(
                                 childAtPosition(
@@ -75,7 +85,7 @@ public class MS1_13c_clear_selected_exhibits {
                                         0),
                                 5),
                         isDisplayed()));
-        materialButton3.perform(click());
+        materialButton4.perform(click());
 
         ViewInteraction textView = onView(
                 allOf(withId(R.id.selected_animals_number), withText("0"),

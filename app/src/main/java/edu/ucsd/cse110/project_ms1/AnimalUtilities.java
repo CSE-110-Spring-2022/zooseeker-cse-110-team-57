@@ -96,6 +96,7 @@ public class AnimalUtilities {
         List<route_node> rest_route;
         if (left_animal_items.size()==0){
             rest_route = new ArrayList<>();
+            rest_route.add(new route_node(AnimalItem.gate,null,0.0000838,null));
         }
         else {
             rest_route = AnimalItem.plan_route(left_animal_items, start, false);
