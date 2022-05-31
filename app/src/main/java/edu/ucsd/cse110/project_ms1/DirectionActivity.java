@@ -285,23 +285,22 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     }
     //act when next button is clicked
     public void onNextButtonClick(View view) {
-        //----------------Comment these line when demo, this is ony used for mocking mode-----------
-        if (!useLocationService){
-            //plug in the current path order
-            autoUpdate_currentLocation_mocking(order);
-        }
-        //----------------------------------------------------------------------------------------
         order++;
         if (!going_forward){
             order-=2;
         }
-
         //grey out skip if going to the exit
 //        if (order+1==animalItems.size())
 //            skipBtn.setEnabled(false);
 //        else skipBtn.setEnabled(true);
 
         going_forward = true;
+        //----------------Comment these line when demo, this is ony used for mocking mode-----------
+        if (!useLocationService){
+            //plug in the current path order
+            autoUpdate_currentLocation_mocking(order);
+        }
+        //----------------------------------------------------------------------------------------
         if (order < planned_route.size() + 1) {
             boolean needUpdate = isNeedUpdate(order);
             if (needUpdate){
@@ -321,12 +320,6 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
     ////act when previous button is clicked
     public void onBackButtonClick(View view) {
-        //----------------Comment these line when demo, this is ony used for mocking mode-----------
-        if (!useLocationService){
-            //plug in the current path order
-            autoUpdate_currentLocation_mocking(order);
-        }
-        //----------------------------------------------------------------------------------------
         order--;
         if (going_forward){
             order+=2;
@@ -338,11 +331,18 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 //        else skipBtn.setEnabled(true);
 
         going_forward = false;
+        //----------------Comment these line when demo, this is ony used for mocking mode-----------
+        if (!useLocationService){
+            //plug in the current path order
+            autoUpdate_currentLocation_mocking(order);
+        }
+        //----------------------------------------------------------------------------------------
+
         if (order >= 0) {
             int order_change = order;
-            if (order >= orderedAnimalList_IDs.size()){
-                order_change = orderedAnimalList_IDs.size()-1;
-            }
+//            if (order >= orderedAnimalList_IDs.size()){
+//                order_change = orderedAnimalList_IDs.size()-1;
+//            }
             boolean needUpdate = isNeedUpdate(order_change);
             if (needUpdate){
                 updateRoute(order, going_forward, Coords.currentLocationCoord, orderedAnimalList_IDs);
@@ -362,7 +362,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
     //update current location for mocking mode only
     public void autoUpdate_currentLocation_mocking(int order){
-        String goal_id = (going_forward) ? orderedAnimalList_IDs.get(order + 1): orderedAnimalList_IDs.get(order);
+        //String goal_id = (going_forward) ? orderedAnimalList_IDs.get(order + 1): orderedAnimalList_IDs.get(order);
+        String goal_id = orderedAnimalList_IDs.get(order);
         ZooData.VertexInfo goal_parent = AnimalItem.vInfo.get(AnimalItem.Latlng_ids_Map.get(goal_id));
         Coord updateCoord = new Coord(goal_parent.lat, goal_parent.lng);
         Coords.currentLocationCoord = updateCoord;
@@ -381,6 +382,11 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     //act when currentlocation is changed
     @Override
     public void OnLocationChange(Coord current) {
+        //update currentLocationCoord
+        Coords.currentLocationCoord = current;
+        LatLngs.currentLocationLatLng = current.toLatLng();
+        setClosestLandmarkText();
+        //check is off_route
         boolean isOffRoute = AnimalUtilities.check_off_route(order, planned_route, current.toLatLng());
         if (isOffRoute){
             showReplanAlert(this, current);
