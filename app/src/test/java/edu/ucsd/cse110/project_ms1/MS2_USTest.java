@@ -275,6 +275,42 @@ public class MS2_USTest {
         assertEquals(expectStreet,actualStreet);
     }
 
+    @Test
+    public void briefDistances(){
+        //NodeA = owens_aviary
+        //NodeB = parker_aviary
+
+        String start = "owens_aviary";
+        String end = "parker_aviary";
+
+        List<IdentifiedWeightedEdge> path = DirectionHelper.findPathBetween(start,end);
+        List<Double> distances = new ArrayList<>();
+        List<String> streets = new ArrayList<>();
+        List<String> targets = new ArrayList<>();
+
+        DirectionHelper.briefBuild(path,start,distances,streets,targets);
+        assertEquals(distances.size(),streets.size());
+        assertEquals(1, distances.size());
+        assertEquals(targets.get(targets.size()-1),AnimalItem.vInfo.get(end).name);
+
+        //NodeA = owens_aviary
+        //NodeB = parker_aviary
+
+        String start2 = "crocodile";
+        String end2 = "scripps_aviary";
+        List<IdentifiedWeightedEdge> path2 = DirectionHelper.findPathBetween(start2,end2);
+        List<Double> distances2 = new ArrayList<>();
+        List<String> streets2 = new ArrayList<>();
+        List<String> targets2 = new ArrayList<>();
+
+
+        DirectionHelper.briefBuild(path2,start2,distances2,streets2,targets2);
+        assertEquals(distances2.size(),streets2.size());
+        assertEquals(streets2.size(),targets2.size());
+        assertEquals(targets2.get(targets2.size()-1),AnimalItem.vInfo.get(end2).name);
+
+    }
+
 
     @Test
     public void reroute() throws IOException {

@@ -536,37 +536,30 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
     //set the directions in brief version
     public void displayBrief(String source_id, String goal_id, List<IdentifiedWeightedEdge> path, boolean NeedUpdate){
-        List<String> pathDisplay = new ArrayList<>();
-        Double updateDistance = 0.0;
-        if (path.size() == 1){
-            String edgeInfo = DirectionHelper.getSingleEdgeInfo(path.get(0));
+//        Log.d("need update briefPath", String.valueOf(NeedUpdate));
+//        Log.d("show briefPath",path.toString());
+        List<String> pathDisplay;
+        Double updateDistance;
+        if (NeedUpdate){
+            IdentifiedWeightedEdge insertion = path.remove(0);
+            //normal path info
+            pathDisplay = DirectionHelper.detailPath(path, source_id);
+            updateDistance = DirectionHelper.totalDistance(path);
+            //additional edge info
+            String edgeInfo = DirectionHelper.getSingleEdgeInfo(insertion);
             pathDisplay.add(0, edgeInfo);
+            updateDistance += Double.valueOf(DirectionHelper.getCloserEndpointInfo(insertion).get(1));
+            //set the Total Distance
+            showUpdateTotalDistance(updateDistance);
+            //show alert
+            String street = AnimalItem.vInfo.get(goal_id).name;
+            DirectionHelper.showUpdateAlert(this, street);
+        }
+        else{
+            pathDisplay = DirectionHelper.briefPath(path, source_id);
             //set the Total Distance
             updateDistance = DirectionHelper.totalDistance(path);
             showUpdateTotalDistance(updateDistance);
-        }
-        else{
-            if (NeedUpdate){
-                IdentifiedWeightedEdge insertion = path.remove(0);
-                //normal path info
-                pathDisplay = DirectionHelper.detailPath(path, source_id);
-                updateDistance = DirectionHelper.totalDistance(path);
-                //additional edge info
-                String edgeInfo = DirectionHelper.getSingleEdgeInfo(insertion);
-                pathDisplay.add(0, edgeInfo);
-                updateDistance += Double.valueOf(DirectionHelper.getCloserEndpointInfo(insertion).get(1));
-                //set the Total Distance
-                showUpdateTotalDistance(updateDistance);
-                //show alert
-                String street = AnimalItem.vInfo.get(goal_id).name;
-                DirectionHelper.showUpdateAlert(this, street);
-            }
-            else{
-                pathDisplay = DirectionHelper.briefPath(path, source_id);
-                //set the Total Distance
-                updateDistance = DirectionHelper.totalDistance(path);
-                showUpdateTotalDistance(updateDistance);
-            }
         }
         direction_adapter.setDirectionsStringList(pathDisplay);
     }
