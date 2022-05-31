@@ -66,10 +66,18 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         Utilities.changeCurrentActivity(this, "DirectionActivity");
         AnimalUtilities.loadZooInfo(this);
 
+
+        //use physical real location
+        useLocationService = true;
+        //-------------------Comment this line when demo-------------------------------------------
+        useLocationService = false;
+        //-----------------------------------------------------------------------------------------
+
+
         // intialize button status
         going_forward = true;
+        //bind the skp button
         skipBtn= findViewById(R.id.skip_button);
-
 
         //grab ordered list of animal id, begin from first item in the route.
         Intent intent = getIntent();
@@ -117,8 +125,6 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             Log.i(TAG, String.format("Observing location model update to %s", coord));
         });
         Coord current_lastKnownPoint = viewModel.getCurrentCoord();
-        //use physical real location
-        useLocationService = true;
 
 
         //Get the order and going_forward
@@ -355,8 +361,9 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
     //update current location for mocking mode only
     public void autoUpdate_currentLocation_mocking(int order){
-        ZooData.VertexInfo goal = AnimalItem.vInfo.get(orderedAnimalList_IDs.get(order + 1));
-        Coord updateCoord = new Coord(goal.lat, goal.lng);
+        String goal_id = (going_forward) ? orderedAnimalList_IDs.get(order + 1): orderedAnimalList_IDs.get(order);
+        ZooData.VertexInfo goal_parent = AnimalItem.vInfo.get(AnimalItem.Latlng_ids_Map.get(goal_id));
+        Coord updateCoord = new Coord(goal_parent.lat, goal_parent.lng);
         Coords.currentLocationCoord = updateCoord;
         setClosestLandmarkText();
     }
@@ -392,10 +399,10 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     //compare current location and path source, check if direction need update
     private boolean isNeedUpdate(int order) {
         Coord current = Coords.currentLocationCoord;
-        String CurrentPathSource_id = (going_forward) ?
-                orderedAnimalList_IDs.get(order): orderedAnimalList_IDs.get(order + 1);
-        ZooData.VertexInfo CurrentPathSource = AnimalItem.vInfo.get(CurrentPathSource_id);
-        Coord CurrentPathSource_coord = new Coord(CurrentPathSource.lat, CurrentPathSource.lng);
+        String CurrentPathSource_id = orderedAnimalList_IDs.get(order);
+        String CurrentPathSource_parent_id = AnimalItem.Latlng_ids_Map.get(CurrentPathSource_id);
+        ZooData.VertexInfo CurrentPathSource_parent = AnimalItem.vInfo.get(CurrentPathSource_parent_id);
+        Coord CurrentPathSource_coord = new Coord(CurrentPathSource_parent.lat, CurrentPathSource_parent.lng);
         boolean needUpdate = !CurrentPathSource_coord.equals(current);
         return needUpdate;
     }
@@ -689,7 +696,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         else if (!going_forward && order <= 1){
             skipBtn.setEnabled((false));
             Utilities.showAlert(this, "You are back to \"Entrance and Exit Gate\".");
-            updateRoute(1, going_forward, Coords.currentLocationCoord, orderedAnimalList_IDs);
+            updateRoute(order, going_forward, Coords.currentLocationCoord, orderedAnimalList_IDs);
             order++;
         }
         //normal
@@ -711,16 +718,15 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     }
 
     //@order:
-    public void updateRoute(int SourcePosition, boolean going_forward, Coord current, List<String> orderedAnimalList_IDs) {
+    public void updateRoute(int order, boolean going_forward, Coord current, List<String> orderedAnimalList_IDs) {
         List<IdentifiedWeightedEdge> updatePath = new LinkedList<>();
         String goalExhibit_id = null;
         //get the goal exhibit
         if (going_forward){
-            goalExhibit_id = orderedAnimalList_IDs.get(SourcePosition + 1);
+            goalExhibit_id = orderedAnimalList_IDs.get(order + 1);
         }
         else{
-            SourcePosition--;
-            goalExhibit_id = orderedAnimalList_IDs.get(SourcePosition);
+            goalExhibit_id = orderedAnimalList_IDs.get(order);
         }
         //get the closestLandmark
         AnimalItem closestLandmark = AnimalItem.getClosestLandmark(current);
