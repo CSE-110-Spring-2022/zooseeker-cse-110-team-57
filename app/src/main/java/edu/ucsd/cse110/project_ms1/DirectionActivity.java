@@ -41,6 +41,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     static boolean going_forward = true;
     Button detailBtn;
     Button skipBtn ;
+    Button prevBtn ;
+    Button nextBtn ;
     Intent intent;
     LocationModel viewModel;
 
@@ -74,10 +76,12 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         //-----------------------------------------------------------------------------------------
 
 
-        // intialize button status
+        // intialize  status
         going_forward = true;
-        //bind the skp button
+        //bind the  buttons
         skipBtn= findViewById(R.id.skip_button);
+        prevBtn = findViewById(R.id.previous_button);
+        nextBtn = findViewById(R.id.next_button);
 
         //grab ordered list of animal id, begin from first item in the route.
         Intent intent = getIntent();
@@ -162,8 +166,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         TextView end = findViewById(R.id.goal_exhibit_name);
         TextView next = findViewById(R.id.next_text);
         TextView prev = findViewById(R.id.previous_text);
-        Button prevBtn = findViewById(R.id.previous_button);
-        Button nextBtn = findViewById(R.id.next_button);
+
         Button mockBtn = findViewById(R.id.mock_button);
         detailBtn = findViewById(R.id.detail_button);
 
@@ -703,6 +706,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             Utilities.showAlert(this, "You are back to \"Entrance and Exit Gate\".");
             updateRoute(order, going_forward, Coords.currentLocationCoord, orderedAnimalList_IDs);
             order--;
+            nextBtn.setEnabled(false);
+
         }
         //skip first exhibit and go back to gate
         else if (!going_forward && order <= 1){
@@ -710,6 +715,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             Utilities.showAlert(this, "You are back to \"Entrance and Exit Gate\".");
             updateRoute(order, going_forward, Coords.currentLocationCoord, orderedAnimalList_IDs);
             order++;
+            prevBtn.setEnabled(false);
         }
         //normal
         else{
