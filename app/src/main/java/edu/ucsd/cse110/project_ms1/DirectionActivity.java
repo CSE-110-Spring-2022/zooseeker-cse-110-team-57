@@ -400,9 +400,6 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     }
     //compare current location and path source, check if direction need update
     private boolean isNeedUpdate(int order) {
-        if ((order <= 0) || (order >= orderedAnimalList_IDs.size() - 1)){
-            return false;
-        }
         Coord current = Coords.currentLocationCoord;
         String CurrentPathSource_id = orderedAnimalList_IDs.get(order);
         String CurrentPathSource_parent_id = AnimalItem.Latlng_ids_Map.get(CurrentPathSource_id);
