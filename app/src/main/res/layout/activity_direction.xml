@@ -208,7 +208,7 @@
         android:layout_height="50dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="10dp"
         android:onClick="onMockButtonClick"
         android:text="Mock"
         android:textSize="20dp"
@@ -220,13 +220,12 @@
 
     <EditText
         android:id="@+id/Latitude_text"
-        android:layout_width="150dp"
+        android:layout_width="180dp"
         android:layout_height="40dp"
-        android:layout_marginStart="20dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
         android:ems="10"
-        android:hint="Latitude"
+        android:hint="Enter: Latitude"
         android:inputType="numberSigned|number"
         android:textSize="10sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -235,10 +234,10 @@
 
     <EditText
         android:id="@+id/Longitude_text"
-        android:layout_width="150dp"
+        android:layout_width="180dp"
         android:layout_height="40dp"
         android:ems="10"
-        android:hint="Longitude"
+        android:hint="Enter: Longitude"
         android:inputType="numberSigned|number"
         android:textSize="10sp"
         app:layout_constraintBottom_toTopOf="@+id/replan_button"
