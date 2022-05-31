@@ -581,7 +581,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     //load displaying status brief/detain from shared preference
     public void loadDisplayStatus() {
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        displayStatus = preferences.getBoolean("DISPLAYSTATUS", true);
+        displayStatus = preferences.getBoolean("DISPLAYSTATUS", false);
     }
 
     //save displaying status brief/detain from shared preference
