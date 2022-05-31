@@ -39,6 +39,8 @@ import javax.xml.transform.TransformerFactory;
 public class EnterActivity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.);
         return;
     }
 }
