@@ -356,7 +356,8 @@ public class DirectionHelper {
         //get the closest landmark
         AnimalItem closestName = AnimalItem.getClosestLandmark(current);
         //get the current street
-        IdentifiedWeightedEdge currentStreet = findCurrStreet(closestName.id, current.toLatLng());
+        String closestName_parent_id = AnimalItem.Latlng_ids_Map.get(closestName.id);
+        IdentifiedWeightedEdge currentStreet = findCurrStreet(closestName_parent_id, current.toLatLng());
 
         ///find the Source and Goal of street
         ZooData.VertexInfo streetSource = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeSource(currentStreet));
