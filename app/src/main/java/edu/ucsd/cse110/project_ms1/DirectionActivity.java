@@ -212,15 +212,11 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         //disable the prev btn at the first page and next btn at last page.
         if (going_forward) {
             //click button
-            if (order >= orderedAnimalList_Names.size() - 1){
-                skipBtn.setEnabled(false);
-            }else{
-                skipBtn.setEnabled(true);
-            }
 
             // next button
             if (index < orderedAnimalList_Names.size() - 2) {
                 nextBtn.setEnabled(true);
+                skipBtn.setEnabled(true);
                 String nextSource = orderedAnimalList_IDs.get(index + 1);
                 String nextGoal = orderedAnimalList_IDs.get(index + 2);
                 List<IdentifiedWeightedEdge> nextPath = DirectionHelper.findPathBetween(nextSource, nextGoal);
@@ -231,6 +227,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             }
             else {
                 nextBtn.setEnabled(false);
+                skipBtn.setEnabled(false);
                 next.setText("End of tour");
             }
             //setting previous button and previous direction distance
@@ -252,12 +249,6 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         }
         else{
-            //click button
-            if (order <=  1){
-                skipBtn.setEnabled(false);
-            }else{
-                skipBtn.setEnabled(true);
-            }
 
             //next button
             nextBtn.setEnabled(true);
@@ -272,6 +263,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             // previous button
             if (index == 1) {
                 prevBtn.setEnabled(false);
+                skipBtn.setEnabled(false);
                 prev.setText("Beginning of tour");
             }
             else {
