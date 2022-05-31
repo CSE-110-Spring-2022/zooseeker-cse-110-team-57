@@ -202,7 +202,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             path = DirectionHelper.findPathBetween(source_id,goal_id);
             DirectionHelper.saveDirectionsInformation(this, order, false);
         }
-        setDisplay(source_id, goal_id, path, displayStatus);
+        setDisplay(source_id, goal_id, path, displayStatus, false);
         Log.d("endText3",endText);
         end.setText(endText);
 
@@ -505,24 +505,29 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     }
     //set the directions in which version
     public void setDisplay(String source_id, String goal_id, List<IdentifiedWeightedEdge> path,
-                           boolean displayStatus) {
+                           boolean displayStatus, boolean NeedUpdate) {
         //brief version
         if (displayStatus) {
-            displayBrief(source_id, goal_id, path);
+            displayBrief(source_id, goal_id, path, NeedUpdate);
         }
         //detailed version
         else {
-            displayDetail(source_id, goal_id, path);
+            displayDetail(source_id, goal_id, path, NeedUpdate);
         }
     }
     //set the directions in detail version
-    public void displayDetail(String source_id, String goal_id, List<IdentifiedWeightedEdge> path){
+    public void displayDetail(String source_id, String goal_id, List<IdentifiedWeightedEdge> path, boolean NeedUpdate){
         List<String> pathDisplay = new ArrayList<>();
         Double updateDistance = 0.0;
         if (path.size() == 0){
             pathDisplay.add("You have already been there. No need to move.");
         }
         else{
+            if (NeedUpdate){
+                //show update Alert
+                String nextExhibit_name = AnimalItem.vInfo.get(goal_id).name;
+                DirectionHelper.showUpdateAlert(this, nextExhibit_name);
+            }
             pathDisplay = DirectionHelper.detailPath(path, source_id);
             //set the Total Distance
             updateDistance = DirectionHelper.totalDistance(path);
@@ -533,13 +538,18 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
 
     //set the directions in brief version
-    public void displayBrief(String source_id, String goal_id, List<IdentifiedWeightedEdge> path){
+    public void displayBrief(String source_id, String goal_id, List<IdentifiedWeightedEdge> path, boolean NeedUpdate){
         List<String> pathDisplay = new ArrayList<>();
         Double updateDistance = 0.0;
         if (path.size() == 0){
             pathDisplay.add("You have already been there. No need to move.");
         }
         else {
+            if (NeedUpdate){
+                //show update Alert
+                String nextExhibit_name = AnimalItem.vInfo.get(goal_id).name;
+                DirectionHelper.showUpdateAlert(this, nextExhibit_name);
+            }
             pathDisplay = DirectionHelper.briefPath(path, source_id);
             //set the Total Distance
             updateDistance = DirectionHelper.totalDistance(path);
@@ -730,10 +740,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         }
         List<IdentifiedWeightedEdge> updated_path = new ArrayList<>(updatePath);
         //display updated directions
-        setDisplay(closestLandmark.id, nextExhibit_id, updated_path, displayStatus);
-        //show update Alert
-        String nextExhibit_name = AnimalItem.vInfo.get(nextExhibit_id).name;
-        DirectionHelper.showUpdateAlert(this, nextExhibit_name);
+        setDisplay(closestLandmark.id, nextExhibit_id, updated_path, displayStatus, true);
+
     }
 
 
