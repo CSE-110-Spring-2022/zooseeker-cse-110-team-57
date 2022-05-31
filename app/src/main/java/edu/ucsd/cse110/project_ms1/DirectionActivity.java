@@ -295,12 +295,20 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 //        else skipBtn.setEnabled(true);
 
         going_forward = true;
+
+
+
+
         //----------------Comment these line when demo, this is ony used for mocking mode-----------
         if (!useLocationService){
             //plug in the current path order
             autoUpdate_currentLocation_mocking(order);
         }
         //----------------------------------------------------------------------------------------
+
+
+
+
         if (order < planned_route.size() + 1) {
             boolean needUpdate = isNeedUpdate(order);
             if (needUpdate){
@@ -331,12 +339,17 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 //        else skipBtn.setEnabled(true);
 
         going_forward = false;
+
+
+
         //----------------Comment these line when demo, this is ony used for mocking mode-----------
         if (!useLocationService){
             //plug in the current path order
             autoUpdate_currentLocation_mocking(order);
         }
         //----------------------------------------------------------------------------------------
+
+
 
         if (order >= 0) {
             int order_change = order;
@@ -663,7 +676,6 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         //-------------------uncomment these lines when demo----------------------------------
         /*
-        useLocationService = false;
         InputStream input = this.getAssets().open(MOCKING_FILE_NAME);
         List<Coord> route = ZooData.loadMockingJSON(input);
         if (route.size() == 1){
