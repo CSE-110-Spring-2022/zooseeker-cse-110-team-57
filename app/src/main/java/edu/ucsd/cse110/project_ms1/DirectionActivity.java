@@ -25,6 +25,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import edu.ucsd.cse110.project_ms1.location.Coord;
 import edu.ucsd.cse110.project_ms1.location.Coords;
@@ -200,7 +202,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             path = DirectionHelper.findPathBetween(source_id,goal_id);
             DirectionHelper.saveDirectionsInformation(this, order, false);
         }
-        setDisplay(source_id, goal_id, path, displayStatus,false);
+        setDisplay(source_id, goal_id, path, displayStatus, false);
         Log.d("endText3",endText);
         end.setText(endText);
 
@@ -517,35 +519,19 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     public void displayDetail(String source_id, String goal_id, List<IdentifiedWeightedEdge> path, boolean NeedUpdate){
         List<String> pathDisplay = new ArrayList<>();
         Double updateDistance = 0.0;
-        if (path.size() == 1){
-            String edgeInfo = DirectionHelper.getSingleEdgeInfo(path.get(0));
-            pathDisplay.add(0, edgeInfo);
-            //set the Total Distance
-            updateDistance = DirectionHelper.totalDistance(path);
-            showUpdateTotalDistance(updateDistance);
+        if (path.size() == 0){
+            pathDisplay.add("You have already been there. No need to move.");
         }
         else{
             if (NeedUpdate){
-                IdentifiedWeightedEdge insertion = path.remove(0);
-                //normal path info
-                pathDisplay = DirectionHelper.detailPath(path, source_id);
-                updateDistance = DirectionHelper.totalDistance(path);
-                //addtional edge info
-                String edgeInfo = DirectionHelper.getSingleEdgeInfo(insertion);
-                pathDisplay.add(0, edgeInfo);
-                updateDistance += Double.valueOf(DirectionHelper.getCloserEndpointInfo(insertion).get(1));
-                //set the Total Distance
-                showUpdateTotalDistance(updateDistance);
-                //show alert
-                String street = AnimalItem.vInfo.get(goal_id).name;
-                DirectionHelper.showUpdateAlert(this, street);
+                //show update Alert
+                String nextExhibit_name = AnimalItem.vInfo.get(goal_id).name;
+                DirectionHelper.showUpdateAlert(this, nextExhibit_name);
             }
-            else{
-                pathDisplay = DirectionHelper.detailPath(path, source_id);
-                //set the Total Distance
-                updateDistance = DirectionHelper.totalDistance(path);
-                showUpdateTotalDistance(updateDistance);
-            }
+            pathDisplay = DirectionHelper.detailPath(path, source_id);
+            //set the Total Distance
+            updateDistance = DirectionHelper.totalDistance(path);
+            showUpdateTotalDistance(updateDistance);
         }
         direction_adapter.setDirectionsStringList(pathDisplay);
     }
@@ -555,35 +541,19 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     public void displayBrief(String source_id, String goal_id, List<IdentifiedWeightedEdge> path, boolean NeedUpdate){
         List<String> pathDisplay = new ArrayList<>();
         Double updateDistance = 0.0;
-        if (path.size() == 1){
-            String edgeInfo = DirectionHelper.getSingleEdgeInfo(path.get(0));
-            pathDisplay.add(0, edgeInfo);
+        if (path.size() == 0){
+            pathDisplay.add("You have already been there. No need to move.");
+        }
+        else {
+            if (NeedUpdate){
+                //show update Alert
+                String nextExhibit_name = AnimalItem.vInfo.get(goal_id).name;
+                DirectionHelper.showUpdateAlert(this, nextExhibit_name);
+            }
+            pathDisplay = DirectionHelper.briefPath(path, source_id);
             //set the Total Distance
             updateDistance = DirectionHelper.totalDistance(path);
             showUpdateTotalDistance(updateDistance);
-        }
-        else{
-            if (NeedUpdate){
-                IdentifiedWeightedEdge insertion = path.remove(0);
-                //normal path info
-                pathDisplay = DirectionHelper.detailPath(path, source_id);
-                updateDistance = DirectionHelper.totalDistance(path);
-                //additional edge info
-                String edgeInfo = DirectionHelper.getSingleEdgeInfo(insertion);
-                pathDisplay.add(0, edgeInfo);
-                updateDistance += Double.valueOf(DirectionHelper.getCloserEndpointInfo(insertion).get(1));
-                //set the Total Distance
-                showUpdateTotalDistance(updateDistance);
-                //show alert
-                String street = AnimalItem.vInfo.get(goal_id).name;
-                DirectionHelper.showUpdateAlert(this, street);
-            }
-            else{
-                pathDisplay = DirectionHelper.briefPath(path, source_id);
-                //set the Total Distance
-                updateDistance = DirectionHelper.totalDistance(path);
-                showUpdateTotalDistance(updateDistance);
-            }
         }
         direction_adapter.setDirectionsStringList(pathDisplay);
     }
@@ -755,23 +725,24 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     //@order:
     public void updateRoute(int order, boolean going_forward, Coord current, List<String> orderedAnimalList_IDs) {
         //get the closestLandmark
+        List<IdentifiedWeightedEdge> updatePath = new ArrayList<>();
         AnimalItem closestLandmark = AnimalItem.getClosestLandmark(current);
-        String goalExhibit_id = null;
+        String nextExhibit_id = null;
         //get the goal exhibit
         if (going_forward){
-            goalExhibit_id = orderedAnimalList_IDs.get(order + 1);
+            nextExhibit_id = orderedAnimalList_IDs.get(order + 1);
         }
         else{
-            goalExhibit_id = orderedAnimalList_IDs.get(order);
+            nextExhibit_id = orderedAnimalList_IDs.get(order);
         }
-        List<IdentifiedWeightedEdge> updatePath = DirectionHelper.findPathBetween(closestLandmark.id, goalExhibit_id);
-        //get the path between closest landmark to goal exhibit
-        if (!closestLandmark.id.equals(goalExhibit_id)){
-            updatePath = DirectionHelper.findPathBetween(closestLandmark.id, goalExhibit_id);
+        //get the path between closest landmark to next exhibit
+        if (!closestLandmark.id.equals(nextExhibit_id)){
+            updatePath = DirectionHelper.findPathBetween(closestLandmark.id, nextExhibit_id);
         }
         List<IdentifiedWeightedEdge> updated_path = new ArrayList<>(updatePath);
         //display updated directions
-        setDisplay(closestLandmark.id, goalExhibit_id, updated_path, displayStatus, true);
+        setDisplay(closestLandmark.id, nextExhibit_id, updated_path, displayStatus, true);
+
     }
 
 
