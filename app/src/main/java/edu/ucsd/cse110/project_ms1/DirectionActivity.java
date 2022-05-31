@@ -25,6 +25,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import edu.ucsd.cse110.project_ms1.location.Coord;
 import edu.ucsd.cse110.project_ms1.location.Coords;
@@ -517,7 +519,10 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     public void displayDetail(String source_id, String goal_id, List<IdentifiedWeightedEdge> path, boolean NeedUpdate){
         List<String> pathDisplay = new ArrayList<>();
         Double updateDistance = 0.0;
-        if (path.size() == 1){
+        if (path.size() == 0){
+            pathDisplay.add("You have already been there. No need to move.");
+        }
+        else if (path.size() == 1){
             String edgeInfo = DirectionHelper.getSingleEdgeInfo(path.get(0));
             pathDisplay.add(0, edgeInfo);
             //set the Total Distance
@@ -555,14 +560,10 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     public void displayBrief(String source_id, String goal_id, List<IdentifiedWeightedEdge> path, boolean NeedUpdate){
         List<String> pathDisplay = new ArrayList<>();
         Double updateDistance = 0.0;
-        if (path.size() == 1){
-            String edgeInfo = DirectionHelper.getSingleEdgeInfo(path.get(0));
-            pathDisplay.add(0, edgeInfo);
-            //set the Total Distance
-            updateDistance = DirectionHelper.totalDistance(path);
-            showUpdateTotalDistance(updateDistance);
+        if (path.size() == 0){
+            pathDisplay.add("You have already been there. No need to move.");
         }
-        else{
+        else {
             if (NeedUpdate){
                 IdentifiedWeightedEdge insertion = path.remove(0);
                 //normal path info
@@ -754,23 +755,27 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     //@order:
     public void updateRoute(int order, boolean going_forward, Coord current, List<String> orderedAnimalList_IDs) {
         //get the closestLandmark
+        List<IdentifiedWeightedEdge> originalPath = new ArrayList<>();
+        List<IdentifiedWeightedEdge> updatePath = new ArrayList<>();
         AnimalItem closestLandmark = AnimalItem.getClosestLandmark(current);
-        String goalExhibit_id = null;
+        String nextExhibit_id = null;
         //get the goal exhibit
         if (going_forward){
-            goalExhibit_id = orderedAnimalList_IDs.get(order + 1);
+            nextExhibit_id = orderedAnimalList_IDs.get(order + 1);
         }
         else{
-            goalExhibit_id = orderedAnimalList_IDs.get(order);
+            nextExhibit_id = orderedAnimalList_IDs.get(order);
         }
-        List<IdentifiedWeightedEdge> updatePath = DirectionHelper.findPathBetween(closestLandmark.id, goalExhibit_id);
+        updatePath = DirectionHelper.findPathBetween(closestLandmark.id, nextExhibit_id);
         //get the path between closest landmark to goal exhibit
-        if (!closestLandmark.id.equals(goalExhibit_id)){
-            updatePath = DirectionHelper.findPathBetween(closestLandmark.id, goalExhibit_id);
+        if (!closestLandmark.id.equals(nextExhibit_id)){
+            originalPath = DirectionHelper.findPathBetween(closestLandmark.id, nextExhibit_id);
         }
+        updatePath = Stream.concat(updatePath.stream(), originalPath.stream())
+                    .collect(Collectors.toList());
         List<IdentifiedWeightedEdge> updated_path = new ArrayList<>(updatePath);
         //display updated directions
-        setDisplay(closestLandmark.id, goalExhibit_id, updated_path, displayStatus, true);
+        setDisplay(closestLandmark.id, nextExhibit_id, updated_path, displayStatus, true);
     }
 
 
