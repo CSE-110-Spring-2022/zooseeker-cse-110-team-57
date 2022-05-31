@@ -339,10 +339,11 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         going_forward = false;
         if (order >= 0) {
+            int order_change = order;
             if (order >= orderedAnimalList_IDs.size()){
-                order = orderedAnimalList_IDs.size()-1;
+                order_change = orderedAnimalList_IDs.size()-1;
             }
-            boolean needUpdate = isNeedUpdate(order);
+            boolean needUpdate = isNeedUpdate(order_change);
             if (needUpdate){
                 updateRoute(order, going_forward, Coords.currentLocationCoord, orderedAnimalList_IDs);
             }
