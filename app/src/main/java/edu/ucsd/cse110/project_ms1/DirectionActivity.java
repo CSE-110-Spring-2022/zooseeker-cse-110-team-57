@@ -308,7 +308,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
                 updateRoute(order, going_forward, Coords.currentLocationCoord, orderedAnimalList_IDs);
             }
             else{
-                display(order, false);
+                display(order, true);
             }
         }
         //in case we have bug
@@ -593,16 +593,20 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     //act when use GPS
     public void onGPSButtonClick(View view){
         // If GPS is enabled, then update the model from the Location service.
-        useLocationService = true;
-        var permissionChecker = new LocationPermissionChecker(this);
-        permissionChecker.ensurePermissions();
+//        useLocationService = true;
+//        var permissionChecker = new LocationPermissionChecker(this);
+//        permissionChecker.ensurePermissions();
+//
+//        var locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+//        var provider = LocationManager.GPS_PROVIDER;
+//        viewModel.addLocationProviderSource(locationManager, provider);
+//        viewModel.getLastKnownCoords().observe(this, (coord) -> {
+//            Log.i(TAG, String.format("Observing location model update to %s", coord));
+//        });
 
-        var locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        var provider = LocationManager.GPS_PROVIDER;
-        viewModel.addLocationProviderSource(locationManager, provider);
-        viewModel.getLastKnownCoords().observe(this, (coord) -> {
-            Log.i(TAG, String.format("Observing location model update to %s", coord));
-        });
+        Log.i("order",Integer.toString(order));
+        Log.i("route status", String.join(", ", orderedAnimalList_IDs));
+
     }
 
     //mock a single point
