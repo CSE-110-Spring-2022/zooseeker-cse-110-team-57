@@ -389,7 +389,7 @@ public class DirectionHelper {
 
         //Path 2: from current to streetGoal to Destination
         second_path = AnimalItem.distance_between_coords(current, streetGoal_Coord);
-        first_path += AnimalItem.adapted_find_shortest_path(AnimalItem.gInfo,
+        second_path += AnimalItem.adapted_find_shortest_path(AnimalItem.gInfo,
                 streetGoal.id, Destination.id).getWeight();
 
         //return the shorter path
