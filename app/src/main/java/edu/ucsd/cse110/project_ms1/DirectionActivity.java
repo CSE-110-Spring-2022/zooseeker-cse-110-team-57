@@ -5,13 +5,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,18 +21,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import edu.ucsd.cse110.project_ms1.location.Coord;
 import edu.ucsd.cse110.project_ms1.location.Coords;
 import edu.ucsd.cse110.project_ms1.location.LocationModel;
 import edu.ucsd.cse110.project_ms1.location.LocationModelFactory;
-import edu.ucsd.cse110.project_ms1.location.LocationPermissionChecker;
 
 public class DirectionActivity extends AppCompatActivity implements OnLocationChangeListener {
     private static Context mContext;
@@ -374,8 +370,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     public void autoUpdate_currentLocation_mocking(int order){
         //String goal_id = (going_forward) ? orderedAnimalList_IDs.get(order + 1): orderedAnimalList_IDs.get(order);
         String goal_id = orderedAnimalList_IDs.get(order);
-        ZooData.VertexInfo goal_parent = AnimalItem.vInfo.get(AnimalItem.Latlng_ids_Map.get(goal_id));
-        Coord updateCoord = new Coord(goal_parent.lat, goal_parent.lng);
+        Coord updateCoord = getParentCoord_byID(goal_id);
         Coords.currentLocationCoord = updateCoord;
         setClosestLandmarkText();
     }
@@ -393,9 +388,10 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     @Override
     public void OnLocationChange(Coord current) {
         //update currentLocationCoord
-        Coord nearestLandmark = new Coord(AnimalItem.getClosestLandmark(current).position) ;
-        Coords.currentLocationCoord = nearestLandmark;
-        LatLngs.currentLocationLatLng = nearestLandmark.toLatLng();
+        String nearestLandmark_id = AnimalItem.getClosestLandmark(current).id;
+        Coord nearestLandmark_coord = getParentCoord_byID(nearestLandmark_id);
+        Coords.currentLocationCoord = nearestLandmark_coord;
+        LatLngs.currentLocationLatLng = nearestLandmark_coord.toLatLng();
         setClosestLandmarkText();
         //check is off_route
         boolean isOffRoute = AnimalUtilities.check_off_route(order, planned_route, Coords.currentLocationCoord.toLatLng());
@@ -414,13 +410,19 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             }
         }
     }
+
+    @NonNull
+    public static Coord getParentCoord_byID(String landmark_id) {
+        String nearestLandmark_parent_id = AnimalItem.Latlng_ids_Map.get(landmark_id);
+        ZooData.VertexInfo nearestLandmark_parent = AnimalItem.vInfo.get(nearestLandmark_parent_id);
+        return new Coord(nearestLandmark_parent.lat, nearestLandmark_parent.lng);
+    }
+
     //compare current location and path source, check if direction need update
     private boolean isNeedUpdate(int order) {
         Coord current = Coords.currentLocationCoord;
         String CurrentPathSource_id = orderedAnimalList_IDs.get(order);
-        String CurrentPathSource_parent_id = AnimalItem.Latlng_ids_Map.get(CurrentPathSource_id);
-        ZooData.VertexInfo CurrentPathSource_parent = AnimalItem.vInfo.get(CurrentPathSource_parent_id);
-        Coord CurrentPathSource_coord = new Coord(CurrentPathSource_parent.lat, CurrentPathSource_parent.lng);
+        Coord CurrentPathSource_coord = getParentCoord_byID(CurrentPathSource_id);
         boolean needUpdate = !CurrentPathSource_coord.equals(current);
         return needUpdate;
     }
@@ -617,7 +619,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         //Step 1: Create a mocking point
         // create your own Coord manually
         Coord koi_fish_coord = new Coord(32.72109826903826, -117.15952052282296);
-        
+        Coord bali_mynah_coord  = new Coord(32.73697286273083, -117.17319785958958);
+
         //Another way to create a Coord automatically
         //get 10 evenly spaced points in the line between "start" and "goal" (include "start" and "goal")
         // "start" and "goal" must be the Name of landmark
@@ -628,7 +631,9 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
 
         //Step 2.1: call mockASinglePoint function
-        mockASinglePoint(koi_fish_coord);
+        //mockASinglePoint(koi_fish_coord);
+        mockASinglePoint(bali_mynah_coord);
+
         //mockASinglePoint(point_near_start);
         //mockASinglePoint(point_near_goal);
 
