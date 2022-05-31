@@ -424,7 +424,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
                 .setPositiveButton("Yes", (dialog, id)->{
                     replan_and_save_status(currentCoord);
                     Utilities.showAlert(this, "The route is replanned.");
-                    display(order, going_forward);
+                    updateRoute(this.order, this.going_forward, currentCoord, orderedAnimalList_IDs);
                 })
                 .setNegativeButton("No",(dialog,id)->{
                     updateRoute(this.order, this.going_forward, currentCoord, orderedAnimalList_IDs);
