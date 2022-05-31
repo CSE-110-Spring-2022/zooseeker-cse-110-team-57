@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -624,9 +625,11 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
 
         //-------------------------uncomment when demo----------------------------------------
-//        Textview lat_text = findViewById(R.id.);
-//        Textview lng_text = findViewById(R.id.);
-//        Coord entered_coord = new Coord(lat_text.getText(), lng_text.getText());
+//        EditText lat_text = findViewById(R.id.Latitude_text);
+//        EditText lng_text = findViewById(R.id.Longitude_text);
+//        Double lat = Double.valueOf(lat_text.getText().toString());
+//        Double lng = Double.valueOf(lng_text.getText().toString());
+//        Coord entered_coord = new Coord(lat, lng);
 //        mockASinglePoint(entered_coord);
 
 
