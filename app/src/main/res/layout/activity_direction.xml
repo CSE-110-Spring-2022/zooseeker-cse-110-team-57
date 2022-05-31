@@ -48,7 +48,7 @@
 
     <TextView
         android:id="@+id/start_exhibit_name"
-        android:layout_width="400dp"
+        android:layout_width="0dp"
         android:layout_height="30dp"
         android:background="@color/main_theme_pink"
         android:gravity="left"
@@ -236,16 +236,12 @@
         android:id="@+id/Longitude_text"
         android:layout_width="150dp"
         android:layout_height="40dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="5dp"
         android:ems="10"
         android:hint="Longitude"
         android:inputType="numberSigned|number"
         android:textSize="10sp"
         app:layout_constraintBottom_toTopOf="@+id/replan_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.672"
-        app:layout_constraintStart_toEndOf="@+id/mock_button"
+        app:layout_constraintStart_toStartOf="@+id/Latitude_text"
         app:layout_constraintTop_toBottomOf="@+id/Latitude_text"
         app:layout_constraintVertical_bias="0.0" />
 
