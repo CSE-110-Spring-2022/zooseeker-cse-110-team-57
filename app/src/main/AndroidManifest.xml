@@ -23,10 +23,12 @@
 
         <activity
             android:name=".DirectionActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".PlanActivity"
-            android:exported="false" />
+            android:exported="false"
+            />
         <activity
             android:name=".SearchAnimalActivity"
             android:exported="false"
