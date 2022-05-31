@@ -8,21 +8,25 @@ import static java.lang.Math.abs;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import org.jgrapht.GraphPath;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import edu.ucsd.cse110.project_ms1.location.Coord;
+import edu.ucsd.cse110.project_ms1.location.Coords;
 
 public class DirectionHelper {
 
@@ -84,10 +88,10 @@ public class DirectionHelper {
     }
 
     //get the directions in detail version
-    public static List<String> detailPath(List<IdentifiedWeightedEdge> path, String start){
+    public static List<String> detailPath(List<IdentifiedWeightedEdge> path, String source_id){
         List<String> display = new ArrayList<>();
         String street = path.get(0).getId();
-        String source = start;
+        String source = AnimalItem.vInfo.get(source_id).name;
         String target = "";
         String edgeInfo = "";
         Double distance = 0.0;
@@ -120,10 +124,10 @@ public class DirectionHelper {
         return display;
     }
     //get the directions in brief version
-    public static List<String> briefPath(List<IdentifiedWeightedEdge> path, String startNode){
+    public static List<String> briefPath(List<IdentifiedWeightedEdge> path, String source_id){
         List<String> display = new ArrayList<>();
         String street = AnimalItem.eInfo.get(path.get(0).getId()).street;
-        String source = startNode;
+        String source = AnimalItem.vInfo.get(source_id).name;
         String target;
         String edgeInfo;
         Double totalDistance = 0.0;
@@ -161,6 +165,42 @@ public class DirectionHelper {
             display.add(edgeInfo);
         }
         return display;
+    }
+
+    @NonNull
+    public static String getSingleEdgeInfo(IdentifiedWeightedEdge singleEdge){
+        String street = AnimalItem.eInfo.get(singleEdge.getId()).street;
+        List<String> CloserEndpointInfo = getCloserEndpointInfo(singleEdge);
+        String target = CloserEndpointInfo.get(0);
+        String distance = CloserEndpointInfo.get(1);
+        String edgeInfo = "Proceed on \"" + street + "\" " + distance + " ft towards \"" + target + "\"";
+        return edgeInfo;
+    }
+
+    //get the closer endpoints of an edge and distance based on current location Coord
+    public static List<String> getCloserEndpointInfo(IdentifiedWeightedEdge singleEdge) {
+        List<String> CloserEndPointList = new ArrayList<>();
+        ZooData.VertexInfo singleEdge_source = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeSource(singleEdge));
+        ZooData.VertexInfo singleEdge_goal = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeTarget(singleEdge));
+        Coord singleEdge_source_coord = new Coord(singleEdge_source.lat, singleEdge_source.lng);
+        Coord singleEdge_goal_coord = new Coord(singleEdge_goal.lat, singleEdge_goal.lng);
+        double Source_distance = AnimalItem.distance_between_coords(Coords.currentLocationCoord, singleEdge_source_coord);
+        double Goal_distance = AnimalItem.distance_between_coords(Coords.currentLocationCoord, singleEdge_goal_coord);
+        if (Source_distance <= Goal_distance){
+            CloserEndPointList.add(singleEdge_source.name);
+            CloserEndPointList.add(Double.toString(Source_distance));
+        }
+        else{
+            CloserEndPointList.add(singleEdge_goal.name);
+            CloserEndPointList.add(Double.toString(Goal_distance));
+        }
+        return CloserEndPointList;
+    }
+
+
+    public static void showUpdateAlert(Context context, String street) {
+        String reminder = "The direction instruction to \"" + street + "\" has been updated.";
+        Utilities.showAlert((Activity) context, reminder);
     }
 
 
@@ -249,14 +289,14 @@ public class DirectionHelper {
         return x1 && x2 && y1 && y2;
     }
 
-    //check if user current location between the two exhibit with 0.0000000000001 threshold
+    //check if user current location between the two exhibit with 0.000001 threshold
     public static boolean onTrack(LatLng curr, LatLng nodeA, LatLng nodeB){
         //y=mx+b
 
-        //m = y2-y1/x2-x1
-        double m = findSlope(nodeA,nodeB);
-        //b = y-mx
-        double b = nodeA.longitude - m*nodeA.latitude;
+//        //m = y2-y1/x2-x1
+//        double m = findSlope(nodeA,nodeB);
+//        //b = y-mx
+//        double b = nodeA.longitude - m*nodeA.latitude;
 
         double x1 = curr.latitude - nodeA.latitude;
         double y1 = curr.longitude - nodeA.longitude;
@@ -264,12 +304,7 @@ public class DirectionHelper {
         double x2 = nodeB.latitude - nodeA.latitude;
         double y2 = nodeB.longitude - nodeA.longitude;
 
-        double cross = x1*y2 - y1*x2;
-
-        if(cross <= 0.0000000000001){
-            return true;
-        }
-        return false;
+        return Math.abs(x1*y2 - y1*x2) < 0.000001;
     }
 
     //find the slope of line that between two exhibits
@@ -282,6 +317,7 @@ public class DirectionHelper {
         //all edge that connect to the nearestExhibit
         Set<IdentifiedWeightedEdge> incomingEdges = AnimalItem.gInfo.incomingEdgesOf(nearestExhibit);
         Log.v("findCurrStreet",incomingEdges.toString());
+        IdentifiedWeightedEdge possibleEdge = incomingEdges.stream().findFirst().get();
         for (IdentifiedWeightedEdge edge : incomingEdges){
             String nodeA = AnimalItem.gInfo.getEdgeSource(edge);
             String nodeB = AnimalItem.gInfo.getEdgeTarget(edge);
@@ -293,12 +329,16 @@ public class DirectionHelper {
             //if current location on the line
             boolean onLine = onTrack(curr,LatLngA,LatLngB);
 
+            if(onRange){
+                possibleEdge = edge;
+            }
+
             if(onRange && onLine){
                 return edge;
             }
 
         }
-        return null;
+        return possibleEdge;
     }
     //getter
     public static LatLng getLatLng(String exhibit){
@@ -323,6 +363,7 @@ public class DirectionHelper {
         ZooData.VertexInfo streetGoal = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeTarget(currentStreet));
 
         //get the coord of Souce and Goal
+//        System.out.println(currentStreet.toString());
         Coord streetSource_Coord = new Coord(streetSource.lat, streetSource.lng);
         Coord streetGoal_Coord = new Coord(streetGoal.lat, streetGoal.lng);
 
@@ -337,9 +378,9 @@ public class DirectionHelper {
                 streetGoal.id, Destination.id).getWeight();
 
         //return the shorter path
-        double result = (first_path <=second_path) ? first_path : second_path;
-        return result;
+        return Math.min(first_path, second_path);
     }
+
 
 
 
