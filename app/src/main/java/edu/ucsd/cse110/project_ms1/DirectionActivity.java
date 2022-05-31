@@ -731,6 +731,9 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         List<IdentifiedWeightedEdge> updated_path = new ArrayList<>(updatePath);
         //display updated directions
         setDisplay(closestLandmark.id, nextExhibit_id, updated_path, displayStatus);
+        //show update Alert
+        String nextExhibit_name = AnimalItem.vInfo.get(nextExhibit_id).name;
+        DirectionHelper.showUpdateAlert(this, nextExhibit_name);
     }
 
 
