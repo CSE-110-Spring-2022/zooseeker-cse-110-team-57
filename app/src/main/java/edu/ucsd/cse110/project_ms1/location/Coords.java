@@ -21,6 +21,7 @@ public class Coords {
     public static final Double BASE = 100.00;
 
     public static Coord currentLocationCoord;
+    public static String curr_loc_id;
 
     /**
      * @param p1 first coordinate

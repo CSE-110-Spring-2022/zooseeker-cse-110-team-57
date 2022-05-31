@@ -390,8 +390,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     @Override
     public void OnLocationChange(Coord current) {
         //update currentLocationCoord
-        String nearestLandmark_id = AnimalItem.getClosestLandmark(current).id;
-        Coord nearestLandmark_coord = getParentCoord_byID(nearestLandmark_id);
+        Coords.curr_loc_id = AnimalItem.getClosestLandmark(current).id;
+        Coord nearestLandmark_coord = getParentCoord_byID(Coords.curr_loc_id);
         Coords.currentLocationCoord = nearestLandmark_coord;
         LatLngs.currentLocationLatLng = nearestLandmark_coord.toLatLng();
         setClosestLandmarkText();
@@ -597,7 +597,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         Log.i("order",Integer.toString(order));
         Log.i("route status", String.join(", ", orderedAnimalList_IDs));
-
+        log.i("curr position", Coords.curr_loc_id);
     }
 
     //mock a single point
