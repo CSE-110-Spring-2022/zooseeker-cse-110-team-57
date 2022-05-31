@@ -438,7 +438,9 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
                 .setMessage(message)
                 .setPositiveButton("Yes", (dialog, id)->{
                     replan_and_save_status(currentCoord);
-                    setToText(orderedAnimalList_Names.get(order + 1));
+                    String goalExhibit = (going_forward)?
+                            orderedAnimalList_Names.get(order + 1): orderedAnimalList_Names.get(order - 1);
+                    setToText(goalExhibit);
                     Utilities.showAlert(this, "The route is replanned.");
                     updateRoute(this.order, this.going_forward, currentCoord, orderedAnimalList_IDs);
                 })
@@ -689,7 +691,9 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         Coord current = Coords.currentLocationCoord;
         replan_and_save_status(current);
-
+        String goalExhibit = (going_forward)?
+                orderedAnimalList_Names.get(order + 1): orderedAnimalList_Names.get(order - 1);
+        setToText(goalExhibit);
 
         //skip last exihibit and go to gate
         if ( going_forward && order >= orderedAnimalList_Names.size() - 2){
