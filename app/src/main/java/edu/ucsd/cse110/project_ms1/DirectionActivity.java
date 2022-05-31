@@ -160,11 +160,9 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 //        Log.d("orderedAnimalList_Names",orderedAnimalList_Names.toString());
     }
 
-    public void display(int index, boolean isNext) {
-        TextView end = findViewById(R.id.goal_exhibit_name);
+    public void display(int index, boolean isGoingForward) {
         TextView next = findViewById(R.id.next_text);
         TextView prev = findViewById(R.id.previous_text);
-
         Button mockBtn = findViewById(R.id.mock_button);
         detailBtn = findViewById(R.id.detail_button);
 
@@ -178,12 +176,12 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         Log.v("sizeDisplay", " "+orderedAnimalList_IDs.size()+" ");
 
         //Set the sourceExibit and "To"
-        String endText = "To: ";
-        if (isNext){
+        String endText = null;
+        if (isGoingForward){
             source_id = orderedAnimalList_IDs.get(index);
             goal_id = orderedAnimalList_IDs.get(index+1);
             for(String child : orderedAnimalList_child.get(index+1)){
-                endText += child;
+                endText = child;
             }
 
             path = DirectionHelper.findPathBetween(source_id,goal_id);
@@ -193,18 +191,16 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             source_id = orderedAnimalList_IDs.get(index);
             goal_id = orderedAnimalList_IDs.get(index-1);
             for(String child : orderedAnimalList_child.get(index-1)){
-                endText += child;
+                endText = child;
             }
             path = DirectionHelper.findPathBetween(source_id,goal_id);
             DirectionHelper.saveDirectionsInformation(this, order, false);
         }
         setDisplay(source_id, goal_id, path, displayStatus, false);
-        Log.d("endText3",endText);
-        end.setText(endText);
+        setToText(endText);
 
 
-
-        //setting next button and next direction distance
+    //setting next button and next direction distance
         //disable the prev btn at the first page and next btn at last page.
         if (going_forward) {
             //click button
@@ -383,6 +379,12 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         start.setText(startText);
     }
 
+    private void setToText(String ToExhibit) {
+        String endText = "To: " + ToExhibit;
+        TextView end = findViewById(R.id.goal_exhibit_name);
+        end.setText(endText);
+    }
+
 
     //act when currentlocation is changed
     @Override
@@ -436,6 +438,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
                 .setMessage(message)
                 .setPositiveButton("Yes", (dialog, id)->{
                     replan_and_save_status(currentCoord);
+                    setToText(orderedAnimalList_Names.get(order + 1));
                     Utilities.showAlert(this, "The route is replanned.");
                     updateRoute(this.order, this.going_forward, currentCoord, orderedAnimalList_IDs);
                 })
@@ -449,7 +452,6 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
     public void replan_and_save_status(Coord current) {
         planned_route = AnimalUtilities.reroute(order, planned_route, current.toLatLng(), going_forward);
-
         populate_lists();
         //apply changes to display
 
@@ -460,6 +462,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             String myAnimal = myRoute_node.exhibit.name;
             animal_strings.add(myAnimal);
         }
+
         SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         String joined = String.join(",", animal_strings);
