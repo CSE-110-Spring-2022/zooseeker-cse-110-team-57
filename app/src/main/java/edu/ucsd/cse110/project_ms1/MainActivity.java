@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //--------Comment these lines if you want to direct to the page before the app is killed----------------
-        goToSearchAnimalActivity();
+        //goToSearchAnimalActivity();
         //goToPlanActivity();
         //goToDirectionActivity();
         //-----------------------------------------------------------------------------------------
