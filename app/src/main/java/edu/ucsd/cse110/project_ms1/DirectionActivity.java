@@ -177,7 +177,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     public void display(int index, boolean isGoingForward) {
         TextView next = findViewById(R.id.next_text);
         TextView prev = findViewById(R.id.previous_text);
-        Button mockBtn = findViewById(R.id.mock_button);
+        Button mockBtn = findViewById(R.id.enter_button);
         detailBtn = findViewById(R.id.detail_button);
 
         //set the directions text
