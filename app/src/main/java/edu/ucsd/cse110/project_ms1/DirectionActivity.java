@@ -366,6 +366,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     public void autoUpdate_currentLocation_mocking(int order){
         //String goal_id = (going_forward) ? orderedAnimalList_IDs.get(order + 1): orderedAnimalList_IDs.get(order);
         String goal_id = orderedAnimalList_IDs.get(order);
+        Coords.curr_loc_id = goal_id;
         Coord updateCoord = getParentCoord_byID(goal_id);
         Coords.currentLocationCoord = updateCoord;
         setClosestLandmarkText();
@@ -599,7 +600,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
         Log.i("order",Integer.toString(order));
         Log.i("route status", String.join(", ", orderedAnimalList_IDs));
-        log.i("curr position", Coords.curr_loc_id);
+        Log.i("curr position", Coords.curr_loc_id);
     }
 
     //mock a single point
@@ -746,7 +747,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             nextExhibit_id = orderedAnimalList_IDs.get(order + 1);
         }
         else{
-            nextExhibit_id = orderedAnimalList_IDs.get(order);
+            nextExhibit_id = orderedAnimalList_IDs.get(order - 1);
         }
         //get the path between closest landmark to next exhibit
         if (!closestLandmark.id.equals(nextExhibit_id)){
