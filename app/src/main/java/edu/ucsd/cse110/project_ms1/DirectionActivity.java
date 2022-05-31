@@ -719,7 +719,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             updateRoute(order, going_forward, Coords.currentLocationCoord, orderedAnimalList_IDs);
             order--;
             nextBtn.setEnabled(false);
-
+            if (planned_route.size()<=1) prevBtn.setEnabled(false);
         }
         //skip first exhibit and go back to gate
         else if (!going_forward && order <= 1){
@@ -728,6 +728,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
             updateRoute(order, going_forward, Coords.currentLocationCoord, orderedAnimalList_IDs);
             order++;
             prevBtn.setEnabled(false);
+            if (planned_route.size()<=1) prevBtn.setEnabled(false);
         }
         //normal
         else{
