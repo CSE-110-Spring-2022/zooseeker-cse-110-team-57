@@ -115,8 +115,6 @@ public class LocationModel extends AndroidViewModel {
         if (!updateCoord.equals(getCurrentCoord())) {
             mockSource.setValue(updateCoord);
             mockSource.postValue(updateCoord);
-            Coords.currentLocationCoord = updateCoord;
-            LatLngs.currentLocationLatLng = updateCoord.toLatLng();
             onLocationChangeListener.OnLocationChange(updateCoord);
         }
         /*

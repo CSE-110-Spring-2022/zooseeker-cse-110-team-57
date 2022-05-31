@@ -382,6 +382,11 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     //act when currentlocation is changed
     @Override
     public void OnLocationChange(Coord current) {
+        //update currentLocationCoord
+        Coords.currentLocationCoord = current;
+        LatLngs.currentLocationLatLng = current.toLatLng();
+        setClosestLandmarkText();
+        //check is off_route
         boolean isOffRoute = AnimalUtilities.check_off_route(order, planned_route, current.toLatLng());
         if (isOffRoute){
             showReplanAlert(this, current);
