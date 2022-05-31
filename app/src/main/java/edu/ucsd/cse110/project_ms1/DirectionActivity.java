@@ -615,7 +615,16 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         //use mocking location
         //this.useLocationService = getIntent().getBooleanExtra(EXTRA_USE_LOCATION_SERVICE, false);
         useLocationService = false;
-        //---------------mocking for test--------------------------------------------------
+
+
+        //-------------------------uncomment when demo----------------------------------------
+//        Textview lat_text = findViewById(R.id.);
+//        Textview lng_text = findViewById(R.id.);
+//        Coord entered_coord = new Coord(lat_text.getText(), lng_text.getText());
+//        mockASinglePoint(entered_coord);
+
+
+        //---------------comment when demo--------------------------------------------------
         //Step 1: Create a mocking point
         // create your own Coord manually
         Coord koi_fish_coord = new Coord(32.72109826903826, -117.15952052282296);
