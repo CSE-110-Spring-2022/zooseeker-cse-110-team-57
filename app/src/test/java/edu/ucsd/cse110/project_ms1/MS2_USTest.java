@@ -147,24 +147,34 @@ public class MS2_USTest {
         a3.add(List.of("1,2,3"));
         a3.add(List.of("1,2,3"));
 
+
+        List<route_node> nodes = AnimalItem.plan_route(AnimalItem.search_by_tag(null),
+                "entrance_exit_gate" , false);
+        while (nodes.size()!=3) nodes.remove(0);
+
         List<String> a1_copy = new ArrayList<>(a1);
         List<String> a2_copy = new ArrayList<>(a2);
         List<List<String>> a3_copy = new ArrayList<>(a3);
-        DirectionActivity.skip(true,1,a1,a2,a3, null);
+        List<route_node> nodes_copy = new ArrayList<>(nodes);
+        DirectionActivity.skip(true,1,a1,a2,a3, nodes);
         a1_copy.remove(2);
         a2_copy.remove(2);
         a3_copy.remove(2);
+        nodes_copy.remove(1);
         assertEquals(a1_copy,a1);
         assertEquals(a2_copy,a2);
         assertEquals(a3_copy,a3);
+        assertEquals(nodes, nodes_copy);
 
-        DirectionActivity.skip(false,1,a1,a2,a3, null);
-        a1_copy.remove(0);
-        a2_copy.remove(0);
-        a3_copy.remove(0);
+        DirectionActivity.skip(false,2,a1,a2,a3, nodes);
+        a1_copy.remove(1);
+        a2_copy.remove(1);
+        a3_copy.remove(1);
+        nodes_copy.remove(0);
         assertEquals(a1_copy,a1);
         assertEquals(a2_copy,a2);
         assertEquals(a3_copy,a3);
+        assertEquals(nodes, nodes_copy);
 //        System.out.println(a1);
 //        System.out.println(a2);
 //        System.out.println(a3);
