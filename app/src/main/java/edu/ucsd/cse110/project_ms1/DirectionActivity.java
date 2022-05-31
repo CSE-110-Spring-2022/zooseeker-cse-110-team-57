@@ -62,6 +62,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_direction);
+        loadProfile();
 
         //retain the DirectionActivity
         Utilities.changeCurrentActivity(this, "DirectionActivity");
@@ -141,6 +142,18 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         setClosestLandmarkText();
 
     } //Initial End
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        saveProfile();
+    }
+
+    private void saveProfile() {
+    }
+
+    private void loadProfile() {
+    }
 
     //populate lists that are used for display
     private void populate_lists() {
