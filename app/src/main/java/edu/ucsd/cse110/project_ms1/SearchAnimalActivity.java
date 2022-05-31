@@ -64,7 +64,7 @@ import javax.xml.transform.TransformerFactory;
             Utilities.changeCurrentActivity(this, "SearchAnimalActivity");
 
             //--------------Comment this line if you don't want to select animals again-------------
-            Utilities.clearSharedPreference(this);
+            //Utilities.clearSharedPreference(this);
             //----------------------------------------------------------------------------------
 
             //make "No such animal" invisible

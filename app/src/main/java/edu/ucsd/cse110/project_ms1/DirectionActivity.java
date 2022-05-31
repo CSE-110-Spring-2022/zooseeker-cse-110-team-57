@@ -775,5 +775,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
     }
 
-
+    public void onEnterButtonClick(View view) {
+        Intent intent = new Intent(this, EnterActivity.class);
+        startActivity(intent);
+    }
 }
