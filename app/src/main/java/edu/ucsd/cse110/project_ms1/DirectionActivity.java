@@ -761,6 +761,7 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
+        //call OnMockChange
         Coord gate_coord = AnimalItem.getExtranceGateCoord();
         SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
         String lat_string = sharedPreferences.getString("currentLat", Double.toString(gate_coord.lat));
