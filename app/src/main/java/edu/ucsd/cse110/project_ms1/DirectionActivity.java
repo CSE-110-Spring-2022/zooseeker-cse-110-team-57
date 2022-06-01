@@ -481,8 +481,8 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
     public void onClearButtonClick_DirectionActivity(View view) {
         clearRoute();
         Utilities.clearSharedPreference(this);
-        intent = new Intent(this, SearchAnimalActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent = new Intent();
+        setResult(Activity.RESULT_OK,intent);
         finish();
     }
 
@@ -769,6 +769,7 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
         Coord updateCoord = new Coord(Double.valueOf(lat_string), Double.valueOf(lng_string));
         OnMockChange(updateCoord);
     }
+
 
 
 }

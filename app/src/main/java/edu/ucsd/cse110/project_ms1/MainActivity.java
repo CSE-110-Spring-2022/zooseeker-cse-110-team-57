@@ -3,12 +3,14 @@ package edu.ucsd.cse110.project_ms1;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.LauncherActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int LAUNCH_SECOND_ACTIVITY = 1;
     Intent intent;
 
     @Override
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 intent = new Intent(this, SearchAnimalActivity.class);
                 break;
         }
-        startActivity(intent);
+        startActivityForResult(intent, LAUNCH_SECOND_ACTIVITY);
     }
 
     //go to SearchAnimalActivity
@@ -54,6 +56,18 @@ public class MainActivity extends AppCompatActivity {
     //go to DirectionActivity
     public void goToDirectionActivity(){
         Utilities.changeCurrentActivity(this, "DirectionActivity");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // TODO Auto-generated method stub
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == LAUNCH_SECOND_ACTIVITY)
+        {
+            if(resultCode == Activity.RESULT_OK){
+                startActivityForResult(new Intent(this,SearchAnimalActivity.class), LAUNCH_SECOND_ACTIVITY);
+            }
+        }
     }
 }
 
