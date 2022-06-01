@@ -554,6 +554,7 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
             if (NeedUpdate){
                 //show update Alert
                 String nextExhibit_name = AnimalItem.vInfo.get(goal_id).name;
+                setToText(nextExhibit_name);
                 DirectionHelper.showUpdateAlert(this, nextExhibit_name);
             }
             pathDisplay = DirectionHelper.briefPath(path, source_id);
