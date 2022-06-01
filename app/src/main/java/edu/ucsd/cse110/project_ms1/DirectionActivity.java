@@ -570,7 +570,7 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
     //load displaying status brief/detain from shared preference
     public void loadDisplayStatus() {
         SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
-        displayStatus = sharedPreferences.getBoolean("currentDisplayStatus", false);
+        displayStatus = sharedPreferences.getBoolean("currentDisplayStatus", true);
     }
 
     //save displaying status brief/detain from shared preference
