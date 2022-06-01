@@ -628,6 +628,7 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
         mockASinglePoint(entered_coord);
 
         //---------------comment when demo--------------------------------------------------
+        /*
         //Step 1: Create a mocking point
         // create your own Coord manually
         Coord koi_fish_coord = new Coord(32.72109826903826, -117.15952052282296);
@@ -652,7 +653,7 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
         //Step 2.2: call mockAListOfPoints function
         //mockAListOfPoints(TenPoints);
 
-        /*
+
         InputStream input = this.getAssets().open(MOCKING_FILE_NAME);
         List<Coord> route = ZooData.loadMockingJSON(input);
         if (route.size() == 1){
