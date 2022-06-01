@@ -28,7 +28,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/brief_path"
         android:layout_width="0dp"
-        android:layout_height="380dp"
+        android:layout_height="330dp"
         app:layout_constraintBottom_toTopOf="@+id/previous_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -38,7 +38,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/detailed_path"
         android:layout_width="0dp"
-        android:layout_height="380dp"
+        android:layout_height="330dp"
         app:layout_constraintBottom_toBottomOf="@+id/brief_path"
         app:layout_constraintEnd_toEndOf="@+id/brief_path"
         app:layout_constraintHorizontal_bias="1.0"
@@ -48,7 +48,7 @@
 
     <TextView
         android:id="@+id/start_exhibit_name"
-        android:layout_width="400dp"
+        android:layout_width="0dp"
         android:layout_height="30dp"
         android:background="@color/main_theme_pink"
         android:gravity="left"
@@ -112,27 +112,28 @@
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="85dp"
         android:layout_marginEnd="20dp"
-        android:text="Clear"
         android:onClick="onClearButtonClick_DirectionActivity"
+        android:text="Clear"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/detail_button"
         app:layout_constraintEnd_toStartOf="@id/replan_button"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/brief_path" />
+        app:layout_constraintTop_toBottomOf="@+id/brief_path"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/replan_button"
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="85dp"
         android:layout_marginEnd="5dp"
+        android:onClick="onReplanButtonClick"
         android:text="replan"
         android:textSize="20sp"
-        android:onClick="onReplanButtonClick"
         app:layout_constraintBottom_toTopOf="@+id/skip_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -161,7 +162,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="170dp"
+        android:layout_marginTop="190dp"
         android:layout_marginEnd="16dp"
         android:gravity="center"
         android:text="TextView"
@@ -175,7 +176,7 @@
         android:id="@+id/next_text"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="170dp"
+        android:layout_marginTop="190dp"
         android:layout_marginEnd="8dp"
         android:gravity="center"
         android:text="TextView"
@@ -202,34 +203,22 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <Button
-        android:id="@+id/mock_button"
-        android:layout_width="150dp"
+        android:id="@+id/enter_button"
+        android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="20dp"
-        android:onClick="onMockButtonClick"
-        android:text="Mock"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:onClick="onEnterButtonClick"
+        android:text="Enter Coordination"
         android:textSize="20dp"
         app:layout_constraintBottom_toTopOf="@+id/clear_button"
-        app:layout_constraintEnd_toStartOf="@+id/gps_button"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/brief_path"
         app:layout_constraintVertical_bias="0.0" />
 
-    <Button
-        android:id="@+id/gps_button"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        android:onClick="onGPSButtonClick"
-        android:text="GPS"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/replan_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/mock_button"
-        app:layout_constraintTop_toBottomOf="@+id/brief_path" />
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

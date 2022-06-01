@@ -3,6 +3,8 @@ package edu.ucsd.cse110.project_ms1;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -29,14 +31,14 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class MS1_12_Step_backwards_in_plan {
+public class MS1_8_route_plan_summary {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void mS1_12() {
+    public void mS1_8_route_plan_summary() {
         ViewInteraction actionMenuItemView = onView(
                 allOf(withId(R.id.search_bar_2), withContentDescription("Search"),
                         childAtPosition(
@@ -46,6 +48,17 @@ public class MS1_12_Step_backwards_in_plan {
                                 0),
                         isDisplayed()));
         actionMenuItemView.perform(click());
+
+        ViewInteraction searchAutoComplete = onView(
+                allOf(withId(androidx.appcompat.R.id.search_src_text),
+                        childAtPosition(
+                                allOf(withId(androidx.appcompat.R.id.search_plate),
+                                        childAtPosition(
+                                                withId(androidx.appcompat.R.id.search_edit_frame),
+                                                1)),
+                                0),
+                        isDisplayed()));
+        searchAutoComplete.perform(replaceText("bl"), closeSoftKeyboard());
 
         ViewInteraction materialButton = onView(
                 allOf(withId(R.id.add_to_button), withText("Add"),
@@ -57,18 +70,17 @@ public class MS1_12_Step_backwards_in_plan {
                         isDisplayed()));
         materialButton.perform(click());
 
-        ViewInteraction appCompatImageButton = onView(
-                allOf(withContentDescription("Collapse"),
+        ViewInteraction materialButton2 = onView(
+                allOf(withId(R.id.add_to_button), withText("Add"),
                         childAtPosition(
-                                allOf(withId(androidx.appcompat.R.id.action_bar),
-                                        childAtPosition(
-                                                withId(androidx.appcompat.R.id.action_bar_container),
-                                                0)),
+                                childAtPosition(
+                                        withId(R.id.all_searched_animals),
+                                        1),
                                 1),
                         isDisplayed()));
-        appCompatImageButton.perform(click());
+        materialButton2.perform(click());
 
-        ViewInteraction materialButton2 = onView(
+        ViewInteraction materialButton3 = onView(
                 allOf(withId(R.id.plan_button), withText("Plan"),
                         childAtPosition(
                                 childAtPosition(
@@ -76,49 +88,13 @@ public class MS1_12_Step_backwards_in_plan {
                                         0),
                                 4),
                         isDisplayed()));
-        materialButton2.perform(click());
-
-        ViewInteraction materialButton3 = onView(
-                allOf(withId(R.id.direction_button), withText("Directions"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
-                        isDisplayed()));
         materialButton3.perform(click());
 
-        ViewInteraction materialButton4 = onView(
-                allOf(withId(R.id.next_button), withText("NEXT"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                4),
-                        isDisplayed()));
-        materialButton4.perform(click());
-
-        ViewInteraction materialButton5 = onView(
-                allOf(withId(R.id.previous_button), withText("PREVIOUS"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                5),
-                        isDisplayed()));
-        materialButton5.perform(click());
-
         ViewInteraction textView = onView(
-                allOf(withId(R.id.goal_exhibit_name), withText("To: Crocodiles"),
+                allOf(withId(R.id.this_is_a_route_plan), withText("Route Plan"),
                         withParent(withParent(withId(android.R.id.content))),
                         isDisplayed()));
-        textView.check(matches(withText("To: Crocodiles")));
-
-        ViewInteraction textView2 = onView(
-                allOf(withId(R.id.start_exhibit_name), withText("From: Entrance and Exit Gate"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        textView2.check(matches(withText("From: Entrance and Exit Gate")));
+        textView.check(matches(withText("Route Plan")));
     }
 
     private static Matcher<View> childAtPosition(

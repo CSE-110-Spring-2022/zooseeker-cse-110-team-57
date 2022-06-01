@@ -29,14 +29,14 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class MS1_13d_Clear_the_route_plan {
+public class MS1_12_step_backwards {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void clearBtn() {
+    public void mS1_12_step_backwards() {
         ViewInteraction actionMenuItemView = onView(
                 allOf(withId(R.id.search_bar_2), withContentDescription("Search"),
                         childAtPosition(
@@ -57,6 +57,26 @@ public class MS1_13d_Clear_the_route_plan {
                         isDisplayed()));
         materialButton.perform(click());
 
+        ViewInteraction materialButton2 = onView(
+                allOf(withId(R.id.add_to_button), withText("Add"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.all_searched_animals),
+                                        1),
+                                1),
+                        isDisplayed()));
+        materialButton2.perform(click());
+
+        ViewInteraction materialButton3 = onView(
+                allOf(withId(R.id.add_to_button), withText("Add"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.all_searched_animals),
+                                        2),
+                                1),
+                        isDisplayed()));
+        materialButton3.perform(click());
+
         ViewInteraction appCompatImageButton = onView(
                 allOf(withContentDescription("Collapse"),
                         childAtPosition(
@@ -68,7 +88,7 @@ public class MS1_13d_Clear_the_route_plan {
                         isDisplayed()));
         appCompatImageButton.perform(click());
 
-        ViewInteraction materialButton2 = onView(
+        ViewInteraction materialButton4 = onView(
                 allOf(withId(R.id.plan_button), withText("Plan"),
                         childAtPosition(
                                 childAtPosition(
@@ -76,9 +96,9 @@ public class MS1_13d_Clear_the_route_plan {
                                         0),
                                 4),
                         isDisplayed()));
-        materialButton2.perform(click());
+        materialButton4.perform(click());
 
-        ViewInteraction materialButton3 = onView(
+        ViewInteraction materialButton5 = onView(
                 allOf(withId(R.id.direction_button), withText("Directions"),
                         childAtPosition(
                                 childAtPosition(
@@ -86,23 +106,23 @@ public class MS1_13d_Clear_the_route_plan {
                                         0),
                                 2),
                         isDisplayed()));
-        materialButton3.perform(click());
+        materialButton5.perform(click());
 
-        ViewInteraction materialButton4 = onView(
-                allOf(withId(R.id.clear_button), withText("Clear"),
+        ViewInteraction materialButton6 = onView(
+                allOf(withId(R.id.previous_button), withText("PREVIOUS"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                7),
+                                5),
                         isDisplayed()));
-        materialButton4.perform(click());
+        materialButton6.perform(click());
 
         ViewInteraction textView = onView(
-                allOf(withId(R.id.selected_animals_number), withText("0"),
+                allOf(withId(R.id.goal_exhibit_name), withText("To: Entrance and Exit Gate"),
                         withParent(withParent(withId(android.R.id.content))),
                         isDisplayed()));
-        textView.check(matches(withText("0")));
+        textView.check(matches(withText("To: Entrance and Exit Gate")));
     }
 
     private static Matcher<View> childAtPosition(

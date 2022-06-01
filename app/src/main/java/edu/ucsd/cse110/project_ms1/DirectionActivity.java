@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +30,8 @@ import edu.ucsd.cse110.project_ms1.location.Coords;
 import edu.ucsd.cse110.project_ms1.location.LocationModel;
 import edu.ucsd.cse110.project_ms1.location.LocationModelFactory;
 
-public class DirectionActivity extends AppCompatActivity implements OnLocationChangeListener {
+public class DirectionActivity extends AppCompatActivity implements Serializable,
+        OnLocationChangeListener{
     private static Context mContext;
     int order;
     private boolean useLocationService;
@@ -54,7 +55,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     List<route_node> planned_route;
 
     private static final String TAG = "Location6666666";
-    public static final String EXTRA_USE_LOCATION_SERVICE = "use_location_updated";
+    private static final int ACTIVITY_CONSTANT = 0;
 
 
     @Override
@@ -141,6 +142,8 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
     } //Initial End
 
+
+
     //populate lists that are used for display
     private void populate_lists() {
         orderedAnimalList_Names = new ArrayList<>();
@@ -163,7 +166,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     public void display(int index, boolean isGoingForward) {
         TextView next = findViewById(R.id.next_text);
         TextView prev = findViewById(R.id.previous_text);
-        Button mockBtn = findViewById(R.id.mock_button);
+        Button mockBtn = findViewById(R.id.enter_button);
         detailBtn = findViewById(R.id.detail_button);
 
         //set the directions text
@@ -566,16 +569,17 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
     //load displaying status brief/detain from shared preference
     public void loadDisplayStatus() {
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        displayStatus = preferences.getBoolean("DISPLAYSTATUS", true);
+        SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
+        displayStatus = sharedPreferences.getBoolean("currentDisplayStatus", false);
     }
 
     //save displaying status brief/detain from shared preference
     public void saveDisplayStatus() {
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("DISPLAYSTATUS", !displayStatus);
+        SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("currentDisplayStatus", !displayStatus);
         displayStatus = !displayStatus;
+        editor.commit();
         editor.apply();
     }
 
@@ -616,18 +620,12 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         return myfuture;
     }
 
-    //act when mock button is clicked
-    public void onMockButtonClick(View view) throws IOException {
+
+    public void OnMockChange(Coord entered_coord) {
         //use mocking location
         //this.useLocationService = getIntent().getBooleanExtra(EXTRA_USE_LOCATION_SERVICE, false);
         useLocationService = false;
-
-
-        //-------------------------uncomment when demo----------------------------------------
-//        Textview lat_text = findViewById(R.id.);
-//        Textview lng_text = findViewById(R.id.);
-//        Coord entered_coord = new Coord(lat_text.getText(), lng_text.getText());
-//        mockASinglePoint(entered_coord);
+        mockASinglePoint(entered_coord);
 
 
         //---------------comment when demo--------------------------------------------------
@@ -655,12 +653,6 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         //Step 2.2: call mockAListOfPoints function
         //mockAListOfPoints(TenPoints);
 
-        //Step 3: check if Coords.currentCoord updates
-        if (Coords.currentLocationCoord.equals(koi_fish_coord)){
-            Log.d("koi_fish_coord", "Yes");
-        }
-
-        //-------------------uncomment these lines when demo----------------------------------
         /*
         InputStream input = this.getAssets().open(MOCKING_FILE_NAME);
         List<Coord> route = ZooData.loadMockingJSON(input);
@@ -673,6 +665,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
          */
         //------------------------------------------------------------------------------
     }
+
 
     //directly replan the route
     public void onReplanButtonClick(View view) {
@@ -756,6 +749,26 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         List<IdentifiedWeightedEdge> updated_path = new ArrayList<>(updatePath);
         //display updated directions
         setDisplay(closestLandmark.id, nextExhibit_id, updated_path, displayStatus, true);
+
+    }
+
+    public void onEnterButtonClick(View view) {
+        Intent intent = new Intent(this, EnterActivity.class);
+        startActivityForResult(intent,ACTIVITY_CONSTANT);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        Coord gate_coord = AnimalItem.getExtranceGateCoord();
+        TextView lat_text = findViewById(R.id.Latitude_text);
+        TextView lng_text = findViewById(R.id.Longitude_text);
+        SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
+        String lat_string = sharedPreferences.getString("currentLat", Double.toString(gate_coord.lat));
+        String lng_string = sharedPreferences.getString("currentLat", Double.toString(gate_coord.lng));
+        Coord updateCoord = new Coord(Double.valueOf(lat_string), Double.valueOf(lng_string));
+        OnMockChange(updateCoord);
 
     }
 

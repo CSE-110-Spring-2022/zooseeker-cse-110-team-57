@@ -1,4 +1,5 @@
 package edu.ucsd.cse110.project_ms1;
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -175,14 +176,8 @@ public class MS2_USTest {
         assertEquals(a2_copy,a2);
         assertEquals(a3_copy,a3);
         assertEquals(nodes, nodes_copy);
-//        System.out.println(a1);
-//        System.out.println(a2);
-//        System.out.println(a3);
-//        System.out.println(a1_copy);
-//        System.out.println(a2_copy);
-//        System.out.println(a3_copy);
-
     }
+
     @Test
     public void getEntranceGateCoord_test(){
         ActivityScenario<SearchAnimalActivity> scenario = searchScenarioRule.getScenario();
@@ -315,18 +310,10 @@ public class MS2_USTest {
         LatLng latlng = new LatLng(32.73561,-117.14936);
         boolean going_forward =  true;
         ArrayList<AnimalItem> animalItemArrayList = new ArrayList<>();
-        AnimalItem a1 = new AnimalItem("orangutan",
-                new ArrayList<>(),
-                "Orangutans",
-                new LatLng(32.736864688333235,-117.16364410510093));
-        AnimalItem a2 = new AnimalItem("siamang",
-                new ArrayList<>(),
-                "Siamangs",
-                new LatLng(32.736864688333235,-117.16079397323202));
-        AnimalItem a3 = new AnimalItem("toucan",
-                new ArrayList<>(),
-                "Toucan",
-                new LatLng(32.736864688333235,-117.16079397323202));
+
+        AnimalItem a1 = AnimalItem.search_by_tag("Orangutans").get(0);
+        AnimalItem a2 = AnimalItem.search_by_tag("Siamangs").get(0);
+        AnimalItem a3 = AnimalItem.search_by_tag("Toucan").get(0);
         AnimalItem a4 = new AnimalItem("entrance_exit_gate",
                 new ArrayList<>(),
                 "Entrance and Exit Gate",
@@ -343,19 +330,21 @@ public class MS2_USTest {
         // optimized route
         List<route_node> route = AnimalItem.plan_route(animalItemArrayList, a4.id, false);
 
+
+        route.remove(2);
+
         for (route_node node : route){
             System.out.println(node.names);
         }
-
-        route.remove(2);
 
         // reroute on order i
         List<route_node> r = AnimalUtilities.reroute(1,  route, latlng, going_forward);
         for (route_node node : r){
             System.out.println(node.names);
         }
-        //wait for reroute
-        //??
+        for (int i =0 ;i<route.size(); i++){
+            assertEquals(route.get(i).names, r.get(i).names);
+        }
     }
 
 
@@ -366,36 +355,30 @@ public class MS2_USTest {
         String gPath = "zoo_graph.json";
         Context context = ApplicationProvider.getApplicationContext();
 
-        LatLng latlng = new LatLng(32,-117);
-        boolean going_forward =  true;
         ArrayList<AnimalItem> animalItemArrayList = new ArrayList<>();
-        AnimalItem a1 = new AnimalItem("orangutan",
-                new ArrayList<>(),
-                "Orangutans",
-                new LatLng(32.736864688333235,-117.16364410510093));
-        AnimalItem a2 = new AnimalItem("siamang",
-                new ArrayList<>(),
-                "Siamangs",
-                new LatLng(32.736864688333235,-117.16079397323202));
-        AnimalItem a3 = new AnimalItem("toucan",
-                new ArrayList<>(),
-                "Toucan",
-                new LatLng(32.736864688333235,-117.16079397323202));
-        AnimalItem a4 = new AnimalItem("entrance_exit_gate",
-                new ArrayList<>(),
-                "Entrance and Exit Gate",
-                new LatLng(32.73561,-117.14936));
+        AnimalItem a1  = AnimalItem.search_by_tag("Orangutans").get(0);
+        AnimalItem a2 = AnimalItem.search_by_tag("Siamangs").get(0);
+        AnimalItem a3 = AnimalItem.search_by_tag("Toucan").get(0);
 
         AnimalItem.loadInfo(context, vPath, ePath, gPath);
 
         animalItemArrayList.add(a1);
         animalItemArrayList.add(a2);
         animalItemArrayList.add(a3);
-        animalItemArrayList.add(a4);
 
 
-        String result = AnimalUtilities.find_starting_point(animalItemArrayList,new LatLng(32.73561,-117.14936));
-        System.out.println(result);
+        String r1 = AnimalUtilities.find_starting_point(animalItemArrayList,
+                new LatLng(32.73561,-117.14936));//Entrance
+        assertEquals(a2.id,r1);
+
+        String r2 = AnimalUtilities.find_starting_point(animalItemArrayList,
+                new LatLng(32.7379,-117.1694));//Owens
+        assertEquals(a3.id,r2);
+
+        String r3 = AnimalUtilities.find_starting_point(animalItemArrayList,
+                new LatLng(32.7463,-117.1665));//Crocodiles
+        assertEquals(a3.id,r3);
+
     }
 
     @Test
@@ -407,32 +390,27 @@ public class MS2_USTest {
         Context context = ApplicationProvider.getApplicationContext();
 
         LatLng latlng = new LatLng(32,-117);
-        boolean going_forward =  true;
+
         ArrayList<AnimalItem> animalItemArrayList = new ArrayList<>();
-        AnimalItem a1 = new AnimalItem("orangutan",
-                new ArrayList<>(),
-                "Orangutans",
-                new LatLng(32.736864688333235,-117.16364410510093));
-        AnimalItem a2 = new AnimalItem("siamang",
-                new ArrayList<>(),
-                "Siamangs",
-                new LatLng(32.736864688333235,-117.16079397323202));
-        AnimalItem a3 = new AnimalItem("toucan",
-                new ArrayList<>(),
-                "Toucan",
-                new LatLng(32.736864688333235,-117.16079397323202));
+        AnimalItem a1  = AnimalItem.search_by_tag("Orangutans").get(0);
+        AnimalItem a2 = AnimalItem.search_by_tag("Flamingos").get(0);
+        AnimalItem a3 = AnimalItem.search_by_tag("Koi Fish").get(0);
         AnimalItem a4 = new AnimalItem("entrance_exit_gate",
                 new ArrayList<>(),
                 "Entrance and Exit Gate",
                 new LatLng(32.73561,-117.14936));
 
         AnimalItem.loadInfo(context, vPath, ePath, gPath);
-
         animalItemArrayList.add(a1);
         animalItemArrayList.add(a2);
         animalItemArrayList.add(a3);
-
         List<route_node> route = AnimalItem.plan_route(animalItemArrayList,a4.id, false);
+        for (route_node r: route){
+            System.out.println(r.names);
+        }
+        boolean b = AnimalUtilities.check_off_route(2,route,
+                new LatLng(32.7463,-117.1665));
+        assertFalse(b);
     }
 
 
