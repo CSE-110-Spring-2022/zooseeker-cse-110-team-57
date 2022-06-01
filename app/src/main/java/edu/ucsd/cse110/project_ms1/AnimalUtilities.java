@@ -77,16 +77,21 @@ public class AnimalUtilities {
         if (going_forward) {
             while (visiting_order < route.size() - 1) {
 
-
-                left_animal_items.add(route.get(visiting_order ).exhibit);
+                route_node r = route.get(visiting_order );
+                for (int i =0; i<r.names.size(); i++){
+                    left_animal_items.add(new AnimalItem(r.ids.get(i),null,r.names.get(i),null));
+                }
                 route.remove(visiting_order );
             }
             route.remove(route.size()-1); //remove the gate, because it will be generated later
         } else {
 
-            for (int i = 0; i < visiting_order-1; i++) {
+            for (int k = 0; k < visiting_order-1; k++) {
 
-                left_animal_items.add(route.get(0).exhibit);
+                route_node r = route.get(0 );
+                for (int i =0; i<r.names.size(); i++){
+                    left_animal_items.add(new AnimalItem(r.ids.get(i),null,r.names.get(i),null));
+                }
                 route.remove(0);
             }
         }

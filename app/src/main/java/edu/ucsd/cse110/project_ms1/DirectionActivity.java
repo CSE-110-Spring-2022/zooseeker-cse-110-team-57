@@ -94,7 +94,17 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
         }
 
         //remove the Entrance and Exit Gate
-        orderedAnimal.remove(orderedAnimal.size() - 1);
+        int size = orderedAnimal.size();
+        int k=0;
+        for (int i=0; i<size; i++){
+
+            if (orderedAnimal.get(k).equals("Entrance and Exit Gate")) {
+                orderedAnimal.remove(k);
+                k--;
+            }
+            k++;
+        }
+//        orderedAnimal.remove(orderedAnimal.size() - 1);
         animalItems = DirectionHelper.loadAnimalItem(this, orderedAnimal);
 
         //find the shortest Path by given ordered route.
