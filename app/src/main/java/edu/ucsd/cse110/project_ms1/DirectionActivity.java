@@ -570,7 +570,7 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
     //load displaying status brief/detain from shared preference
     public void loadDisplayStatus() {
         SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
-        displayStatus = sharedPreferences.getBoolean("currentDisplayStatus", false);
+        displayStatus = sharedPreferences.getBoolean("currentDisplayStatus", true);
     }
 
     //save displaying status brief/detain from shared preference
@@ -769,7 +769,6 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
         String lng_string = sharedPreferences.getString("currentLat", Double.toString(gate_coord.lng));
         Coord updateCoord = new Coord(Double.valueOf(lat_string), Double.valueOf(lng_string));
         OnMockChange(updateCoord);
-
     }
 
 
