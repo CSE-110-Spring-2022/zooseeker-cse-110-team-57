@@ -53,7 +53,7 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
     RecyclerView direction_recyclerView;
     List<String> orderedAnimalList_Names;
     List<String> orderedAnimalList_IDs;
-    List<List<String>> orderedAnimalList_child;
+    List<String> orderedAnimalList_child;
     List<AnimalItem> animalItems;
     List<route_node> planned_route;
 
@@ -90,7 +90,17 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
         }
 
         //remove the Entrance and Exit Gate
-        orderedAnimal.remove(orderedAnimal.size() - 1);
+        int size = orderedAnimal.size();
+        int k=0;
+        for (int i=0; i<size; i++){
+
+            if (orderedAnimal.get(k).equals("Entrance and Exit Gate")) {
+                orderedAnimal.remove(k);
+                k--;
+            }
+            k++;
+        }
+//        orderedAnimal.remove(orderedAnimal.size() - 1);
         animalItems = DirectionHelper.loadAnimalItem(this, orderedAnimal);
 
         //find the shortest Path by given ordered route.
@@ -150,14 +160,14 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
         for(route_node node : planned_route){
             orderedAnimalList_Names.add(node.exhibit.name);
             orderedAnimalList_IDs.add(node.exhibit.id);
-            orderedAnimalList_child.add(node.names);
+            orderedAnimalList_child.add(node.get_concat_names());
 
         }
 
         //we need add the front gate into orderedAnimalList, so that route begin at gate
         orderedAnimalList_Names.add(0, "Entrance and Exit Gate");
         orderedAnimalList_IDs.add(0, "entrance_exit_gate");
-        orderedAnimalList_child.add(0, Arrays.asList("Entrance and Exit Gate"));
+        orderedAnimalList_child.add(0, "Entrance and Exit Gate");
 //        Log.d("orderedAnimalList_Names",orderedAnimalList_Names.toString());
     }
 
@@ -180,9 +190,7 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
         if (isGoingForward){
             source_id = orderedAnimalList_IDs.get(index);
             goal_id = orderedAnimalList_IDs.get(index+1);
-            for(String child : orderedAnimalList_child.get(index+1)){
-                endText = child;
-            }
+            endText = orderedAnimalList_child.get(index+1);
 
             path = DirectionHelper.findPathBetween(source_id,goal_id);
             DirectionHelper.saveDirectionsInformation(this, order, true);
@@ -190,9 +198,7 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
         else{
             source_id = orderedAnimalList_IDs.get(index);
             goal_id = orderedAnimalList_IDs.get(index-1);
-            for(String child : orderedAnimalList_child.get(index-1)){
-                endText = child;
-            }
+            endText = orderedAnimalList_child.get(index-1);
             path = DirectionHelper.findPathBetween(source_id,goal_id);
             DirectionHelper.saveDirectionsInformation(this, order, false);
         }
@@ -440,7 +446,7 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
                 .setPositiveButton("Yes", (dialog, id)->{
                     replan_and_save_status(currentCoord);
                     String goalExhibit = (going_forward)?
-                            orderedAnimalList_Names.get(order + 1): orderedAnimalList_Names.get(order - 1);
+                            orderedAnimalList_child.get(order + 1): orderedAnimalList_child.get(order - 1);
                     setToText(goalExhibit);
                     Utilities.showAlert(this, "The route is replanned.");
                     updateRoute(this.order, this.going_forward, currentCoord, orderedAnimalList_IDs);
@@ -462,8 +468,8 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
         //save to SharedPreferences
         List<String> animal_strings = new ArrayList<>();
         for (route_node myRoute_node : planned_route) {
-            String myAnimal = myRoute_node.exhibit.name;
-            animal_strings.add(myAnimal);
+            for (String myAnimal : myRoute_node.names)
+                animal_strings.add(myAnimal);
         }
 
         SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
@@ -636,7 +642,7 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
         Coord current = Coords.currentLocationCoord;
         replan_and_save_status(current);
         String goalExhibit = (going_forward)?
-                orderedAnimalList_Names.get(order + 1): orderedAnimalList_Names.get(order - 1);
+                orderedAnimalList_child.get(order + 1): orderedAnimalList_child.get(order - 1);
         setToText(goalExhibit);
 
         //skip last exihibit and go to gate
@@ -669,7 +675,7 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
     }
 
     //skip the current animal
-    public static void skip(boolean going_forward, int order, List<String> a1, List<String> a2, List<List<String>> a3, List<route_node> route_nodeList) {
+    public static void skip(boolean going_forward, int order, List<String> a1, List<String> a2, List<String> a3, List<route_node> route_nodeList) {
         int index_remove;
         if (going_forward) index_remove=order+1;
         else index_remove = order-1;
