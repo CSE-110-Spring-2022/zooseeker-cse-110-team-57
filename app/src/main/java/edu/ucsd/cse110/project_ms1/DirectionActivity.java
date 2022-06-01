@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,7 +29,7 @@ import edu.ucsd.cse110.project_ms1.location.Coords;
 import edu.ucsd.cse110.project_ms1.location.LocationModel;
 import edu.ucsd.cse110.project_ms1.location.LocationModelFactory;
 
-public class DirectionActivity extends AppCompatActivity implements OnLocationChangeListener {
+public class DirectionActivity extends AppCompatActivity implements OnLocationChangeListener, OnMockChangeListener {
     private static Context mContext;
     int order;
     private boolean useLocationService;
@@ -62,7 +60,6 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_direction);
-        loadProfile();
 
         //retain the DirectionActivity
         Utilities.changeCurrentActivity(this, "DirectionActivity");
@@ -143,17 +140,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
     } //Initial End
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        saveProfile();
-    }
 
-    private void saveProfile() {
-    }
-
-    private void loadProfile() {
-    }
 
     //populate lists that are used for display
     private void populate_lists() {
@@ -580,16 +567,17 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
     //load displaying status brief/detain from shared preference
     public void loadDisplayStatus() {
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        displayStatus = preferences.getBoolean("DISPLAYSTATUS", false);
+        SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
+        displayStatus = sharedPreferences.getBoolean("currentDisplayStatus", false);
     }
 
     //save displaying status brief/detain from shared preference
     public void saveDisplayStatus() {
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("DISPLAYSTATUS", !displayStatus);
+        SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("currentDisplayStatus", !displayStatus);
         displayStatus = !displayStatus;
+        editor.commit();
         editor.apply();
     }
 
@@ -630,20 +618,12 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         return myfuture;
     }
 
-    //act when mock button is clicked
-    public void onMockButtonClick(View view) throws IOException {
+    @Override
+    public void OnMockChange(Coord entered_coord) {
         //use mocking location
         //this.useLocationService = getIntent().getBooleanExtra(EXTRA_USE_LOCATION_SERVICE, false);
         useLocationService = false;
-
-
-        //-------------------------uncomment when demo----------------------------------------
-//        EditText lat_text = findViewById(R.id.Latitude_text);
-//        EditText lng_text = findViewById(R.id.Longitude_text);
-//        Double lat = Double.valueOf(lat_text.getText().toString());
-//        Double lng = Double.valueOf(lng_text.getText().toString());
-//        Coord entered_coord = new Coord(lat, lng);
-//        mockASinglePoint(entered_coord);
+        mockASinglePoint(entered_coord);
 
 
         //---------------comment when demo--------------------------------------------------
@@ -671,12 +651,6 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         //Step 2.2: call mockAListOfPoints function
         //mockAListOfPoints(TenPoints);
 
-        //Step 3: check if Coords.currentCoord updates
-        if (Coords.currentLocationCoord.equals(koi_fish_coord)){
-            Log.d("koi_fish_coord", "Yes");
-        }
-
-        //-------------------uncomment these lines when demo----------------------------------
         /*
         InputStream input = this.getAssets().open(MOCKING_FILE_NAME);
         List<Coord> route = ZooData.loadMockingJSON(input);
@@ -689,6 +663,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
          */
         //------------------------------------------------------------------------------
     }
+
 
     //directly replan the route
     public void onReplanButtonClick(View view) {
@@ -779,4 +754,6 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         Intent intent = new Intent(this, EnterActivity.class);
         startActivity(intent);
     }
+
+
 }

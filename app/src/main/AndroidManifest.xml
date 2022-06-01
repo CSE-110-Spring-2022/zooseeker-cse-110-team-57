@@ -17,7 +17,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project_MS1">
         <activity
-            android:name=".Enter"
+            android:name=".EnterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".EnterActivit"
             android:exported="false" />
 
         <meta-data

@@ -14,10 +14,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_animal);
+        setContentView(R.layout.activity_main);
 
         //--------Comment these lines if you want to direct to the page before the app is killed----------------
-        //goToSearchAnimalActivity();
+        goToSearchAnimalActivity();
         //goToPlanActivity();
         //goToDirectionActivity();
         //-----------------------------------------------------------------------------------------

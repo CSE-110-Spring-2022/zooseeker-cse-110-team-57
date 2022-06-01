@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Enter">
+    tools:context=".EnterActivity">
+
 
     <EditText
         android:id="@+id/Latitude_text"
@@ -31,13 +32,16 @@
         app:layout_constraintTop_toBottomOf="@+id/Latitude_text" />
 
     <Button
-        android:id="@+id/mock"
+        android:id="@+id/mock_button"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginBottom="100dp"
         android:width="250dp"
         android:text="mock"
+        android:textSize="20dp"
+        android:onClick="onMockButtonClick"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
