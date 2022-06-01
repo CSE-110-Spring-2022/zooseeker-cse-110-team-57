@@ -53,6 +53,7 @@ public class EnterActivity extends AppCompatActivity implements Serializable {
     }
 
     public void onMockButtonClick(View view){
+        saveEnteredCoord();
         Intent intent = new Intent();
         setResult(RESULT_OK, intent);
         finish();
@@ -61,7 +62,6 @@ public class EnterActivity extends AppCompatActivity implements Serializable {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        saveEnteredCoord();
     }
 
     private void saveEnteredCoord() {
