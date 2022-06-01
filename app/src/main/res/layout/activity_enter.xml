@@ -28,7 +28,7 @@
         android:layout_marginBottom="176dp"
         android:width="250dp"
         android:onClick="onMockButtonClick"
-        android:text="mock"
+        android:text="Mock this Coordination"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

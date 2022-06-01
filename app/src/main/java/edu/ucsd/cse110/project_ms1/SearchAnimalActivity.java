@@ -162,6 +162,7 @@ import javax.xml.transform.TransformerFactory;
             selectedAnimalNameStringSet.remove("currentOrder");
             selectedAnimalNameStringSet.remove("currentIsNext");
             selectedAnimalNameStringSet.remove("currentDisplayStatus");
+            selectedAnimalNameStringSet.remove("currentServiceStatus");
             selectedAnimalNameStringSet.remove("currentLat");
             selectedAnimalNameStringSet.remove("currentLng");
             selectedAnimalNameStringSet.remove("route");
