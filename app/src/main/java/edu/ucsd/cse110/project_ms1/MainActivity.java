@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         goToSearchAnimalActivity();
         //goToPlanActivity();
         //goToDirectionActivity();
+        //goToEnterActivity();
         //-----------------------------------------------------------------------------------------
 
         //restore the current activity
@@ -31,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case "DirectionActivity":
                 intent = new Intent(this, DirectionActivity.class);
+                break;
+            case "EnterActivity":
+                intent = new Intent(this, EnterActivity.class);
                 break;
             default:
                 intent = new Intent(this, SearchAnimalActivity.class);
@@ -50,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
     //go to DirectionActivity
     public void goToDirectionActivity(){
         Utilities.changeCurrentActivity(this, "DirectionActivity");
+    }
+    //go to EnterActivity
+    public void goToEnterActivity(){
+        Utilities.changeCurrentActivity(this, "EnterActivity");
     }
 }
 
