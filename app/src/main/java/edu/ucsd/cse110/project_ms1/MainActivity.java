@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
                 intent = new Intent(this, PlanActivity.class);
                 break;
             case "DirectionActivity":
+            case "EnterActivity":
                 intent = new Intent(this, DirectionActivity.class);
                 break;
             default:
@@ -53,10 +54,6 @@ public class MainActivity extends AppCompatActivity {
     //go to DirectionActivity
     public void goToDirectionActivity(){
         Utilities.changeCurrentActivity(this, "DirectionActivity");
-    }
-    //go to EnterActivity
-    public void goToEnterActivity(){
-        Utilities.changeCurrentActivity(this, "EnterActivity");
     }
 }
 
