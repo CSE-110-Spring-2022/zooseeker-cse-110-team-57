@@ -34,6 +34,7 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
         OnLocationChangeListener{
     private static Context mContext;
     int order;
+    boolean serviceStatus;
     private boolean useLocationService;
     boolean displayStatus;
     // which direction of the user is going: forward/backward
@@ -147,6 +148,9 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
 
         // display status
         loadDisplayStatus();
+        loadServiceStatus();
+        Button EnterButton = findViewById(R.id.enter_button);
+        EnterButton.setEnabled(false);
         display(order, going_forward);
         setClosestLandmarkText();
 
@@ -566,6 +570,43 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
         }
         direction_adapter.setDirectionsStringList(pathDisplay);
     }
+
+    public void onServiceButtonClick(View view){
+        saveServiceStatus();
+        String message = (serviceStatus)?
+                "You switch to Mock mode. Press ENTER button to mock a point.":
+                "You switch to GPS mode. ENTER button is set disabled.";
+        Utilities.showAlert(this, message);
+        setLocationServiceTextDisplay();
+    }
+
+    private void loadServiceStatus() {
+        SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
+        serviceStatus = sharedPreferences.getBoolean("currentServiceStatus", true);
+    }
+
+    public void setLocationServiceTextDisplay() {
+        Button serviceBtn = findViewById(R.id.service_button);
+        Button EnterButton = findViewById(R.id.enter_button);
+        if (serviceStatus) {
+            serviceBtn.setText("GPS");
+            EnterButton.setEnabled(true);
+        }
+        else {
+            serviceBtn.setText("MOCK");
+            EnterButton.setEnabled(false);
+        }
+    }
+
+    private void saveServiceStatus() {
+        SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("currentServiceStatus", !serviceStatus);
+        serviceStatus = !serviceStatus;
+        editor.commit();
+        editor.apply();
+    }
+
 
     //show update total distance
     private void showUpdateTotalDistance(Double updateDistance) {
