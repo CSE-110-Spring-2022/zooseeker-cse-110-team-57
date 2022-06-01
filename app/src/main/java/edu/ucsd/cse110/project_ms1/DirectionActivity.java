@@ -526,12 +526,15 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
         List<String> pathDisplay = new ArrayList<>();
         Double updateDistance = 0.0;
         if (path.size() == 0){
+            String goal_name = AnimalItem.vInfo.get(goal_id).name;
+            setToText(goal_name);
             pathDisplay.add("You have already been there. No need to move.");
         }
         else{
             if (NeedUpdate){
                 //show update Alert
                 String nextExhibit_name = AnimalItem.vInfo.get(goal_id).name;
+                setToText(nextExhibit_name);
                 DirectionHelper.showUpdateAlert(this, nextExhibit_name);
             }
             pathDisplay = DirectionHelper.detailPath(path, source_id);
@@ -548,6 +551,8 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
         List<String> pathDisplay = new ArrayList<>();
         Double updateDistance = 0.0;
         if (path.size() == 0){
+            String goal_name = AnimalItem.vInfo.get(goal_id).name;
+            setToText(goal_name);
             pathDisplay.add("You have already been there. No need to move.");
         }
         else {
