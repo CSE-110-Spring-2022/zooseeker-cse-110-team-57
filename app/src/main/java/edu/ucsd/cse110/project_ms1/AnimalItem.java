@@ -314,21 +314,44 @@ public class AnimalItem {
     }
      */
     @Nullable
-    public static AnimalItem getClosestLandmark(Coord current) {
-        //find the current street
-        List<AnimalItem> all_landmarks = AnimalItem.search_by_tag(null) ;
-        all_landmarks.add(AnimalItem.gate);
-        AnimalItem closestName = null;
+    public static List<String> getClosestLandmark(Coord current) {
+        ZooData.VertexInfo closestVertex = null;
         double min = 999999999;
-        for (AnimalItem currentLandmark : all_landmarks){
-            double currentDis = AnimalUtilities.get_distance(current.toLatLng(), currentLandmark);
-            if (currentDis < min){
-                min = currentDis;
-                closestName = currentLandmark;
+        List<ZooData.VertexInfo> all_landmarks_has_coord = getLandmark_hasCoord();
+        for (ZooData.VertexInfo landmark_vertex : all_landmarks_has_coord){
+            Coord landmark_coord = new Coord(landmark_vertex.lat, landmark_vertex.lng);
+            if (landmark_coord.equals(current)){
+                closestVertex = landmark_vertex;
+                break;
+            }
+            else{
+                double currentDis = distance_between_coords(landmark_coord, current);
+                if (currentDis < min){
+                    min = currentDis;
+                    closestVertex = landmark_vertex;
+                }
             }
         }
-        return closestName;
+        List<String> retval = new ArrayList<>();
+        //first is id, second is name
+        retval.add(closestVertex.id);
+        retval.add(closestVertex.name);
+//        AnimalItem landmark_AnimalItem = AnimalItem.search_by_tag(closestVertex.id).get(0);
+        return retval;
     }
+
+    @NonNull
+    private static List<ZooData.VertexInfo> getLandmark_hasCoord() {
+        List<ZooData.VertexInfo> all_landmarks_has_coord = new ArrayList<>();
+        for (Map.Entry<String, ZooData.VertexInfo> set : vInfo.entrySet()) {
+            ZooData.VertexInfo current_vertex = set.getValue();
+            if (current_vertex.lat != null){
+                all_landmarks_has_coord.add(current_vertex);
+            }
+        }
+        return all_landmarks_has_coord;
+    }
+
 
 }
 
