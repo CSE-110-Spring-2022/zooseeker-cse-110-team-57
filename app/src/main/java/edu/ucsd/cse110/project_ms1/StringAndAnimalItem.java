@@ -35,10 +35,11 @@ import javax.xml.transform.TransformerFactory;
 
 public class StringAndAnimalItem {
 
+    //Animal to String
     public String AnimalItemToString(AnimalItem animalItem){
         return new Gson().toJson(animalItem);
     }
-
+    //String to AnimalItem
     public AnimalItem StringToAnimalItem(String animalItem){
         Gson g = new Gson();
         AnimalItem currentAnimalItem = g.fromJson(animalItem, AnimalItem.class);

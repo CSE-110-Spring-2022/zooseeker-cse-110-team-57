@@ -49,7 +49,7 @@ public class LatLngs {
                 (l1.longitude + l2.longitude) / 2
         );
     }
-
+    //get 10 points in the line between 2 LatLng
     public static List<LatLng> pointsBetween(LatLng l1, LatLng l2, int n) {
         var dLat = Math.abs(l1.latitude - l2.latitude);
         var dLng = Math.abs(l1.longitude - l2.longitude);
@@ -67,7 +67,8 @@ public class LatLngs {
                 })
                 .collect(Collectors.toList());
     }
-    public Pair<Double, Double> CoordsToFeet(LatLng latLng){
+    //change Latlng into Pair<double, double> in feet
+    public Pair<Double, Double> LatLngToFeet(LatLng latLng){
         return Pair.create(latLng.latitude * DEG_LAT_IN_FT, latLng.longitude * DEG_LNG_IN_FT);
     }
 }

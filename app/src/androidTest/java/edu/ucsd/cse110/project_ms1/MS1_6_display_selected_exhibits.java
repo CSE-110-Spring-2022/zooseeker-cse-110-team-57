@@ -29,14 +29,14 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class MS1_12 {
+public class MS1_6_display_selected_exhibits {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void mS1_12() {
+    public void mS1_6_display_selected_exhibits() {
         ViewInteraction actionMenuItemView = onView(
                 allOf(withId(R.id.search_bar_2), withContentDescription("Search"),
                         childAtPosition(
@@ -57,6 +57,36 @@ public class MS1_12 {
                         isDisplayed()));
         materialButton.perform(click());
 
+        ViewInteraction materialButton2 = onView(
+                allOf(withId(R.id.add_to_button), withText("Add"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.all_searched_animals),
+                                        1),
+                                1),
+                        isDisplayed()));
+        materialButton2.perform(click());
+
+        ViewInteraction materialButton3 = onView(
+                allOf(withId(R.id.add_to_button), withText("Add"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.all_searched_animals),
+                                        2),
+                                1),
+                        isDisplayed()));
+        materialButton3.perform(click());
+
+        ViewInteraction materialButton4 = onView(
+                allOf(withId(R.id.add_to_button), withText("Add"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.all_searched_animals),
+                                        3),
+                                1),
+                        isDisplayed()));
+        materialButton4.perform(click());
+
         ViewInteraction appCompatImageButton = onView(
                 allOf(withContentDescription("Collapse"),
                         childAtPosition(
@@ -68,7 +98,7 @@ public class MS1_12 {
                         isDisplayed()));
         appCompatImageButton.perform(click());
 
-        ViewInteraction materialButton2 = onView(
+        ViewInteraction materialButton5 = onView(
                 allOf(withId(R.id.plan_button), withText("Plan"),
                         childAtPosition(
                                 childAtPosition(
@@ -76,49 +106,13 @@ public class MS1_12 {
                                         0),
                                 4),
                         isDisplayed()));
-        materialButton2.perform(click());
-
-        ViewInteraction materialButton3 = onView(
-                allOf(withId(R.id.direction_button), withText("Directions"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
-                        isDisplayed()));
-        materialButton3.perform(click());
-
-        ViewInteraction materialButton4 = onView(
-                allOf(withId(R.id.next_button), withText("NEXT"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                4),
-                        isDisplayed()));
-        materialButton4.perform(click());
-
-        ViewInteraction materialButton5 = onView(
-                allOf(withId(R.id.previous_button), withText("PREVIOUS"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                5),
-                        isDisplayed()));
         materialButton5.perform(click());
 
         ViewInteraction textView = onView(
-                allOf(withId(R.id.goal_exhibit_name), withText("To: Crocodiles"),
+                allOf(withId(R.id.this_is_a_route_plan), withText("Route Plan"),
                         withParent(withParent(withId(android.R.id.content))),
                         isDisplayed()));
-        textView.check(matches(withText("To: Crocodiles")));
-
-        ViewInteraction textView2 = onView(
-                allOf(withId(R.id.start_exhibit_name), withText("From: Entrance and Exit Gate"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        textView2.check(matches(withText("From: Entrance and Exit Gate")));
+        textView.check(matches(isDisplayed()));
     }
 
     private static Matcher<View> childAtPosition(

@@ -1,9 +1,9 @@
 package edu.ucsd.cse110.project_ms1;
 
 import android.content.Context;
-import android.util.Pair;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
@@ -13,6 +13,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -46,6 +47,7 @@ public class AnimalItem {
     public static Map<String, ZooData.EdgeInfo> eInfo;
     public static Graph<String, IdentifiedWeightedEdge> gInfo;
     public static Map<String, String> Latlng_ids_Map;
+//    public static Map<String, List<String>> neighbor_map;
     public static AnimalItem gate;
 
 
@@ -76,6 +78,7 @@ public class AnimalItem {
         gInfo = ZooData.loadZooGraphJSON(input);
 
         Latlng_ids_Map = new HashMap<String, String>();
+        //iterate through nodes
         for (Map.Entry<String, ZooData.VertexInfo> set : vInfo.entrySet()){
             ZooData.VertexInfo currentVertex = set.getValue();
 
@@ -94,6 +97,8 @@ public class AnimalItem {
                 );
             }
         }
+
+        int a =0;
     }
 
     @Override
@@ -130,9 +135,19 @@ public class AnimalItem {
     }
 
     //return a route that has a different order of input route, so it can be a good choice for the user
-    public static List<route_node> plan_route(List<AnimalItem> animal_items){
+    public static List<route_node> plan_route(List<AnimalItem> animal_items, String start_position, boolean maybe_reverse){
+        //remove
+        if (animal_items.get(0).id.equals("entrance_exit_gate")){
+            animal_items.remove(0);
+        }
+        else{
+            if (animal_items.get(animal_items.size()-1).id.equals("entrance_exit_gate")){
+                animal_items.remove(animal_items.size()-1);
+            }
+        }
+
+        String start = start_position;
         //begin and end positions
-        String start = "entrance_exit_gate";
         String goal;
         ArrayList<route_node> planned_route = new ArrayList<>();
         int num_iter=animal_items.size();
@@ -151,6 +166,10 @@ public class AnimalItem {
             //find next closest exhibit
             closest_animal = AnimalUtilities.getClosestAnimalItem(animal_items, start, min_distance, closest_animal);
             animal_items.remove(closest_animal);
+
+            //remove itself if applicable
+//            if(closest_animal.id == start_position) continue;
+
             // find the potential group name, may be null
             String potential_parent_id = vInfo.get( closest_animal.id).group_id;
             // itself is a parent/group exhibit
@@ -166,15 +185,23 @@ public class AnimalItem {
 
                 if (!self_is_group)
                     myRouteNode.names.add(closest_animal.name);
+                    myRouteNode.ids.add(closest_animal.id);
                 continue;
             }
 
             //find the address of the goal
             GraphPath<String, IdentifiedWeightedEdge> path = adapted_find_shortest_path(gInfo, start, closest_animal.id);
             int pathSize = path.getEdgeList().size();
-            IdentifiedWeightedEdge myEdge = path.getEdgeList().get(pathSize - 1);
-            address_id = myEdge.getId();
-            String address= eInfo.get(address_id).street;
+            String address;
+
+            if(pathSize!=0) {
+                IdentifiedWeightedEdge myEdge = path.getEdgeList().get(pathSize - 1);
+                address_id = myEdge.getId();
+                address = eInfo.get(address_id).street;
+            }
+            else {
+                address = "NOT IMPORTANT?!?!?!?!";
+            }
 
             //construct parent item for the node if current is a sub_animal
             AnimalItem parent = new AnimalItem(null,null,null,null);
@@ -199,6 +226,10 @@ public class AnimalItem {
             myRouteNode = new route_node(closest_animal, address, distance, parent);
             planned_route.add(myRouteNode);
         }
+
+        if (!DirectionActivity.going_forward){
+            Collections.reverse(planned_route);
+        }
         return  planned_route;
     }
 
@@ -211,27 +242,29 @@ public class AnimalItem {
         }
         return retVal;
     }
-
-    public static GraphPath<String, IdentifiedWeightedEdge> adapted_find_shortest_path (Graph<String, IdentifiedWeightedEdge> gInfo, String source, String sink){
-        source = Latlng_ids_Map.get(source);
-        sink = Latlng_ids_Map.get(sink);
-        return DijkstraShortestPath.findPathBetween(gInfo, source, sink);
+    //find the shortest path between source and sink
+    public static GraphPath<String, IdentifiedWeightedEdge> adapted_find_shortest_path (Graph<String, IdentifiedWeightedEdge> gInfo, String source_id, String sink_id){
+        String source_id_parent = Latlng_ids_Map.get(source_id);
+        String sink_id_parent = Latlng_ids_Map.get(sink_id);
+        return DijkstraShortestPath.findPathBetween(gInfo, source_id_parent, sink_id_parent);
     }
-
+    //get the String format of coord
     public String getCoordString(){
         var coords = getCoords();
         return String.format(Locale.getDefault(), "%3.6f, %3.6f", coords.lat, coords.lng);
     }
 
     public Coord getCoords() {
-        AnimalItem landmark = search_by_tag(Latlng_ids_Map.get(id)).get(0);
-        return new Coord(landmark.position.latitude, landmark.position.longitude);
+        ZooData.VertexInfo landmark = vInfo.get(Latlng_ids_Map.get(this.id));
+        Coord mycoord = new Coord(landmark.lat, landmark.lng);
+        return mycoord;
     }
 
 //    public boolean isClosestTo(Coord otherCoords) {
 //        return isCloseTo(otherCoords, 0.001);
 //    }
 
+    //get the distance between two coords.
     public Double getDistanceToInFeet(Coord otherCoords) {
         Coord coord = getCoords();
 //        if (coord == null
@@ -240,11 +273,87 @@ public class AnimalItem {
 //                || otherCoords.lat == null || otherCoords.lng == null){
 //            return -1.0;
 //        }
-        Double dLat = (coord.lat - otherCoords.lat)* DEG_LAT_IN_FT;
-        Double dLng = (coord.lng - otherCoords.lng) * DEG_LNG_IN_FT;
+        return distance_between_coords(otherCoords, coord);
+    }
+
+    public static double distance_between_coords(Coord coord1, Coord coord2) {
+        Double dLat = (coord2.lat - coord1.lat)* DEG_LAT_IN_FT;
+        Double dLng = (coord2.lng - coord1.lng) * DEG_LNG_IN_FT;
         Double d_ft = Math.sqrt(Math.pow(dLat, 2) + Math.pow(dLng, 2));
         return Math.ceil(d_ft);
     }
+
+    //get the entrance gate coord
+    public static Coord getExtranceGateCoord(){
+        Coord EntranceGate_Coord = new Coord(vInfo.get("entrance_exit_gate").lat, vInfo.get("entrance_exit_gate").lng);
+        return EntranceGate_Coord;
+    }
+
+    //find the nearest exhibit due to current location in all exhibit in zoo
+    //Abandon this function because it doesn't fit the unit
+    /*
+    public static String getNearestExhibit(LatLng curr){
+        String exhibit = "";
+        float smallest = 9999;
+        for(Map.Entry<String, ZooData.VertexInfo> vertexInfo : vInfo.entrySet()){
+
+            if(vertexInfo.getValue().lat == null){
+                continue;
+            }
+
+            float[] distance = new float[1];
+
+            //unit: meter
+            Location.distanceBetween(curr.latitude,curr.longitude,vertexInfo.getValue().lat,vertexInfo.getValue().lng,distance);
+            if (distance[0] <= smallest){
+                exhibit = vertexInfo.getKey();
+                smallest = distance[0];
+            }
+        }
+
+        return exhibit;
+    }
+     */
+    @Nullable
+    public static List<String> getClosestLandmark(Coord current) {
+        ZooData.VertexInfo closestVertex = null;
+        double min = 999999999;
+        List<ZooData.VertexInfo> all_landmarks_has_coord = getLandmark_hasCoord();
+        for (ZooData.VertexInfo landmark_vertex : all_landmarks_has_coord){
+            Coord landmark_coord = new Coord(landmark_vertex.lat, landmark_vertex.lng);
+            if (landmark_coord.equals(current)){
+                closestVertex = landmark_vertex;
+                break;
+            }
+            else{
+                double currentDis = distance_between_coords(landmark_coord, current);
+                if (currentDis < min){
+                    min = currentDis;
+                    closestVertex = landmark_vertex;
+                }
+            }
+        }
+        List<String> retval = new ArrayList<>();
+        //first is id, second is name
+        retval.add(closestVertex.id);
+        retval.add(closestVertex.name);
+//        AnimalItem landmark_AnimalItem = AnimalItem.search_by_tag(closestVertex.id).get(0);
+        return retval;
+    }
+
+    @NonNull
+    private static List<ZooData.VertexInfo> getLandmark_hasCoord() {
+        List<ZooData.VertexInfo> all_landmarks_has_coord = new ArrayList<>();
+        for (Map.Entry<String, ZooData.VertexInfo> set : vInfo.entrySet()) {
+            ZooData.VertexInfo current_vertex = set.getValue();
+            if (current_vertex.lat != null){
+                all_landmarks_has_coord.add(current_vertex);
+            }
+        }
+        return all_landmarks_has_coord;
+    }
+
+
 }
 
 
@@ -256,12 +365,23 @@ class route_node
         this.distance = distance;
         names= new ArrayList<>();
         names.add(this.exhibit.name);
+        ids= new ArrayList<>();
+        ids.add(this.exhibit.id);
+
+
         this.parent_item = parent_item;
+    }
+
+    public String get_concat_names(){
+        return String.join(", ", this.names);
     }
 
     public AnimalItem exhibit;
     public String address;
     public double  distance;
     public List<String> names;
+    public List<String> ids;
+
     public AnimalItem parent_item;
+    String concated_names;
 };

@@ -3,38 +3,29 @@ package edu.ucsd.cse110.project_ms1;
 import java.util.List;
 
 public class DirectionData {
-    public String startExhibit;
-    public String goalExhibit;
-    double distance;
-    List<String> detailPath;
-    List<String> detailPrevPath;
-    List<String> briefPath;
-    List<String> briefPrevPath;
-    DirectionData(String startExhibit,
-                  String goalExhibit,
-                  Double distance,
-                  List<String> paths,
-                  List<String> prevPaths,
-                  List<String> briefPath,
-                  List<String> briefPrevPath){
+    public String exhibitName;
+    public String exhibitID;
+    public List<String> childList;
+    //A mediator function
+    DirectionData(String exhibitName,
+                  String exhibitID,
+                  List<String> childList){
 
-        this.startExhibit = startExhibit;
-        this.goalExhibit = goalExhibit;
-        this.distance = distance;
-        this.detailPath = paths;
-        this.detailPrevPath = prevPaths;
-        this.briefPath = briefPath;
-        this.briefPrevPath = briefPrevPath;
+        this.exhibitName = exhibitName;
+        this.exhibitID = exhibitID;
+        this.childList = childList;
+
     }
 
-    String getStartExhibit(){
-        return startExhibit;
+    public String getExhibitName(){
+        return exhibitName;
     }
 
-    String getGoalExhibit(){
-        return goalExhibit;
+    public String getExhibitID(){
+        return exhibitID;
     }
 
+    List<String> getChildList(){ return childList;}
 
 }
 

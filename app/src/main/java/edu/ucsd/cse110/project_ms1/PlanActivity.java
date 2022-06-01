@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -29,21 +30,21 @@ public class PlanActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_plan);
+        //update the current Activity
         Utilities.changeCurrentActivity(this, "PlanActivity");
-
+        AnimalUtilities.loadZooInfo(this);
+        //initialization
         stringAndAnimalItem = new StringAndAnimalItem();
         routedAnimalNameStrings = new ArrayList<String>();
-
         plan_adapter = new PlanAdapter();
         plan_adapter.setHasStableIds(true);
-
-
+        //bind the recycler view
         plan_recyclerView = this.findViewById(R.id.planed_route);
         plan_recyclerView.setLayoutManager(new LinearLayoutManager(this));
         plan_recyclerView.setAdapter(plan_adapter);
 
 
-        //-----------------------------load selected animalItem----------------------------------
+        //load the selected animals
         Intent intent = getIntent();
         selectedAnimalNameStringList =
                 intent.getStringArrayListExtra("nameStringList");
@@ -55,12 +56,14 @@ public class PlanActivity extends AppCompatActivity{
             selectedAnimalNameStringSet.remove("currentActivity");
             selectedAnimalNameStringSet.remove("currentOrder");
             selectedAnimalNameStringSet.remove("currentIsNext");
+            selectedAnimalNameStringSet.remove("currentDisplayStatus");
+            selectedAnimalNameStringSet.remove("currentLat");
+            selectedAnimalNameStringSet.remove("currentLng");
             selectedAnimalNameStringSet.remove("route");
             selectedAnimalNameStringList = new ArrayList<String>(selectedAnimalNameStringSet);
         }
 
-
-
+        //get the AnimalItem of selected animal names
         for (String animalName: selectedAnimalNameStringList){
             //find the string containing all related information of a selected animal
             String animalItemInfoString = sharedPreferences.getString(animalName,
@@ -70,20 +73,22 @@ public class PlanActivity extends AppCompatActivity{
             //add animalItem to the AnimalItem list
             selectedAnimalItemList.add(animalItem);
         }
-        routeNodeList = AnimalItem.plan_route(selectedAnimalItemList);
-
+        //get the route
+        routeNodeList = AnimalItem.plan_route(selectedAnimalItemList, "entrance_exit_gate", false);
+        //remove the exit gate
         List<route_node> routeNodeListWithoutExitGate = new ArrayList<>(routeNodeList);
         int exit_gate_index = routeNodeList.size() - 1;
         route_node exit_gate_route_node = routeNodeListWithoutExitGate.remove(exit_gate_index);
         plan_adapter.setRouted_animal_items(routeNodeListWithoutExitGate);
-
+        //get the routed animals name string
         for (route_node myRoute_node: routeNodeList){
-            String myAnimal = myRoute_node.exhibit.name;
-            routedAnimalNameStrings.add(myAnimal);
+
+            for (String myAnimal : myRoute_node.names)
+                routedAnimalNameStrings.add(myAnimal);
         }
 
     }
-
+    //act when direction is clicked
     public void onDirectionsClick(View view) {
         saveToSharedPreference(routedAnimalNameStrings);
 
@@ -93,7 +98,7 @@ public class PlanActivity extends AppCompatActivity{
         intent.putStringArrayListExtra("routedAnimalNameList", routedAnimalList);
         startActivityForResult(intent, ACTIVITY_CONSTANT);
     }
-
+    //save the routed animals in sharedpreference
     public void saveToSharedPreference(List<String> animal_names) {
         //save routedAnimalNameString to sharedPreference
         //link the animalItem name with the string form of animalItem
@@ -115,7 +120,11 @@ public class PlanActivity extends AppCompatActivity{
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == ACTIVITY_CONSTANT)
         {
-            finish();
+            if (requestCode == Activity.RESULT_CANCELED){
+                setResult(Activity.RESULT_CANCELED,new Intent());
+                finish();
+            }
+
         }
     }
 }

@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Pair;
+import android.widget.Button;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -17,6 +18,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import edu.ucsd.cse110.project_ms1.location.Coord;
 
 public class Utilities {
     public static void showAlert(Activity activity, String message){
@@ -33,7 +36,8 @@ public class Utilities {
         alertDialog.show();
     }
 
-    public static void clearSavedAnimalItem(Context context){
+
+    public static void clearSharedPreference(Context context){
         SharedPreferences sharedPreferences = context.getSharedPreferences("Team57", 0);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
@@ -41,7 +45,7 @@ public class Utilities {
         editor.apply();
 
     }
-
+    //change current Activity
     public static void changeCurrentActivity(Context context, String activity){
         SharedPreferences sharedPreferences = context.getSharedPreferences("Team57", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -51,6 +55,7 @@ public class Utilities {
         editor.apply();
     }
 
+    //conplete zoo graph
     public static Graph<String,IdentifiedWeightedEdge> completeG (Graph<String,IdentifiedWeightedEdge> g, ArrayList<String> vertex) {
         Graph<String,IdentifiedWeightedEdge> graph = new DefaultUndirectedWeightedGraph<>(IdentifiedWeightedEdge.class);
         // add vertex to graph
@@ -75,7 +80,7 @@ public class Utilities {
     //findcycle() for detecting cycle
     //DegreeOf() for checking degree
 
-
+    //TSP algorithm
     public static ArrayList<String> TSP(Graph<String,IdentifiedWeightedEdge> g, String start){
         if(!GraphTests.isComplete(g)){
             throw new IllegalArgumentException("not a complete graph");

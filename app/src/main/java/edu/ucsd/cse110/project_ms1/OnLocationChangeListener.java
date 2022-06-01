@@ -1,7 +1,7 @@
 package edu.ucsd.cse110.project_ms1;
 
-import com.google.android.gms.maps.model.LatLng;
+import edu.ucsd.cse110.project_ms1.location.Coord;
 
 public interface OnLocationChangeListener {
-    void OnLocationChange(LatLng current);
+    void OnLocationChange(Coord current);
 }

@@ -29,7 +29,7 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class MS2_MS1_13a_Retained_selected_animal {
+public class MS1_13a_Retained_selected_animal {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EnterActivity">
+
+
+    <EditText
+        android:id="@+id/Latitude_text"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="200dp"
+        android:hint="Default: 32.73459618734685"
+        android:inputType="numberSigned|number|numberDecimal"
+        android:textSize="20sp"
+        android:backgroundTint="@color/PaleVoiletRed"
+        android:textIsSelectable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/mock_button"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="176dp"
+        android:width="250dp"
+        android:onClick="onMockButtonClick"
+        android:text="mock"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/Latitude"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="4dp"
+        android:gravity="center|left"
+        android:text="Enter latitude value:"
+        android:textColor="@color/light_pink"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/Latitude_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.144"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/Longitude"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="4dp"
+        android:gravity="center|left"
+        android:text="Enter longitude value:"
+        android:textColor="@color/light_pink"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/Longitude_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.144"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/Longitude_text"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="116dp"
+        android:hint="Default: -117.14936"
+        android:inputType="numberSigned|number|numberDecimal"
+        android:textIsSelectable="true"
+        android:textSize="20sp"
+        android:backgroundTint="@color/PaleVoiletRed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/Latitude_text" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

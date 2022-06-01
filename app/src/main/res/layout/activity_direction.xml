@@ -28,7 +28,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/brief_path"
         android:layout_width="0dp"
-        android:layout_height="430dp"
+        android:layout_height="330dp"
         app:layout_constraintBottom_toTopOf="@+id/previous_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -38,11 +38,13 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/detailed_path"
         android:layout_width="0dp"
-        android:layout_height="430dp"
+        android:layout_height="330dp"
         app:layout_constraintBottom_toBottomOf="@+id/brief_path"
         app:layout_constraintEnd_toEndOf="@+id/brief_path"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/brief_path"
-        app:layout_constraintTop_toTopOf="@+id/brief_path" />
+        app:layout_constraintTop_toTopOf="@+id/brief_path"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/start_exhibit_name"
@@ -54,7 +56,6 @@
         android:textColor="@color/white"
         android:textSize="20dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -111,24 +112,26 @@
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="85dp"
         android:layout_marginEnd="20dp"
+        android:onClick="onClearButtonClick_DirectionActivity"
         android:text="Clear"
-        android:onClick="onClearButtonClick"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/detail_button"
         app:layout_constraintEnd_toStartOf="@id/replan_button"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/brief_path" />
+        app:layout_constraintTop_toBottomOf="@+id/brief_path"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/replan_button"
         android:layout_width="150dp"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="85dp"
         android:layout_marginEnd="5dp"
+        android:onClick="onReplanButtonClick"
         android:text="replan"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/skip_button"
@@ -147,6 +150,7 @@
         android:layout_marginBottom="5dp"
         android:text="SKIP"
         android:textSize="20sp"
+        android:onClick="OnSkipClick"
         app:layout_constraintBottom_toTopOf="@+id/previous_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/detail_button"
@@ -158,7 +162,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="190dp"
         android:layout_marginEnd="16dp"
         android:gravity="center"
         android:text="TextView"
@@ -172,7 +176,7 @@
         android:id="@+id/next_text"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="190dp"
         android:layout_marginEnd="8dp"
         android:gravity="center"
         android:text="TextView"
@@ -196,6 +200,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/goal_exhibit_name"
         app:layout_constraintTop_toBottomOf="@+id/start_exhibit_name"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/enter_button"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:onClick="onEnterButtonClick"
+        android:text="Enter Coordination"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/clear_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/brief_path"
         app:layout_constraintVertical_bias="0.0" />
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

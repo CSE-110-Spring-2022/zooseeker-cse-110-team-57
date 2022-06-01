@@ -52,9 +52,7 @@ import javax.xml.transform.TransformerFactory;
         TextView NoSuchAnimal;
         TextView animalNumbers;
         StringAndAnimalItem stringAndAnimalItem;
-        String vPath = "exhibit_info.json";
-        String ePath = "trail_info.json";
-        String gPath = "zoo_graph.json";
+
 
 
 
@@ -62,16 +60,8 @@ import javax.xml.transform.TransformerFactory;
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_search_animal);
-            try {
-                AnimalItem.loadInfo(this, vPath, ePath, gPath);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            AnimalUtilities.loadZooInfo(this);
             Utilities.changeCurrentActivity(this, "SearchAnimalActivity");
-
-            //--------------Comment this line if you don't want to select animals again-------------
-            //Utilities.clearSavedAnimalItem(this);
-            //----------------------------------------------------------------------------------
 
             //make "No such animal" invisible
             NoSuchAnimal = findViewById(R.id.no_such_animal);
@@ -150,7 +140,7 @@ import javax.xml.transform.TransformerFactory;
         }
 
         //----------------------Below are functions in SharedPreferences-------------------------------
-
+        //save the selected animals in sharepreference
         public void saveAddToList(AnimalItem newSelectedAnimalItem) {
             //link the animalItem name with the string form of animalItem
             SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
@@ -162,7 +152,7 @@ import javax.xml.transform.TransformerFactory;
             editor.commit();
             editor.apply();
         }
-
+        //load the selected animals in sharepreference
         public List<AnimalItem> loadAddToList() {
             SharedPreferences sharedPreferences = getSharedPreferences("Team57", 0);
             List<AnimalItem> selectedAnimalItemList = new ArrayList<AnimalItem>();
@@ -171,6 +161,9 @@ import javax.xml.transform.TransformerFactory;
             selectedAnimalNameStringSet.remove("currentActivity");
             selectedAnimalNameStringSet.remove("currentOrder");
             selectedAnimalNameStringSet.remove("currentIsNext");
+            selectedAnimalNameStringSet.remove("currentDisplayStatus");
+            selectedAnimalNameStringSet.remove("currentLat");
+            selectedAnimalNameStringSet.remove("currentLng");
             selectedAnimalNameStringSet.remove("route");
             selectedAnimalNameStringList = new ArrayList<String>(selectedAnimalNameStringSet);
 
@@ -196,7 +189,7 @@ import javax.xml.transform.TransformerFactory;
 
         }
 
-
+        //act when plan button is clicked
         public void onPlanClick(View view) {
             Intent intent = new Intent(this, PlanActivity.class);
             if (selectedAnimalNameStringList.isEmpty()) {
@@ -208,7 +201,7 @@ import javax.xml.transform.TransformerFactory;
             startActivityForResult(intent, ACTIVITY_CONSTANT);
         }
 
-
+        //search bar menu
         @Override
         public boolean onCreateOptionsMenu(Menu menu) {
             MenuInflater inflater = getMenuInflater();
@@ -244,6 +237,7 @@ import javax.xml.transform.TransformerFactory;
             return true;
         }
 
+        //set the NoSuchAnimal alert
         @Override
         public void pass(List<AnimalItem> isAnimalFound) {
             if (isAnimalFound.isEmpty()) {
@@ -253,8 +247,9 @@ import javax.xml.transform.TransformerFactory;
             }
         }
 
-        public void onClearClick(View view) {
-            Utilities.clearSavedAnimalItem(this);
+        //act when clear button is clicked
+        public void onClearButtonClick_SearchActivity(View view) {
+            Utilities.clearSharedPreference(this);
             selectedAnimalItemList = loadAddToList();
             addToList_adapter.setSelectedAnimalItems(selectedAnimalItemList);
             animalNumbers.setText(Integer.toString(preSelectedAnimalItemList.size()));
