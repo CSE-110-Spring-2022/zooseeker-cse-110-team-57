@@ -79,7 +79,7 @@ public class EnterActivity extends AppCompatActivity implements Serializable {
         TextView lat_text = findViewById(R.id.Latitude_text);
         TextView lng_text = findViewById(R.id.Longitude_text);
         lat_text.setText(sharedPreferences.getString("currentLat", ""));
-        lng_text.setText(sharedPreferences.getString("currentLat", ""));
+        lng_text.setText(sharedPreferences.getString("currentLng", ""));
     }
 
     public Coord readEnteredCoord(){
