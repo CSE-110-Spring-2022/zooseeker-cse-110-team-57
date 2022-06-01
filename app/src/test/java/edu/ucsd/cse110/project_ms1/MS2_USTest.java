@@ -242,7 +242,7 @@ public class MS2_USTest {
     }
 
 
-    @Test
+/*    @Test
     public void findCurrStreet(){
         //NodeA = owens_aviary
         //NodeB = fern_canyon
@@ -257,7 +257,7 @@ public class MS2_USTest {
         String actualStreet = DirectionHelper.findCurrStreet(nearestExhibit,currLatLng).toString();
         assertEquals(expectStreet,actualStreet);
     }
-
+*/
     @Test
     public void briefDistances(){
         //NodeA = owens_aviary

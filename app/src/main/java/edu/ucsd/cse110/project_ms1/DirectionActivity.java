@@ -383,7 +383,7 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
 
     private void setClosestLandmarkText() {
         //set "Closest Landmark"
-        String ClosestLandMark_name = AnimalItem.getClosestLandmark(Coords.currentLocationCoord).name;
+        String ClosestLandMark_name = AnimalItem.getClosestLandmark(Coords.currentLocationCoord).get(1);
         String startText = "Closest Landmark: " + ClosestLandMark_name;
         TextView start = findViewById(R.id.start_exhibit_name);
         start.setText(startText);
@@ -400,7 +400,7 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
     @Override
     public void OnLocationChange(Coord current) {
         //update currentLocationCoord
-        Coords.curr_loc_id = AnimalItem.getClosestLandmark(current).id;
+        Coords.curr_loc_id = AnimalItem.getClosestLandmark(current).get(0);
         Coord nearestLandmark_coord = getParentCoord_byID(Coords.curr_loc_id);
         Coords.currentLocationCoord = nearestLandmark_coord;
         LatLngs.currentLocationLatLng = nearestLandmark_coord.toLatLng();
@@ -487,8 +487,8 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
     public void onClearButtonClick_DirectionActivity(View view) {
         clearRoute();
         Utilities.clearSharedPreference(this);
-        intent = new Intent(this, SearchAnimalActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent = new Intent();
+        setResult(Activity.RESULT_CANCELED,intent);
         finish();
     }
 
@@ -633,8 +633,8 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
         useLocationService = false;
         mockASinglePoint(entered_coord);
 
-
         //---------------comment when demo--------------------------------------------------
+        /*
         //Step 1: Create a mocking point
         // create your own Coord manually
         Coord koi_fish_coord = new Coord(32.72109826903826, -117.15952052282296);
@@ -659,7 +659,7 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
         //Step 2.2: call mockAListOfPoints function
         //mockAListOfPoints(TenPoints);
 
-        /*
+
         InputStream input = this.getAssets().open(MOCKING_FILE_NAME);
         List<Coord> route = ZooData.loadMockingJSON(input);
         if (route.size() == 1){
@@ -739,7 +739,7 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
     public void updateRoute(int order, boolean going_forward, Coord current, List<String> orderedAnimalList_IDs) {
         //get the closestLandmark
         List<IdentifiedWeightedEdge> updatePath = new ArrayList<>();
-        AnimalItem closestLandmark = AnimalItem.getClosestLandmark(current);
+        String closestLandmark_id = AnimalItem.getClosestLandmark(current).get(0);
         String nextExhibit_id = null;
         //get the goal exhibit
         if (going_forward){
@@ -749,12 +749,12 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
             nextExhibit_id = orderedAnimalList_IDs.get(order - 1);
         }
         //get the path between closest landmark to next exhibit
-        if (!closestLandmark.id.equals(nextExhibit_id)){
-            updatePath = DirectionHelper.findPathBetween(closestLandmark.id, nextExhibit_id);
+        if (!closestLandmark_id.equals(nextExhibit_id)){
+            updatePath = DirectionHelper.findPathBetween(closestLandmark_id, nextExhibit_id);
         }
         List<IdentifiedWeightedEdge> updated_path = new ArrayList<>(updatePath);
         //display updated directions
-        setDisplay(closestLandmark.id, nextExhibit_id, updated_path, displayStatus, true);
+        setDisplay(closestLandmark_id, nextExhibit_id, updated_path, displayStatus, true);
 
     }
 
@@ -767,15 +767,15 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
+        //call OnMockChange
         Coord gate_coord = AnimalItem.getExtranceGateCoord();
-        TextView lat_text = findViewById(R.id.Latitude_text);
-        TextView lng_text = findViewById(R.id.Longitude_text);
         SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
         String lat_string = sharedPreferences.getString("currentLat", Double.toString(gate_coord.lat));
-        String lng_string = sharedPreferences.getString("currentLat", Double.toString(gate_coord.lng));
+        String lng_string = sharedPreferences.getString("currentLng", Double.toString(gate_coord.lng));
         Coord updateCoord = new Coord(Double.valueOf(lat_string), Double.valueOf(lng_string));
         OnMockChange(updateCoord);
     }
+
 
 
 }

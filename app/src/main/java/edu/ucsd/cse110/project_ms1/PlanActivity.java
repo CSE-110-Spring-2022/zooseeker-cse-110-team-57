@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -55,6 +56,7 @@ public class PlanActivity extends AppCompatActivity{
             selectedAnimalNameStringSet.remove("currentActivity");
             selectedAnimalNameStringSet.remove("currentOrder");
             selectedAnimalNameStringSet.remove("currentIsNext");
+            selectedAnimalNameStringSet.remove("currentDisplayStatus");
             selectedAnimalNameStringSet.remove("currentLat");
             selectedAnimalNameStringSet.remove("currentLng");
             selectedAnimalNameStringSet.remove("route");
@@ -118,7 +120,11 @@ public class PlanActivity extends AppCompatActivity{
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == ACTIVITY_CONSTANT)
         {
-            finish();
+            if (requestCode == Activity.RESULT_CANCELED){
+                setResult(Activity.RESULT_CANCELED,new Intent());
+                finish();
+            }
+
         }
     }
 }

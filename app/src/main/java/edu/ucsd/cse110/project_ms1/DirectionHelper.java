@@ -368,16 +368,12 @@ public class DirectionHelper {
     public static double getPathDistanceBetween(Coord current, AnimalItem Destination){
         double first_path, second_path;
         //get the closest landmark
-        AnimalItem closestName = AnimalItem.getClosestLandmark(current);
-        String closestName_parent_id = AnimalItem.Latlng_ids_Map.get(closestName.id);
+        String closestName_id = AnimalItem.getClosestLandmark(current).get(0);
+        String closestName_parent_id = AnimalItem.Latlng_ids_Map.get(closestName_id);
 
         return AnimalItem.adapted_find_shortest_path(AnimalItem.gInfo,
                 closestName_parent_id, Destination.id).getWeight();
-
     }
-
-
-
 
 }
 
