@@ -128,4 +128,9 @@ public class PlanActivity extends AppCompatActivity{
 
         }
     }
+
+    public void onClearButtonClick_PlanActivity(View view) {
+        Utilities.clearSharedPreference(this);
+        finish();
+    }
 }
