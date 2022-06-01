@@ -185,6 +185,7 @@ public class AnimalItem {
 
                 if (!self_is_group)
                     myRouteNode.names.add(closest_animal.name);
+                    myRouteNode.ids.add(closest_animal.id);
                 continue;
             }
 
@@ -364,6 +365,10 @@ class route_node
         this.distance = distance;
         names= new ArrayList<>();
         names.add(this.exhibit.name);
+        ids= new ArrayList<>();
+        ids.add(this.exhibit.id);
+
+
         this.parent_item = parent_item;
     }
 
@@ -375,6 +380,8 @@ class route_node
     public String address;
     public double  distance;
     public List<String> names;
+    public List<String> ids;
+
     public AnimalItem parent_item;
     String concated_names;
 };

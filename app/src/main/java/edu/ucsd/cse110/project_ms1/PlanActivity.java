@@ -82,8 +82,9 @@ public class PlanActivity extends AppCompatActivity{
         plan_adapter.setRouted_animal_items(routeNodeListWithoutExitGate);
         //get the routed animals name string
         for (route_node myRoute_node: routeNodeList){
-            String myAnimal = myRoute_node.exhibit.name;
-            routedAnimalNameStrings.add(myAnimal);
+
+            for (String myAnimal : myRoute_node.names)
+                routedAnimalNameStrings.add(myAnimal);
         }
 
     }
@@ -120,6 +121,7 @@ public class PlanActivity extends AppCompatActivity{
         if(requestCode == ACTIVITY_CONSTANT)
         {
             if (requestCode == Activity.RESULT_CANCELED){
+                setResult(Activity.RESULT_CANCELED,new Intent());
                 finish();
             }
 
