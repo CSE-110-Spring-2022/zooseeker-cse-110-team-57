@@ -48,6 +48,7 @@ public class EnterActivity extends AppCompatActivity implements Serializable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter);
         Utilities.changeCurrentActivity(this, "EnterActivity");
+        AnimalUtilities.loadZooInfo(this);
         loadEnteredCoord();
     }
 
