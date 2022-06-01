@@ -63,10 +63,6 @@ import javax.xml.transform.TransformerFactory;
             AnimalUtilities.loadZooInfo(this);
             Utilities.changeCurrentActivity(this, "SearchAnimalActivity");
 
-            //--------------Comment this line if you don't want to select animals again-------------
-            Utilities.clearSharedPreference(this);
-            //----------------------------------------------------------------------------------
-
             //make "No such animal" invisible
             NoSuchAnimal = findViewById(R.id.no_such_animal);
             NoSuchAnimal.setVisibility(View.INVISIBLE);
@@ -165,6 +161,8 @@ import javax.xml.transform.TransformerFactory;
             selectedAnimalNameStringSet.remove("currentActivity");
             selectedAnimalNameStringSet.remove("currentOrder");
             selectedAnimalNameStringSet.remove("currentIsNext");
+            selectedAnimalNameStringSet.remove("currentLat");
+            selectedAnimalNameStringSet.remove("currentLng");
             selectedAnimalNameStringSet.remove("route");
             selectedAnimalNameStringList = new ArrayList<String>(selectedAnimalNameStringSet);
 

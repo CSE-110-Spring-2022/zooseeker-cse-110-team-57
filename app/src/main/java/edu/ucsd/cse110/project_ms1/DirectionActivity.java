@@ -627,7 +627,6 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
         useLocationService = false;
         mockASinglePoint(entered_coord);
 
-
         //---------------comment when demo--------------------------------------------------
         //Step 1: Create a mocking point
         // create your own Coord manually
@@ -762,14 +761,11 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
     {
         super.onActivityResult(requestCode, resultCode, data);
         Coord gate_coord = AnimalItem.getExtranceGateCoord();
-        TextView lat_text = findViewById(R.id.Latitude_text);
-        TextView lng_text = findViewById(R.id.Longitude_text);
         SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
         String lat_string = sharedPreferences.getString("currentLat", Double.toString(gate_coord.lat));
-        String lng_string = sharedPreferences.getString("currentLat", Double.toString(gate_coord.lng));
+        String lng_string = sharedPreferences.getString("currentLng", Double.toString(gate_coord.lng));
         Coord updateCoord = new Coord(Double.valueOf(lat_string), Double.valueOf(lng_string));
         OnMockChange(updateCoord);
-
     }
 
 
