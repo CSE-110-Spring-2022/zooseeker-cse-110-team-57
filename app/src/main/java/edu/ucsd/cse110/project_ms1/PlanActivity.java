@@ -55,6 +55,7 @@ public class PlanActivity extends AppCompatActivity{
             selectedAnimalNameStringSet.remove("currentActivity");
             selectedAnimalNameStringSet.remove("currentOrder");
             selectedAnimalNameStringSet.remove("currentIsNext");
+            selectedAnimalNameStringSet.remove("currentDisplayStatus");
             selectedAnimalNameStringSet.remove("currentLat");
             selectedAnimalNameStringSet.remove("currentLng");
             selectedAnimalNameStringSet.remove("route");

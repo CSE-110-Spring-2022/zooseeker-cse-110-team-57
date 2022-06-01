@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         //Utilities.clearSharedPreference(this);
         //----------------------------------------------------------------------------------
         //--------Comment these lines if you want to direct to the page before the app is killed----------------
-        goToSearchAnimalActivity();
+        //goToSearchAnimalActivity();
         //goToPlanActivity();
         //goToDirectionActivity();
         //goToEnterActivity();
