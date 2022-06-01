@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == LAUNCH_SECOND_ACTIVITY)
         {
-            if(resultCode == Activity.RESULT_OK){
+            if(resultCode == Activity.RESULT_CANCELED){
                 startActivityForResult(new Intent(this,SearchAnimalActivity.class), LAUNCH_SECOND_ACTIVITY);
             }
         }

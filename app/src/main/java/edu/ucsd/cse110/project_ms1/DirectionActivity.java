@@ -482,7 +482,7 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
         clearRoute();
         Utilities.clearSharedPreference(this);
         intent = new Intent();
-        setResult(Activity.RESULT_OK,intent);
+        setResult(Activity.RESULT_CANCELED,intent);
         finish();
     }
 

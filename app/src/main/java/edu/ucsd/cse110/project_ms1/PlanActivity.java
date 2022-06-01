@@ -120,6 +120,7 @@ public class PlanActivity extends AppCompatActivity{
         if(requestCode == ACTIVITY_CONSTANT)
         {
             if (requestCode == Activity.RESULT_CANCELED){
+                setResult(Activity.RESULT_CANCELED,new Intent());
                 finish();
             }
 
