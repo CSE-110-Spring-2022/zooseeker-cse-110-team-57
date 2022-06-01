@@ -77,6 +77,7 @@ public class AnimalUtilities {
         if (going_forward) {
             while (visiting_order < route.size() - 1) {
 
+
                 left_animal_items.add(route.get(visiting_order ).exhibit);
                 route.remove(visiting_order );
             }

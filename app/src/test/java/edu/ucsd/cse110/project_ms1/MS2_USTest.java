@@ -141,12 +141,8 @@ public class MS2_USTest {
     public void test_skip_remove(){
         List<String> a1 = new ArrayList<>(Arrays.asList("a","b","c","d","e"));
         List<String> a2 = new ArrayList<>(Arrays.asList("1","2","3","4","5"));
-        List<List<String>> a3 = new ArrayList<>();
-        a3.add(List.of("1,2,3"));
-        a3.add(List.of("1,2,3"));
-        a3.add(List.of("1,2,3"));
-        a3.add(List.of("1,2,3"));
-        a3.add(List.of("1,2,3"));
+        List<String> a3 = new ArrayList<>(Arrays.asList("1,2,3"));
+
 
 
         List<route_node> nodes = AnimalItem.plan_route(AnimalItem.search_by_tag(null),
@@ -155,7 +151,7 @@ public class MS2_USTest {
 
         List<String> a1_copy = new ArrayList<>(a1);
         List<String> a2_copy = new ArrayList<>(a2);
-        List<List<String>> a3_copy = new ArrayList<>(a3);
+        List<String> a3_copy = new ArrayList<>(a3);
         List<route_node> nodes_copy = new ArrayList<>(nodes);
         DirectionActivity.skip(true,1,a1,a2,a3, nodes);
         a1_copy.remove(2);
