@@ -769,7 +769,6 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
         String lng_string = sharedPreferences.getString("currentLat", Double.toString(gate_coord.lng));
         Coord updateCoord = new Coord(Double.valueOf(lat_string), Double.valueOf(lng_string));
         OnMockChange(updateCoord);
-
     }
 
 

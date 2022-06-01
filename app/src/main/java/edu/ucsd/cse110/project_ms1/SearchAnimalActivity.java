@@ -165,6 +165,8 @@ import javax.xml.transform.TransformerFactory;
             selectedAnimalNameStringSet.remove("currentActivity");
             selectedAnimalNameStringSet.remove("currentOrder");
             selectedAnimalNameStringSet.remove("currentIsNext");
+            selectedAnimalNameStringSet.remove("currentLat");
+            selectedAnimalNameStringSet.remove("currentLng");
             selectedAnimalNameStringSet.remove("route");
             selectedAnimalNameStringList = new ArrayList<String>(selectedAnimalNameStringSet);
 
