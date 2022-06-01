@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -29,6 +30,7 @@ import edu.ucsd.cse110.project_ms1.location.Coord;
 import edu.ucsd.cse110.project_ms1.location.Coords;
 import edu.ucsd.cse110.project_ms1.location.LocationModel;
 import edu.ucsd.cse110.project_ms1.location.LocationModelFactory;
+import edu.ucsd.cse110.project_ms1.location.LocationPermissionChecker;
 
 public class DirectionActivity extends AppCompatActivity implements Serializable,
         OnLocationChangeListener{
@@ -36,6 +38,7 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
     int order;
     private boolean useLocationService;
     boolean displayStatus;
+    boolean serviceStatus;
     // which direction of the user is going: forward/backward
     static boolean going_forward = true;
     Button detailBtn;
@@ -66,13 +69,6 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
         //retain the DirectionActivity
         Utilities.changeCurrentActivity(this, "DirectionActivity");
         AnimalUtilities.loadZooInfo(this);
-
-
-        //use physical real location
-        useLocationService = true;
-        //-------------------Comment this line when demo-------------------------------------------
-        useLocationService = false;
-        //-----------------------------------------------------------------------------------------
 
 
         // intialize  status
@@ -136,11 +132,13 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
         going_forward = Boolean.valueOf(retainedInfo.get(1));
 
         // display status
+        loadServiceStatus();
         loadDisplayStatus();
         display(order, going_forward);
         setClosestLandmarkText();
 
     } //Initial End
+
 
 
 
@@ -166,7 +164,6 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
     public void display(int index, boolean isGoingForward) {
         TextView next = findViewById(R.id.next_text);
         TextView prev = findViewById(R.id.previous_text);
-        Button mockBtn = findViewById(R.id.enter_button);
         detailBtn = findViewById(R.id.detail_button);
 
         //set the directions text
@@ -290,13 +287,13 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
 
 
 
-
-        //----------------Comment these line when demo, this is ony used for mocking mode-----------
-        if (!useLocationService){
-            //plug in the current path order
-            autoUpdate_currentLocation_mocking(order);
-        }
-        //----------------------------------------------------------------------------------------
+//
+//        //----------------Comment these line when demo, this is ony used for mocking mode-----------
+//        if (!useLocationService){
+//            //plug in the current path order
+//            autoUpdate_currentLocation_mocking(order);
+//        }
+//        //----------------------------------------------------------------------------------------
 
 
 
@@ -335,10 +332,10 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
 
 
         //----------------Comment these line when demo, this is ony used for mocking mode-----------
-        if (!useLocationService){
-            //plug in the current path order
-            autoUpdate_currentLocation_mocking(order);
-        }
+//        if (!useLocationService){
+//            //plug in the current path order
+//            autoUpdate_currentLocation_mocking(order);
+//        }
         //----------------------------------------------------------------------------------------
 
 
@@ -590,17 +587,16 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
 
     //act when use GPS
     public void onGPSButtonClick(View view){
-        // If GPS is enabled, then update the model from the Location service.
-//        useLocationService = true;
-//        var permissionChecker = new LocationPermissionChecker(this);
-//        permissionChecker.ensurePermissions();
-//
-//        var locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-//        var provider = LocationManager.GPS_PROVIDER;
-//        viewModel.addLocationProviderSource(locationManager, provider);
-//        viewModel.getLastKnownCoords().observe(this, (coord) -> {
-//            Log.i(TAG, String.format("Observing location model update to %s", coord));
-//        });
+        //If GPS is enabled, then update the model from the Location service.
+        var permissionChecker = new LocationPermissionChecker(this);
+        permissionChecker.ensurePermissions();
+
+        var locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        var provider = LocationManager.GPS_PROVIDER;
+        viewModel.addLocationProviderSource(locationManager, provider);
+        viewModel.getLastKnownCoords().observe(this, (coord) -> {
+            Log.i(TAG, String.format("Observing location model update to %s", coord));
+        });
 
         Log.i("order",Integer.toString(order));
         Log.i("route status", String.join(", ", orderedAnimalList_IDs));
@@ -618,52 +614,6 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
     public Future<?> mockAListOfPoints(List<Coord> route){
         Future<?> myfuture = viewModel.mockRoute(this, route, 500, TimeUnit.MILLISECONDS);
         return myfuture;
-    }
-
-
-    public void OnMockChange(Coord entered_coord) {
-        //use mocking location
-        //this.useLocationService = getIntent().getBooleanExtra(EXTRA_USE_LOCATION_SERVICE, false);
-        useLocationService = false;
-        mockASinglePoint(entered_coord);
-
-        //---------------comment when demo--------------------------------------------------
-        /*
-        //Step 1: Create a mocking point
-        // create your own Coord manually
-        Coord koi_fish_coord = new Coord(32.72109826903826, -117.15952052282296);
-        Coord bali_mynah_coord  = new Coord(32.73697286273083, -117.17319785958958);
-
-        //Another way to create a Coord automatically
-        //get 10 evenly spaced points in the line between "start" and "goal" (include "start" and "goal")
-        // "start" and "goal" must be the Name of landmark
-        List<Coord> TenPoints = Coords.getTenPointsInLine("Siamangs", "Orangutans");
-        //change the indexes as you wish
-        Coord point_near_start = TenPoints.get(2);
-        Coord point_near_goal = TenPoints.get(7);
-
-
-        //Step 2.1: call mockASinglePoint function
-        //mockASinglePoint(koi_fish_coord);
-        mockASinglePoint(bali_mynah_coord);
-
-        //mockASinglePoint(point_near_start);
-        //mockASinglePoint(point_near_goal);
-
-        //Step 2.2: call mockAListOfPoints function
-        //mockAListOfPoints(TenPoints);
-
-
-        InputStream input = this.getAssets().open(MOCKING_FILE_NAME);
-        List<Coord> route = ZooData.loadMockingJSON(input);
-        if (route.size() == 1){
-            mockASinglePoint(route.get(0));
-        }
-        else{
-            mockAListOfPoints(route);
-        }
-         */
-        //------------------------------------------------------------------------------
     }
 
 
@@ -757,17 +707,47 @@ public class DirectionActivity extends AppCompatActivity implements Serializable
         startActivityForResult(intent,ACTIVITY_CONSTANT);
     }
 
+    public void onServiceButtonClick(View view){
+        saveServiceStatus();
+        setLocationServiceTextDisplay();
+    }
+
+    private void loadServiceStatus() {
+        SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
+        serviceStatus = sharedPreferences.getBoolean("currentServiceStatus", false);
+    }
+
+    private void saveServiceStatus() {
+        SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("currentServiceStatus", !serviceStatus);
+        serviceStatus = !serviceStatus;
+        editor.commit();
+        editor.apply();
+    }
+
+    public void setLocationServiceTextDisplay() {
+        Button serviceBtn = findViewById(R.id.service_button);
+        if (serviceStatus) {
+            serviceBtn.setText("GPS");
+        }
+        else {
+            serviceBtn.setText("MOCK");
+        }
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        //call OnMockChange
+        //call mockASinglePoint
         Coord gate_coord = AnimalItem.getExtranceGateCoord();
         SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
         String lat_string = sharedPreferences.getString("currentLat", Double.toString(gate_coord.lat));
         String lng_string = sharedPreferences.getString("currentLng", Double.toString(gate_coord.lng));
         Coord updateCoord = new Coord(Double.valueOf(lat_string), Double.valueOf(lng_string));
-        OnMockChange(updateCoord);
+        mockASinglePoint(updateCoord);
     }
 
 
