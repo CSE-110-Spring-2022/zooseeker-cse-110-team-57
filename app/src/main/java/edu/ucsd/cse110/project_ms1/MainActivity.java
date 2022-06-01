@@ -16,6 +16,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //--------------Comment this line if you don't want to select animals again-------------
+        //Utilities.clearSharedPreference(this);
+        //----------------------------------------------------------------------------------
         //--------Comment these lines if you want to direct to the page before the app is killed----------------
         goToSearchAnimalActivity();
         //goToPlanActivity();
