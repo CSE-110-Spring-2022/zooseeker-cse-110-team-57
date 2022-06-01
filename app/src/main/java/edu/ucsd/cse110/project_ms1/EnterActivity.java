@@ -74,7 +74,6 @@ public class EnterActivity extends AppCompatActivity implements Serializable {
     }
 
     private void loadEnteredCoord() {
-        Coord gate_coord = AnimalItem.getExtranceGateCoord();
         SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
         TextView lat_text = findViewById(R.id.Latitude_text);
         TextView lng_text = findViewById(R.id.Longitude_text);
@@ -83,11 +82,23 @@ public class EnterActivity extends AppCompatActivity implements Serializable {
     }
 
     public Coord readEnteredCoord(){
+        Coord coord = null;
         EditText lat_text = findViewById(R.id.Latitude_text);
         EditText lng_text = findViewById(R.id.Longitude_text);
-        Double lat = Double.valueOf(lat_text.getText().toString());
-        Double lng = Double.valueOf(lng_text.getText().toString());
-        Coord coord = new Coord(lat, lng);
+        String lat_string = lat_text.getText().toString();
+        String lng_string = lng_text.getText().toString();
+        if ((lat_string.isEmpty()) && (lng_string.isEmpty())){
+            coord = AnimalItem.getExtranceGateCoord();
+        }
+        else if (lat_string.isEmpty()){
+            Utilities.showAlert(this, "Please enter the latitude value.");
+        }
+        else if (lng_string.isEmpty()){
+            Utilities.showAlert(this, "Please enter the longtitude value.");
+        }
+        else{
+            coord = new Coord(Double.valueOf(lat_string), Double.valueOf(lng_string));
+        }
         return coord;
     }
 
