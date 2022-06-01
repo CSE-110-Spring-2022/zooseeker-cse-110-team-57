@@ -141,7 +141,7 @@ public class MS2_USTest {
     public void test_skip_remove(){
         List<String> a1 = new ArrayList<>(Arrays.asList("a","b","c","d","e"));
         List<String> a2 = new ArrayList<>(Arrays.asList("1","2","3","4","5"));
-        List<String> a3 = new ArrayList<>(Arrays.asList("1,2,3"));
+        List<String> a3 = new ArrayList<>(Arrays.asList("1","2","3","4","5"));
 
 
 
