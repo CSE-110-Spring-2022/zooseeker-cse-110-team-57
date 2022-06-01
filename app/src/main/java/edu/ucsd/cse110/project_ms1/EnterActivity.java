@@ -26,6 +26,7 @@ import androidx.appcompat.widget.SearchView;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +40,7 @@ import javax.xml.transform.TransformerFactory;
 
 import edu.ucsd.cse110.project_ms1.location.Coord;
 
-public class EnterActivity extends AppCompatActivity {
-    OnMockChangeListener onMockChangeListener;
+public class EnterActivity extends AppCompatActivity implements Serializable {
     Coord entered_coord;
 
     @Override
@@ -51,18 +51,9 @@ public class EnterActivity extends AppCompatActivity {
     }
 
     public void onMockButtonClick(View view){
-        entered_coord= readEnteredCoord();
-        onMockChangeListener.OnMockChange(entered_coord);
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
         finish();
-    }
-
-    public Coord readEnteredCoord(){
-        EditText lat_text = findViewById(R.id.Latitude_text);
-        EditText lng_text = findViewById(R.id.Longitude_text);
-        Double lat = Double.valueOf(lat_text.getText().toString());
-        Double lng = Double.valueOf(lng_text.getText().toString());
-        Coord coord = new Coord(lat, lng);
-        return coord;
     }
 
     @Override
@@ -86,8 +77,17 @@ public class EnterActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
         TextView lat_text = findViewById(R.id.Latitude_text);
         TextView lng_text = findViewById(R.id.Longitude_text);
-        lat_text.setText(sharedPreferences.getString("currentLat", Double.toString(gate_coord.lat)));
-        lng_text.setText(sharedPreferences.getString("currentLat", Double.toString(gate_coord.lng)));
+        lat_text.setText(sharedPreferences.getString("currentLat", ""));
+        lng_text.setText(sharedPreferences.getString("currentLat", ""));
+    }
+
+    public Coord readEnteredCoord(){
+        EditText lat_text = findViewById(R.id.Latitude_text);
+        EditText lng_text = findViewById(R.id.Longitude_text);
+        Double lat = Double.valueOf(lat_text.getText().toString());
+        Double lng = Double.valueOf(lng_text.getText().toString());
+        Coord coord = new Coord(lat, lng);
+        return coord;
     }
 
 }
