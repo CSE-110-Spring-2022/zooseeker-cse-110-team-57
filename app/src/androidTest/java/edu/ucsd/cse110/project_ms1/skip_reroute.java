@@ -163,7 +163,7 @@ public class skip_reroute {
                 allOf(withId(R.id.goal_exhibit_name), withText("To: Crocodiles"),
                         withParent(withParent(withId(android.R.id.content))),
                         isDisplayed()));
-        textView.check(matches(withText("To: Owens Aviary")));
+        textView.check(matches(withText("To: Crocodiles")));
     }
 
     private static Matcher<View> childAtPosition(
