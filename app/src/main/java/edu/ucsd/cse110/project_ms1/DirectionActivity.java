@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +30,8 @@ import edu.ucsd.cse110.project_ms1.location.Coords;
 import edu.ucsd.cse110.project_ms1.location.LocationModel;
 import edu.ucsd.cse110.project_ms1.location.LocationModelFactory;
 
-public class DirectionActivity extends AppCompatActivity implements OnLocationChangeListener, OnMockChangeListener {
+public class DirectionActivity extends AppCompatActivity implements Serializable,
+        OnLocationChangeListener{
     private static Context mContext;
     int order;
     private boolean useLocationService;
@@ -53,7 +55,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
     List<route_node> planned_route;
 
     private static final String TAG = "Location6666666";
-    public static final String EXTRA_USE_LOCATION_SERVICE = "use_location_updated";
+    private static final int ACTIVITY_CONSTANT = 0;
 
 
     @Override
@@ -618,7 +620,7 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
         return myfuture;
     }
 
-    @Override
+
     public void OnMockChange(Coord entered_coord) {
         //use mocking location
         //this.useLocationService = getIntent().getBooleanExtra(EXTRA_USE_LOCATION_SERVICE, false);
@@ -752,7 +754,22 @@ public class DirectionActivity extends AppCompatActivity implements OnLocationCh
 
     public void onEnterButtonClick(View view) {
         Intent intent = new Intent(this, EnterActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent,ACTIVITY_CONSTANT);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        Coord gate_coord = AnimalItem.getExtranceGateCoord();
+        TextView lat_text = findViewById(R.id.Latitude_text);
+        TextView lng_text = findViewById(R.id.Longitude_text);
+        SharedPreferences sharedPreferences = getSharedPreferences("Team57", Activity.MODE_PRIVATE);
+        String lat_string = sharedPreferences.getString("currentLat", Double.toString(gate_coord.lat));
+        String lng_string = sharedPreferences.getString("currentLat", Double.toString(gate_coord.lng));
+        Coord updateCoord = new Coord(Double.valueOf(lat_string), Double.valueOf(lng_string));
+        OnMockChange(updateCoord);
+
     }
 
 
