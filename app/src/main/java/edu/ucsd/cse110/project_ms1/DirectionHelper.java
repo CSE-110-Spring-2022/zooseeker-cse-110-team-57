@@ -369,31 +369,11 @@ public class DirectionHelper {
         double first_path, second_path;
         //get the closest landmark
         AnimalItem closestName = AnimalItem.getClosestLandmark(current);
-        //get the current street
         String closestName_parent_id = AnimalItem.Latlng_ids_Map.get(closestName.id);
-        IdentifiedWeightedEdge currentStreet = findCurrStreet(closestName_parent_id, current.toLatLng());
 
-        ///find the Source and Goal of street
-        ZooData.VertexInfo streetSource = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeSource(currentStreet));
-        ZooData.VertexInfo streetGoal = AnimalItem.vInfo.get(AnimalItem.gInfo.getEdgeTarget(currentStreet));
+        return AnimalItem.adapted_find_shortest_path(AnimalItem.gInfo,
+                closestName_parent_id, Destination.id).getWeight();
 
-        //get the coord of Souce and Goal
-//        System.out.println(currentStreet.toString());
-        Coord streetSource_Coord = new Coord(streetSource.lat, streetSource.lng);
-        Coord streetGoal_Coord = new Coord(streetGoal.lat, streetGoal.lng);
-
-        //Path 1: from current to streetSource to Destination
-        first_path = AnimalItem.distance_between_coords(current, streetSource_Coord);
-        first_path += AnimalItem.adapted_find_shortest_path(AnimalItem.gInfo,
-                streetSource.id, Destination.id).getWeight();
-
-        //Path 2: from current to streetGoal to Destination
-        second_path = AnimalItem.distance_between_coords(current, streetGoal_Coord);
-        second_path += AnimalItem.adapted_find_shortest_path(AnimalItem.gInfo,
-                streetGoal.id, Destination.id).getWeight();
-
-        //return the shorter path
-        return Math.min(first_path, second_path);
     }
 
 
